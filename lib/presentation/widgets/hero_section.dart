@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/presentation/pages/snake_game_page.dart';
 import 'package:portfolio/presentation/widgets/animated_text.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:portfolio/assets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HeroSection extends StatelessWidget {
   final AnimationController controller;
@@ -44,11 +47,11 @@ class HeroSection extends StatelessWidget {
                   ),
                 );
               },
-              child: Lottie.network(
-                'https://assets10.lottiefiles.com/packages/lf20_w51pcehl.json',
-                height: 400,
-                fit: BoxFit.contain,
-              ),
+//               child: Lottie.asset(
+//   Assets.googleAnimation,
+//   height: 400,
+//   fit: BoxFit.contain,
+// ),
             ),
           ),
           
@@ -120,6 +123,10 @@ class HeroSection extends StatelessWidget {
                                   speed: const Duration(milliseconds: 100),
                                 ),
                                 TypewriterAnimatedText(
+                                  'Freelancer',
+                                  speed: const Duration(milliseconds: 100),
+                                ),
+                                TypewriterAnimatedText(
                                   'Problem Solver',
                                   speed: const Duration(milliseconds: 100),
                                 ),
@@ -134,7 +141,7 @@ class HeroSection extends StatelessWidget {
                         
                         // Description
                         Text(
-                          'Building beautiful, responsive applications with Flutter and solving complex problems with a passion for clean code.',
+                          'Building beautiful, responsive applications with Flutter and solving complex problems with a passion for clean code. Specializing in Google-oriented technologies like Flutter and Go.',
                           style: textTheme.bodyLarge,
                         ),
                         const SizedBox(height: 40),
@@ -154,6 +161,19 @@ class HeroSection extends StatelessWidget {
                               isPrimary: false,
                             ),
                           ],
+                        ),
+                        const SizedBox(height: 24),
+                        
+                        // Resume download button
+                        OutlinedButton.icon(
+                          onPressed: () => _launchUrl(Assets.resumeUrl),
+                          icon: const Icon(Icons.download),
+                          label: const Text('Download Resume'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.accentPrimary,
+                            side: const BorderSide(color: AppColors.accentPrimary, width: 2),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          ),
                         ),
                       ],
                     ),
@@ -179,7 +199,7 @@ class HeroSection extends StatelessWidget {
                         );
                       },
                       child: Lottie.network(
-                        'https://assets9.lottiefiles.com/packages/lf20_w7401jcz.json',
+                        Assets.developerAnimation,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -202,7 +222,7 @@ class HeroSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Lottie.network(
-                    'https://assets2.lottiefiles.com/packages/lf20_iikbn1ww.json',
+                    Assets.scrollDownAnimation,
                     height: 50,
                     width: 50,
                     fit: BoxFit.contain,
@@ -211,8 +231,40 @@ class HeroSection extends StatelessWidget {
               ),
             ),
           ),
+          
+          // Easter egg trigger (hidden in the corner)
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: GestureDetector(
+              onTap: () => _showEasterEgg(context),
+              child: Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
+  }
+  
+  void _showEasterEgg(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SnakeGamePage(),
+      ),
+    );
+  }
+  
+  Future<void> _launchUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

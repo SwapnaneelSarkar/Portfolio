@@ -27,7 +27,7 @@ class _ExperiencePageState extends State<ExperiencePage> with TickerProviderStat
       'description': 'Sole Flutter developer responsible for end-to-end mobile app development using BLoC architecture and reusable component design. Coordinated closely with UI/UX designers to implement pixel-perfect, responsive interfaces and custom animations. Integrated RESTful APIs and collaborated with the backend team to manage data flow, debug payloads, and support real-time communication (RTC) features. Owned the complete app lifecycle — from feature development and debugging to optimization and cross-platform deployment.',
       'responsibilities': [
         'Developed and maintained mobile applications using Flutter and Dart',
-        'Implemented BLoC architecture for state management',
+        'Implemented BLoC and used clean architecture',
         'Created reusable UI components for consistent design',
         'Integrated RESTful APIs for data fetching and manipulation',
         'Collaborated with UI/UX designers for pixel-perfect implementation',
@@ -38,20 +38,22 @@ class _ExperiencePageState extends State<ExperiencePage> with TickerProviderStat
       'animation': 'https://assets5.lottiefiles.com/packages/lf20_iorpbol0.json',
     },
     {
-      'company': 'Taxian',
-      'position': 'Software Developer (Intern)',
-      'period': 'March, 2025 - April, 2025',
-      'description': 'Developed UI for web applications using Flutter, ensuring seamless user experiences. Integrated APIs for dynamic data flow and implemented notification systems with FCM. Implemented payment gateway integration for secure transactions. Collaborated with the team to build efficient, user-friendly solutions for various projects.',
-      'responsibilities': [
-        'Developed web UI using Flutter for cross-platform compatibility',
+    'company': 'Taxian',
+    'position': 'Software Developer (Intern)',
+    'period': 'March, 2025 - April, 2025',
+    'description': 'Developed UI for web applications using Flutter, ensuring seamless user experiences. Integrated APIs for dynamic data flow and implemented notification systems with FCM. Implemented payment gateway integration for secure transactions. Set up CI/CD pipelines for smooth deployment and published app to Play Store. Ensured app efficiency and optimal user experience through performance optimization. Collaborated with backend and DevOps teams to build robust, user-friendly solutions.',
+    'responsibilities': [
+        'Developed both web and mobile app using Flutter for cross-platform compatibility',
         'Integrated RESTful APIs for data fetching and manipulation',
         'Implemented Firebase Cloud Messaging for notifications',
         'Set up payment gateway integration for secure transactions',
-        'Collaborated with team members for efficient development',
-      ],
-      'color': AppColors.accentSecondary,
-      'animation': 'https://assets9.lottiefiles.com/packages/lf20_w51pcehl.json',
-    },
+        'Configured CI/CD pipelines for automated testing and deployment',
+        'Published and maintained application on Google Play Store',
+        'Collaborated with backend and DevOps teams for end-to-end development',
+    ],
+    'color': AppColors.accentSecondary,
+    'animation': 'https://assets9.lottiefiles.com/packages/lf20_w51pcehl.json',
+},
     {
       'company': 'Apps AiT',
       'position': 'Flutter Developer (Intern)',
@@ -250,7 +252,7 @@ class _ExperiencePageState extends State<ExperiencePage> with TickerProviderStat
               thickness: 3,
             ),
             endChild: Padding(
-              padding: const EdgeInsets.only(left: 20, bottom: 60),
+              padding: const EdgeInsets.only(left: 20, bottom: 80),
               child: isMobile
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,6 +294,7 @@ class _ExperiencePageState extends State<ExperiencePage> with TickerProviderStat
   }
   
   Widget _buildExperienceContent(Map<String, dynamic> experience, TextTheme textTheme) {
+    // Using a completely different approach for the content
     return Container(
       padding: const EdgeInsets.all(30),
       decoration: BoxDecoration(
@@ -309,87 +312,100 @@ class _ExperiencePageState extends State<ExperiencePage> with TickerProviderStat
           width: 1,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  experience['company'],
-                  style: textTheme.headlineSmall?.copyWith(
-                    color: experience['color'],
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: experience['color'].withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  experience['period'],
-                  style: TextStyle(
-                    color: experience['color'],
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            experience['position'],
-            style: textTheme.titleLarge?.copyWith(
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            experience['description'],
-            style: textTheme.bodyLarge?.copyWith(
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            'Key Responsibilities',
-            style: textTheme.titleMedium?.copyWith(
-              color: AppColors.accentSecondary,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: (experience['responsibilities'] as List<String>).map((responsibility) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.check_circle,
+      child: IntrinsicHeight(  // Using IntrinsicHeight to ensure the column takes the height of its children
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    experience['company'],
+                    style: textTheme.headlineSmall?.copyWith(
                       color: experience['color'],
-                      size: 20,
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        responsibility,
-                        style: textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              );
-            }).toList(),
-          ),
-        ],
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: experience['color'].withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    experience['period'],
+                    style: TextStyle(
+                      color: experience['color'],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              experience['position'],
+              style: textTheme.titleLarge?.copyWith(
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Wrap the description in Flexible to allow it to shrink if needed
+            Flexible(
+              child: Text(
+                experience['description'],
+                style: textTheme.bodyLarge?.copyWith(
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Key Responsibilities',
+              style: textTheme.titleMedium?.copyWith(
+                color: AppColors.accentSecondary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Use ListView instead of Column for the responsibilities
+            // This ensures the content doesn't overflow
+            SizedBox(
+              height: 200, // Fixed height for the responsibilities section
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: (experience['responsibilities'] as List<String>).length,
+                itemBuilder: (context, idx) {
+                  final responsibility = experience['responsibilities'][idx];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.check_circle,
+                          color: experience['color'],
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            responsibility,
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

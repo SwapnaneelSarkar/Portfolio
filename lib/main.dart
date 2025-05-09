@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-// Choose only one URL strategy implementation:
 import 'package:url_strategy/url_strategy.dart';
-// Remove this import if using the one above
-// import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:portfolio/presentation/blocs/navigation/navigation_bloc.dart';
 import 'package:portfolio/presentation/blocs/theme/theme_bloc.dart';
 import 'package:portfolio/presentation/blocs/animation/animation_bloc.dart';
 import 'package:portfolio/presentation/blocs/scroll/scroll_bloc.dart';
 import 'package:portfolio/presentation/router/app_router.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/presentation/pages/snake_game_page.dart';
 
 void main() {
-  // Use only ONE of these methods, not both:
-  setPathUrlStrategy();
-  // Remove this line:
-  // setUrlStrategy(PathUrlStrategy());
+  // Set URL strategy for web
+  setUrlStrategy(PathUrlStrategy());
   
   runApp(const MyApp());
 }

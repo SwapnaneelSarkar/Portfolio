@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'dart:math' as math;
+import 'package:portfolio/assets.dart';
+import 'package:lottie/lottie.dart';
 
 class SkillsSection extends StatefulWidget {
   const SkillsSection({Key? key}) : super(key: key);
@@ -103,6 +105,88 @@ class _SkillsSectionState extends State<SkillsSection> with SingleTickerProvider
               ),
             ),
           ),
+          const SizedBox(height: 40),
+          
+          // Google-themed tech stack highlight
+          AnimatedOpacity(
+            opacity: _isVisible ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 800),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppColors.cardBackground,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: AppColors.accentPrimary.withOpacity(0.3),
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Google-Oriented Tech Stack',
+                    style: textTheme.headlineSmall?.copyWith(
+                      color: AppColors.accentPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  isMobile
+                      ? Column(
+                          children: [
+                            _buildTechStackItem(
+                              'Flutter',
+                              'Cross-platform UI toolkit',
+                              Assets.flutterAnimation,
+                              AppColors.accentPrimary,
+                            ),
+                            const SizedBox(height: 20),
+                            _buildTechStackItem(
+                              'Go',
+                              'Efficient backend language',
+                              Assets.goAnimation,
+                              AppColors.accentSecondary,
+                            ),
+                            const SizedBox(height: 20),
+                            _buildTechStackItem1(
+                              'Firebase',
+                              'Google\'s app development platform',
+                              Assets.googleAnimation,
+                              AppColors.primaryLight,
+                            ),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Expanded(
+                              child: _buildTechStackItem(
+                                'Flutter',
+                                'Cross-platform UI toolkit',
+                                Assets.flutterAnimation,
+                                AppColors.accentPrimary,
+                              ),
+                            ),
+                            Expanded(
+                              child: _buildTechStackItem(
+                                'Go',
+                                'Efficient backend language',
+                                Assets.goAnimation,
+                                AppColors.accentSecondary,
+                              ),
+                            ),
+                            Expanded(
+                              child: _buildTechStackItem1(
+                                'Firebase',
+                                'Google\'s app development platform',
+                                Assets.googleAnimation,
+                                AppColors.accentTertiary,
+                              ),
+                            ),
+                          ],
+                        ),
+                ],
+              ),
+            ),
+          ),
           const SizedBox(height: 60),
           
           // Skills categories
@@ -165,6 +249,83 @@ class _SkillsSectionState extends State<SkillsSection> with SingleTickerProvider
     );
   }
   
+  Widget _buildTechStackItem(String title, String description, String animationUrl, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 100,
+            child: Lottie.network(
+              animationUrl,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            title,
+            style: TextStyle(
+              color: color,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            description,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildTechStackItem1(String title, String description, String animationUrl, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 100,
+            child: Lottie.asset(
+              animationUrl,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            title,
+            style: TextStyle(
+              color: color,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            description,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+  
   Widget _buildSkillCategory(
     String title,
     List<Map<String, dynamic>> skills,
@@ -174,30 +335,33 @@ class _SkillsSectionState extends State<SkillsSection> with SingleTickerProvider
     return AnimatedOpacity(
       opacity: _isVisible ? 1.0 : 0.0,
       duration: Duration(milliseconds: 1000 + (delayFactor * 200)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: textTheme.headlineSmall?.copyWith(
-              color: AppColors.accentPrimary,
-            ),
-          ),
-          const SizedBox(height: 24),
-          ...skills.map((skill) {
-            final index = skills.indexOf(skill);
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: _buildSkillBar(
-                skill['name'],
-                skill['level'],
-                skill['color'],
-                index,
-                delayFactor,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: textTheme.headlineSmall?.copyWith(
+                color: AppColors.accentPrimary,
               ),
-            );
-          }).toList(),
-        ],
+            ),
+            const SizedBox(height: 24),
+            ...skills.map((skill) {
+              final index = skills.indexOf(skill);
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: _buildSkillBar(
+                  skill['name'],
+                  skill['level'],
+                  skill['color'],
+                  index,
+                  delayFactor,
+                ),
+              );
+            }).toList(),
+          ],
+        ),
       ),
     );
   }
@@ -221,14 +385,18 @@ class _SkillsSectionState extends State<SkillsSection> with SingleTickerProvider
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: Text(
+                    name,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                const SizedBox(width: 8),
                 Text(
                   '${(animatedLevel * 100).toInt()}%',
                   style: TextStyle(
@@ -240,29 +408,33 @@ class _SkillsSectionState extends State<SkillsSection> with SingleTickerProvider
               ],
             ),
             const SizedBox(height: 8),
-            Container(
-              height: 8,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.backgroundDark,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 500),
-                    width: MediaQuery.of(context).size.width * 0.7 * animatedLevel,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [color, color.withOpacity(0.7)],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return Container(
+                  height: 8,
+                  width: constraints.maxWidth,
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundDark,
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                ],
-              ),
+                  child: Stack(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 500),
+                        width: constraints.maxWidth * animatedLevel,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [color, color.withOpacity(0.7)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
             ),
           ],
         );

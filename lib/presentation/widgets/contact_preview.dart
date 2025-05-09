@@ -3,6 +3,7 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:lottie/lottie.dart';
+import 'package:portfolio/assets.dart';
 
 class ContactPreview extends StatefulWidget {
   const ContactPreview({Key? key}) : super(key: key);
@@ -203,7 +204,7 @@ class _ContactPreviewState extends State<ContactPreview> with SingleTickerProvid
           );
         },
         child: Lottie.network(
-          'https://assets2.lottiefiles.com/packages/lf20_u8o7BL.json',
+          Assets.contactAnimation,
           fit: BoxFit.contain,
         ),
       ),

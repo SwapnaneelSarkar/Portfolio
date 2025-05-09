@@ -3,6 +3,7 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:lottie/lottie.dart';
+import 'package:portfolio/assets.dart';
 
 class ExperiencePreview extends StatefulWidget {
   const ExperiencePreview({Key? key}) : super(key: key);
@@ -31,11 +32,11 @@ class _ExperiencePreviewState extends State<ExperiencePreview> with SingleTicker
       'color': AppColors.accentSecondary,
     },
     {
-      'company': 'Apps AiT',
-      'position': 'Flutter Developer (Intern)',
-      'period': 'September, 2024 - March, 2025',
-      'description': 'Developed real-time mobile applications using Flutter and Firebase, translating Figma designs into user-friendly interfaces.',
-      'color': AppColors.accentTertiary,
+      'company': 'Freelance',
+      'position': 'Flutter Developer',
+      'period': 'January, 2024 - Present',
+      'description': 'Working on various client projects, delivering custom Flutter applications with focus on Google-oriented technologies.',
+      'color': AppColors.primaryLight,
     },
   ];
   
@@ -183,10 +184,12 @@ class _ExperiencePreviewState extends State<ExperiencePreview> with SingleTicker
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        experience['company'],
-                        style: textTheme.titleLarge?.copyWith(
-                          color: experience['color'],
+                      Expanded(
+                        child: Text(
+                          experience['company'],
+                          style: textTheme.titleLarge?.copyWith(
+                            color: experience['color'],
+                          ),
                         ),
                       ),
                       Container(
@@ -242,7 +245,7 @@ class _ExperiencePreviewState extends State<ExperiencePreview> with SingleTicker
           );
         },
         child: Lottie.network(
-          'https://assets5.lottiefiles.com/packages/lf20_iorpbol0.json',
+          Assets.workAnimation,
           fit: BoxFit.contain,
         ),
       ),

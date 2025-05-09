@@ -79,7 +79,7 @@ class ParticlesPainter extends CustomPainter {
       final color = [
         AppColors.accentPrimary,
         AppColors.accentSecondary,
-        AppColors.accentTertiary,
+        AppColors.primaryLight,
       ][random.nextInt(3)];
       
       particles.add(

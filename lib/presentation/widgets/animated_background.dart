@@ -49,7 +49,7 @@ class BackgroundPainter extends CustomPainter {
       colors: [
         AppColors.backgroundDark.withOpacity(0.8),
         AppColors.backgroundLight.withOpacity(0.5),
-        AppColors.primaryDark.withOpacity(0.3),
+        AppColors.accentPrimary.withOpacity(0.3),
       ],
       stops: [
         0.1,
@@ -93,7 +93,7 @@ class BackgroundPainter extends CustomPainter {
     
     // Third circle
     final radius3 = 200 + 40 * animation.value;
-    circlePaint.color = AppColors.accentTertiary.withOpacity(0.1);
+    circlePaint.color = AppColors.primaryLight.withOpacity(0.1);
     canvas.drawCircle(
       Offset(size.width * 0.5, size.height * 0.5),
       radius3,
@@ -103,7 +103,7 @@ class BackgroundPainter extends CustomPainter {
   
   void _drawGridLines(Canvas canvas, Size size) {
     final linePaint = Paint()
-      ..color = AppColors.primaryLight.withOpacity(0.1)
+      ..color = AppColors.accentPrimary.withOpacity(0.1)
       ..strokeWidth = 0.5;
     
     // Horizontal lines

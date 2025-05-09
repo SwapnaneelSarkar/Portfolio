@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:portfolio/presentation/pages/snake_game_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Footer extends StatelessWidget {
@@ -107,7 +108,7 @@ class Footer extends StatelessWidget {
               ),
               const Icon(
                 Icons.favorite,
-                color: Colors.red,
+                color: AppColors.accentTertiary,
                 size: 16,
               ),
               const Text(
@@ -126,6 +127,20 @@ class Footer extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          
+          // Easter egg hint
+          const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () => _showEasterEgg(context),
+            child: const Text(
+              'Psst... there\'s a hidden game somewhere',
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 10,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
           ),
         ],
       ),
@@ -161,5 +176,13 @@ class Footer extends StatelessWidget {
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $url');
     }
+  }
+  
+  void _showEasterEgg(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SnakeGamePage(),
+      ),
+    );
   }
 }

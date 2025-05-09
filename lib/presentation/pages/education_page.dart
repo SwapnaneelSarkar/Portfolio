@@ -5,6 +5,8 @@ import 'package:portfolio/presentation/widgets/footer.dart';
 import 'package:portfolio/presentation/widgets/animated_background.dart';
 import 'package:lottie/lottie.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:portfolio/assets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EducationPage extends StatefulWidget {
   const EducationPage({Key? key}) : super(key: key);
@@ -35,7 +37,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
         'Mobile Application Development',
       ],
       'color': AppColors.accentPrimary,
-      'animation': 'https://assets9.lottiefiles.com/packages/lf20_q4qbz1wk.json',
+      'animation': Assets.educationAnimation,
     },
     {
       'institution': 'Kendriya Vidyalaya, Cooch Behar',
@@ -52,7 +54,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
         'Computer Science',
       ],
       'color': AppColors.accentSecondary,
-      'animation': 'https://assets3.lottiefiles.com/packages/lf20_tfb3estd.json',
+      'animation': Assets.schoolAnimation,
     },
   ];
   
@@ -63,6 +65,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       'date': 'January 2024',
       'description': 'Certification for problem-solving skills in algorithms and data structures.',
       'color': AppColors.accentPrimary,
+      'url': Assets.certificateUrls['Problem Solving'],
     },
     {
       'title': 'Software Engineer',
@@ -70,6 +73,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       'date': 'March 2024',
       'description': 'Comprehensive certification covering software engineering principles and practices.',
       'color': AppColors.accentSecondary,
+      'url': Assets.certificateUrls['Software Engineer'],
     },
     {
       'title': 'Flutter & Dart',
@@ -77,6 +81,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       'date': 'November 2023',
       'description': 'Complete Flutter development bootcamp with Dart programming language.',
       'color': AppColors.accentTertiary,
+      'url': Assets.certificateUrls['Flutter & Dart'],
     },
     {
       'title': 'Flutter Essentials',
@@ -84,6 +89,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       'date': 'December 2023',
       'description': 'Essential Flutter development concepts and best practices.',
       'color': AppColors.accentPrimary,
+      'url': Assets.certificateUrls['Flutter Essentials'],
     },
   ];
   
@@ -444,7 +450,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
               physics: const NeverScrollableScrollPhysics(),
               crossAxisSpacing: 20,
               mainAxisSpacing: 20,
-              childAspectRatio: 1.5,
+              childAspectRatio: 2.0, // Made cards smaller
               children: _certificates.map((cert) {
                 return _buildCertificateCard(cert, textTheme);
               }).toList(),
@@ -453,81 +459,180 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
   }
   
   Widget _buildCertificateCard(Map<String, dynamic> certificate, TextTheme textTheme) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: certificate['color'].withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+    return GestureDetector(
+      onTap: () => _showCertificateDialog(certificate),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColors.cardBackground,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: certificate['color'].withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+          border: Border.all(
+            color: certificate['color'].withOpacity(0.2),
+            width: 1,
           ),
-        ],
-        border: Border.all(
-          color: certificate['color'].withOpacity(0.2),
-          width: 1,
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.verified,
-                color: certificate['color'],
-                size: 24,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  certificate['title'],
-                  style: textTheme.titleLarge?.copyWith(
-                    color: certificate['color'],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.verified,
+                  color: certificate['color'],
+                  size: 24,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    certificate['title'],
+                    style: textTheme.titleLarge?.copyWith(
+                      color: certificate['color'],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Text(
-                certificate['issuer'],
-                style: textTheme.titleMedium?.copyWith(
-                  color: AppColors.textPrimary,
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    certificate['issuer'],
+                    style: textTheme.titleMedium?.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: certificate['color'].withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: certificate['color'].withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    certificate['date'],
+                    style: TextStyle(
+                      color: certificate['color'],
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
-                child: Text(
-                  certificate['date'],
+              ],
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: Text(
+                certificate['description'],
+                style: textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'Tap to view',
                   style: TextStyle(
                     color: certificate['color'],
                     fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            certificate['description'],
-            style: textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.touch_app,
+                  color: certificate['color'],
+                  size: 16,
+                ),
+              ],
             ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  void _showCertificateDialog(Map<String, dynamic> certificate) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.cardBackground,
+        title: Text(
+          certificate['title'],
+          style: TextStyle(
+            color: certificate['color'],
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Do you want to download this certificate to see if I\'m telling the truth? 🧐',
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'I promise it\'s legit... or is it? 😏',
+              style: TextStyle(
+                color: certificate['color'],
+                fontSize: 14,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Maybe Later',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _downloadCertificate(certificate['url']);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: certificate['color'],
+            ),
+            child: const Text('Yes, I\'m Curious!'),
           ),
         ],
       ),
     );
+  }
+  
+  void _downloadCertificate(String? url) async {
+    if (url != null) {
+      try {
+        final Uri uri = Uri.parse(url);
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } catch (e) {
+        // Handle error
+        debugPrint('Could not launch certificate URL: $e');
+      }
+    }
   }
 }

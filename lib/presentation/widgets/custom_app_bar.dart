@@ -4,6 +4,7 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portfolio/presentation/blocs/navigation/navigation_bloc.dart';
+import 'package:portfolio/presentation/pages/snake_game_page.dart';
 
 class CustomAppBar extends StatefulWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class CustomAppBar extends StatefulWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   bool _isMenuOpen = false;
+  int _logoClickCount = 0;
   
   final List<Map<String, String>> _menuItems = [
     {'title': 'Home', 'route': '/'},
@@ -50,7 +52,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
         children: [
           // Logo
           GestureDetector(
-            onTap: () => context.go('/'),
+            onTap: () {
+              context.go('/');
+              
+              // Easter egg trigger - click logo 5 times
+              setState(() {
+                _logoClickCount++;
+                if (_logoClickCount >= 5) {
+                  _logoClickCount = 0;
+                  _showEasterEgg(context);
+                }
+              });
+            },
             child: Row(
               children: [
                 Container(
@@ -58,7 +71,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   height: 40,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: AppColors.primaryGradient,
+                      colors: [
+                        AppColors.accentPrimary,
+                        AppColors.accentSecondary,
+                        AppColors.primaryLight,
+                        AppColors.accentTertiary,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -121,6 +141,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
               },
             ),
         ],
+      ),
+    );
+  }
+  
+  void _showEasterEgg(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SnakeGamePage(),
       ),
     );
   }

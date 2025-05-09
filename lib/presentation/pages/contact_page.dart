@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:portfolio/assets.dart';
 
 class ContactPage extends StatefulWidget {
   const ContactPage({Key? key}) : super(key: key);
@@ -232,7 +233,7 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
           ),
           const SizedBox(height: 24),
           Text(
-            'Feel free to reach out to me for any inquiries, project collaborations, or just to say hello. I\'m always open to discussing new opportunities and ideas.',
+            'Feel free to reach out to me for any inquiries, project collaborations, freelance opportunities, or just to say hello. I\'m always open to discussing new ideas and challenges.',
             style: textTheme.bodyLarge?.copyWith(
               color: AppColors.textPrimary,
             ),
@@ -288,8 +289,10 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
             ],
           ),
           const SizedBox(height: 40),
+          _buildResumeDownloadButton(),
+          const SizedBox(height: 40),
           Lottie.network(
-            'https://assets2.lottiefiles.com/packages/lf20_u8o7BL.json',
+            Assets.contactAnimation,
             height: 200,
             fit: BoxFit.contain,
           ),
@@ -369,6 +372,22 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
     );
   }
   
+  Widget _buildResumeDownloadButton() {
+    return ElevatedButton.icon(
+      onPressed: () => _launchUrl(Assets.resumeUrl),
+      icon: const Icon(Icons.download),
+      label: const Text('Download Resume'),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.accentPrimary,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+  
   Widget _buildContactForm(TextTheme textTheme) {
     return AnimatedBuilder(
       animation: _contentController,
@@ -421,22 +440,21 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: AppColors.accentSecondary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
-
                 ),
                 child: Row(
                   children: [
                     const Icon(
                       Icons.check_circle,
-                      color: Colors.green,
+                      color: AppColors.accentSecondary,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'Your message has been sent successfully! I\'ll get back to you soon.',
                         style: textTheme.bodyMedium?.copyWith(
-                          color: Colors.green,
+                          color: AppColors.accentSecondary,
                         ),
                       ),
                     ),
@@ -448,42 +466,83 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
                 key: _formKey,
                 child: Column(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: _buildTextField(
-                            controller: _nameController,
-                            label: 'Name',
-                            hint: 'Enter your name',
-                            prefixIcon: Icons.person,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your name';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _buildTextField(
-                            controller: _emailController,
-                            label: 'Email',
-                            hint: 'Enter your email',
-                            prefixIcon: Icons.email,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your email';
-                              }
-                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                                return 'Please enter a valid email';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        if (constraints.maxWidth < 600) {
+                          // Mobile layout
+                          return Column(
+                            children: [
+                              _buildTextField(
+                                controller: _nameController,
+                                label: 'Name',
+                                hint: 'Enter your name',
+                                prefixIcon: Icons.person,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your name';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                              _buildTextField(
+                                controller: _emailController,
+                                label: 'Email',
+                                hint: 'Enter your email',
+                                prefixIcon: Icons.email,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email';
+                                  }
+                                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          );
+                        } else {
+                          // Desktop layout
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: _buildTextField(
+                                  controller: _nameController,
+                                  label: 'Name',
+                                  hint: 'Enter your name',
+                                  prefixIcon: Icons.person,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your name';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildTextField(
+                                  controller: _emailController,
+                                  label: 'Email',
+                                  hint: 'Enter your email',
+                                  prefixIcon: Icons.email,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your email';
+                                    }
+                                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                                      return 'Please enter a valid email';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                      }
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(

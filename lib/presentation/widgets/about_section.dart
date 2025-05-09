@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:lottie/lottie.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:portfolio/assets.dart';
 
 class AboutSection extends StatefulWidget {
   const AboutSection({Key? key}) : super(key: key);
@@ -120,52 +121,77 @@ class _AboutSectionState extends State<AboutSection> with SingleTickerProviderSt
           ),
           const SizedBox(height: 16),
           Text(
-            'My problem-solving skills and critical thinking abilities allow me to approach complex challenges with confidence. I am currently expanding my knowledge by learning GoLang for industry applications.',
+            'My problem-solving skills and critical thinking abilities allow me to approach complex challenges with confidence. I am currently expanding my knowledge by learning GoLang for industry applications, focusing on Google-oriented technologies.',
             style: textTheme.bodyLarge,
           ),
           const SizedBox(height: 16),
           Text(
-            'With experience in Arduino programming and a passion for IoT, I am eager to explore its applications further and create innovative solutions that make a difference.',
+            'I also work as a freelance Flutter developer, taking on projects that challenge me to create innovative solutions. With experience in Arduino programming and a passion for IoT, I am eager to explore its applications further.',
             style: textTheme.bodyLarge,
           ),
           const SizedBox(height: 32),
-          Row(
+          Wrap(
+            spacing: 16,
+            runSpacing: 16,
             children: [
               _buildInfoItem(Icons.code, 'Flutter Developer'),
-              const SizedBox(width: 24),
               _buildInfoItem(Icons.school, 'CS Student'),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
+              _buildInfoItem(Icons.work, 'Freelancer'),
               _buildInfoItem(Icons.location_on, 'Cooch Behar, India'),
-              const SizedBox(width: 24),
               _buildInfoItem(Icons.email, 'swapnaneelsarkar571@gmail.com'),
             ],
           ),
+          const SizedBox(height: 32),
+          _buildResumeButton(),
         ],
       ),
     );
   }
   
   Widget _buildInfoItem(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          color: AppColors.accentSecondary,
-          size: 20,
-        ),
-        const SizedBox(width: 8),
-        Text(
-          text,
-          style: const TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 14,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: AppColors.accentSecondary,
+            size: 20,
           ),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: const TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildResumeButton() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        // Launch URL to download resume
+        launchResumeDownload();
+      },
+      icon: const Icon(Icons.download),
+      label: const Text('Download Resume'),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.accentPrimary,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-      ],
+      ),
     );
   }
   
@@ -182,10 +208,15 @@ class _AboutSectionState extends State<AboutSection> with SingleTickerProviderSt
           );
         },
         child: Lottie.network(
-          'https://assets3.lottiefiles.com/packages/lf20_v4isjbj5.json',
+          Assets.codingAnimation,
           fit: BoxFit.contain,
         ),
       ),
     );
+  }
+  
+  void launchResumeDownload() async {
+    // Implement URL launcher to download resume
+    // This will be implemented in a utility function
   }
 }

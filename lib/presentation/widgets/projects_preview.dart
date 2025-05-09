@@ -3,6 +3,7 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:lottie/lottie.dart';
+import 'package:portfolio/assets.dart';
 
 class ProjectsPreview extends StatefulWidget {
   const ProjectsPreview({Key? key}) : super(key: key);
@@ -17,22 +18,28 @@ class _ProjectsPreviewState extends State<ProjectsPreview> with SingleTickerProv
   
   final List<Map<String, dynamic>> _projects = [
     {
+      'title': 'Grape',
+      'description': 'A Flutter-based mobile app designed to help manage chronic illnesses. ',
+      'technologies': ['Flutter', 'Firebase', 'WebRTC'],
+      'color': AppColors.accentPrimary,
+    },
+    {
+      'title': 'Asset Management System',
+      'description': 'An IoT based asset management system. This uses a ESP-82 along with RFiD scanners and an mobile app to show the realtime output',
+      'technologies': ['Flutter', 'Firebase', 'ESP-82'],
+      'color': AppColors.accentSecondary,
+    },
+    {
       'title': 'Blog Explorer',
       'description': 'A Flutter application for exploring and reading blogs with a clean, modern UI and offline reading capabilities.',
       'technologies': ['Flutter', 'Firebase', 'BLoC'],
-      'color': AppColors.accentPrimary,
+      'color': AppColors.accentTertiary,
     },
     {
       'title': 'Application Tracking System',
       'description': 'A system to track job applications with status updates, reminders, and analytics dashboard.',
-      'technologies': ['Flutter', 'Firebase', 'Cloud Functions'],
+      'technologies': ['Flutter', 'Firebase', 'ESP-82'],
       'color': AppColors.accentSecondary,
-    },
-    {
-      'title': 'Grape',
-      'description': 'A social media platform for connecting professionals in the tech industry.',
-      'technologies': ['Flutter', 'Firebase', 'WebRTC'],
-      'color': AppColors.accentTertiary,
     },
   ];
   
@@ -254,8 +261,8 @@ class _ProjectsPreviewState extends State<ProjectsPreview> with SingleTickerProv
             child: child,
           );
         },
-        child: Lottie.network(
-          'https://assets9.lottiefiles.com/packages/lf20_3vbOcw.json',
+        child: Lottie.asset(
+          Assets.projectAnimation,
           fit: BoxFit.contain,
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:portfolio/presentation/pages/experience_page.dart';
 import 'package:portfolio/presentation/pages/education_page.dart';
 import 'package:portfolio/presentation/pages/contact_page.dart';
 import 'package:portfolio/presentation/pages/not_found_page.dart';
+import 'package:portfolio/presentation/pages/snake_game_page.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -69,6 +70,19 @@ class AppRouter {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const ContactPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: child,
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        path: '/easter-egg',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const SnakeGamePage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),

@@ -20,6 +20,19 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   
   final List<Map<String, dynamic>> _projects = [
     {
+      'title': 'Asset Management System',
+      'description': 'An Iot based asset management system. This system uses an ESP-82 equipped with RFiD scanners to scan the data and upload it to cloud servers. Mobile app controls the management system and verify logs.',
+      'technologies': ['Flutter', 'Firebase', 'Google APIs', 'Cloud Storage'],
+      'features': [
+        'Real-time messaging and video calls',
+        'Job board with filtering options',
+        'Skill endorsement system',
+        'Event discovery and networking',
+      ],
+      'color': AppColors.accentTertiary,
+      'animation': 'https://assets3.lottiefiles.com/packages/lf20_UgZWvP.json',
+    },
+    {
       'title': 'Blog Explorer',
       'description': 'A Flutter application for exploring and reading blogs with a clean, modern UI and offline reading capabilities. Users can save articles for later, customize their reading experience, and receive notifications for new content.',
       'technologies': ['Flutter', 'Firebase', 'BLoC', 'REST API'],
@@ -43,12 +56,12 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
         'Document storage for resumes and cover letters',
       ],
       'color': AppColors.accentSecondary,
-      'animation': 'https://assets5.lottiefiles.com/packages/lf20_rqcjx9kc.json',
+      'animation': 'https://assets9.lottiefiles.com/packages/lf20_kyu7xb1v.json',
     },
     {
       'title': 'Grape',
-      'description': 'A social media platform specifically designed for connecting professionals in the tech industry. Features include job postings, skill showcasing, and networking opportunities.',
-      'technologies': ['Flutter', 'Firebase', 'WebRTC', 'Cloud Storage'],
+      'description': 'A Flutter-based mobile app designed to help manage chronic illnesses. Key features include symptom tracking using a specialized fine-tuned medical AI, medication reminders, appointment management, medical history tracking, community support with group chats, and a healthcare location finder. The app integrates Google Maps API for healthcare facility location services and utilizes the Gemini API for medical text-to-speech and speech-to-text capabilities.',
+      'technologies': ['Flutter', 'Firebase', 'Google APIs', 'Cloud Storage'],
       'features': [
         'Real-time messaging and video calls',
         'Job board with filtering options',
@@ -56,7 +69,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
         'Event discovery and networking',
       ],
       'color': AppColors.accentTertiary,
-      'animation': 'https://assets3.lottiefiles.com/packages/lf20_UgZWvP.json',
+      'animation': 'https://assets7.lottiefiles.com/packages/lf20_tutvdkg0.json',
     },
     {
       'title': 'GradeBook',
