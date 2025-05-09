@@ -21,14 +21,14 @@ class _SkillsSectionState extends State<SkillsSection> with SingleTickerProvider
     {'name': 'C', 'level': 0.80, 'color': AppColors.accentSecondary},
     {'name': 'Dart', 'level': 0.90, 'color': AppColors.accentPrimary},
     {'name': 'SQL', 'level': 0.75, 'color': AppColors.accentSecondary},
-    {'name': 'Go', 'level': 0.60, 'color': AppColors.accentPrimary},
-    {'name': 'JavaScript', 'level': 0.70, 'color': AppColors.accentSecondary},
+    {'name': 'Go', 'level': 0.40, 'color': AppColors.accentPrimary},
+    {'name': 'JavaScript', 'level': 0.30, 'color': AppColors.accentSecondary},
   ];
   
   final List<Map<String, dynamic>> _conceptSkills = [
     {'name': 'Data Structures & Algorithms', 'level': 0.85, 'color': AppColors.accentPrimary},
     {'name': 'Object-Oriented Programming', 'level': 0.90, 'color': AppColors.accentSecondary},
-    {'name': 'Database Management', 'level': 0.75, 'color': AppColors.accentPrimary},
+    {'name': 'Database Management', 'level': 0.70, 'color': AppColors.accentPrimary},
     {'name': 'Design & Analysis of Algorithms', 'level': 0.80, 'color': AppColors.accentSecondary},
     {'name': 'Operating Systems', 'level': 0.70, 'color': AppColors.accentPrimary},
     {'name': 'Software Engineering', 'level': 0.85, 'color': AppColors.accentSecondary},
@@ -39,8 +39,7 @@ class _SkillsSectionState extends State<SkillsSection> with SingleTickerProvider
     {'name': 'Arduino', 'level': 0.75, 'color': AppColors.accentSecondary},
     {'name': 'Firebase', 'level': 0.85, 'color': AppColors.accentPrimary},
     {'name': 'Git & GitHub', 'level': 0.80, 'color': AppColors.accentSecondary},
-    {'name': 'React.js', 'level': 0.65, 'color': AppColors.accentPrimary},
-    {'name': 'Next.js', 'level': 0.60, 'color': AppColors.accentSecondary},
+    {'name': 'React.js', 'level': 0.3, 'color': AppColors.accentPrimary},
   ];
   
   @override

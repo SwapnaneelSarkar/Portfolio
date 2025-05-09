@@ -20,13 +20,13 @@ class Assets {
   static const String goAnimation = 'https://assets9.lottiefiles.com/packages/lf20_kyu7xb1v.json';
   
   // Resume download URL - replace with your actual resume URL
-  static const String resumeUrl = 'https://example.com/swapnaneel_sarkar_resume.pdf';
+  static const String resumeUrl = 'https://docs.google.com/document/d/1D3Mn7jahk61fksFFxkarDuCi7H84fFce/export?format=pdf';
   
   // Certificate URLs - replace with your actual certificate URLs
   static const Map<String, String> certificateUrls = {
-    'Problem Solving': 'https://example.com/certificates/problem_solving.pdf',
-    'Software Engineer': 'https://example.com/certificates/software_engineer.pdf',
-    'Flutter & Dart': 'https://example.com/certificates/flutter_dart.pdf',
+    'Problem Solving': 'https://drive.google.com/uc?export=download&id=1ga4fOjHFVVt7oGrQYE2LumNkMjh4HkzB',
+    'Software Engineer': 'https://drive.google.com/uc?export=download&id=1i09Kxe0W9uX2_w2uiY9ejzDHschdQZqr',
+    'Flutter & Dart': 'https://drive.google.com/uc?export=download&id=1gNgvgcpOWu77oVJamjHXiM1FZ3Tt7OXw',
     'Flutter Essentials': 'https://example.com/certificates/flutter_essentials.pdf',
   };
 }
