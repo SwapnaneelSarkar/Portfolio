@@ -12,13 +12,21 @@ class AppColors {
   static const Color accentTertiary = Color(0xFFFF5757);  // Red
   
   // Text colors
-  static const Color textPrimary = Color(0xFFF5F5F7);
-  static const Color textSecondary = Color(0xFFB8B8B8);
+  static const Color primaryAccentLight = Color(0xFF5E97F6);
+  static const Color primaryRedLight = Color(0xFFEB6A5E);
+  static const Color primaryYellowLight = Color(0xFFFDD663);
+  static const Color primaryGreenLight = Color(0xFF46B565);
   
   // Background colors
-  static const Color backgroundDark = Color(0xFF050A18);
-  static const Color backgroundLight = Color(0xFF0F1624);
-  static const Color cardBackground = Color(0xFF162033);
+  static const Color backgroundDark = Color(0xFF202124);  // Google Dark Gray
+  static const Color backgroundLight = Color(0xFF303134); // Google Light Gray
+  static const Color cardBackground = Color(0xFF3C4043);  // Google Card Gray
+  static const Color cardHover = Color(0xFF4A4E52);      // Hover state
+  static const Color cardActive = Color(0xFF5A5E62);     // Active state
+  
+  // Text colors
+  static const Color textPrimary = Color(0xFFE8EAED);    // Google Light Text
+  static const Color textSecondary = Color(0xFF9AA0A6);  // Google Secondary Text
   
   // Gradient colors
   static const List<Color> primaryGradient = [
@@ -30,6 +38,12 @@ class AppColors {
     Color(0xFF00D9F5),
     Color(0xFF6C63FF),
   ];
+  
+  // Skill level colors
+  static const Color beginnerLevel = Color(0xFFFF5757);  // Red for beginner
+  static const Color intermediateLevel = Color(0xFFFDD663);  // Yellow for intermediate
+  static const Color advancedLevel = Color(0xFF00D9F5);  // Cyan for advanced
+  static const Color expertLevel = Color(0xFF6C63FF);  // Purple for expert
 }
 
 class AppTheme {
