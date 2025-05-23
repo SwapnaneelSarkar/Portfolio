@@ -9,6 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:portfolio/assets.dart';
 
+import '../../services/email_service.dart';
+
 class ContactPage extends StatefulWidget {
   const ContactPage({Key? key}) : super(key: key);
 
@@ -63,24 +65,48 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
     super.dispose();
   }
   
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isSubmitting = true;
       });
       
-      // Simulate form submission
-      Future.delayed(const Duration(seconds: 2), () {
+      try {
+        final success = await EmailService.sendEmail(
+          name: _nameController.text,
+          email: _emailController.text,
+          subject: _subjectController.text,
+          message: _messageController.text,
+        );
+        
         setState(() {
           _isSubmitting = false;
-          _isSubmitted = true;
+          _isSubmitted = success;
         });
         
-        // Reset form after submission
-        _nameController.clear();
-        _emailController.clear();
-        _subjectController.clear();
-        _messageController.clear();
+        if (success) {
+          // Reset form after successful submission
+          _nameController.clear();
+          _emailController.clear();
+          _subjectController.clear();
+          _messageController.clear();
+          
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Message sent successfully!'),
+              backgroundColor: AppColors.accentSecondary,
+            ),
+          );
+        } else {
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to send message. Please try again.'),
+              backgroundColor: AppColors.accentTertiary,
+            ),
+          );
+        }
         
         // Reset submission status after a delay
         Future.delayed(const Duration(seconds: 3), () {
@@ -90,7 +116,18 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
             });
           }
         });
-      });
+      } catch (e) {
+        setState(() {
+          _isSubmitting = false;
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred. Please try again.'),
+            backgroundColor: AppColors.accentTertiary,
+          ),
+        );
+      }
     }
   }
 
@@ -659,14 +696,14 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
-                color: AppColors.accentTertiary,
+                color: AppColors.beginnerLevel,
                 width: 2,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
-                color: AppColors.accentTertiary,
+                color: AppColors.beginnerLevel,
                 width: 2,
               ),
             ),

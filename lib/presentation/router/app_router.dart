@@ -7,12 +7,26 @@ import 'package:portfolio/presentation/pages/education_page.dart';
 import 'package:portfolio/presentation/pages/contact_page.dart';
 import 'package:portfolio/presentation/pages/not_found_page.dart';
 import 'package:portfolio/presentation/pages/snake_game_page.dart';
+import 'package:portfolio/presentation/pages/splash_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
     errorBuilder: (context, state) => const NotFoundPage(),
     routes: [
+      GoRoute(
+        path: '/splash',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const SplashScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: child,
+            );
+          },
+        ),
+      ),
       GoRoute(
         path: '/',
         pageBuilder: (context, state) => CustomTransitionPage(
