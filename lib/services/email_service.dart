@@ -27,7 +27,7 @@ class EmailService {
             'from_email': email,
             'subject': subject,
             'message': message,
-            'to_email': 'swapnaneelsarkar571@gmail.com',
+            'to_email': 'swapnaneel.devwork@gmail.com',
           },
         }),
       );

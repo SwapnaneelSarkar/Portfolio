@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
 import 'package:portfolio/presentation/widgets/footer.dart';
+import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/animated_background.dart';
 import 'package:lottie/lottie.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -37,9 +38,9 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
     super.initState();
     _backgroundController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 24),
     )..repeat();
-    
+
     _contentController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
@@ -145,7 +146,6 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
       ),
       body: Stack(
         children: [
-          // Animated Background
           AnimatedBackground(controller: _backgroundController),
           
           // Main Content
@@ -279,8 +279,8 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
           _buildContactItem(
             Icons.email,
             'Email',
-            'swapnaneelsarkar571@gmail.com',
-            'mailto:swapnaneelsarkar571@gmail.com',
+            'swapnaneel.devwork@gmail.com',
+            'mailto:swapnaneel.devwork@gmail.com',
           ),
           const SizedBox(height: 24),
           _buildContactItem(
@@ -293,7 +293,7 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
           _buildContactItem(
             Icons.location_on,
             'Location',
-            'Hitendra Narayan Road, Cooch Behar- 736101',
+            'Cooch Behar, West Bengal, India',
             'https://maps.google.com/?q=Cooch+Behar',
           ),
           const SizedBox(height: 40),

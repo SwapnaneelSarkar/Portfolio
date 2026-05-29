@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/presentation/pages/home_page.dart';
 import 'package:portfolio/presentation/pages/projects_page.dart';
+import 'package:portfolio/presentation/pages/case_studies_page.dart';
+import 'package:portfolio/presentation/pages/case_study_detail_page.dart';
 import 'package:portfolio/presentation/pages/experience_page.dart';
 import 'package:portfolio/presentation/pages/education_page.dart';
 import 'package:portfolio/presentation/pages/contact_page.dart';
@@ -39,6 +41,36 @@ class AppRouter {
             );
           },
         ),
+      ),
+      GoRoute(
+        path: '/case-studies',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const CaseStudiesPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: child,
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        path: '/case-studies/:slug',
+        pageBuilder: (context, state) {
+          final slug = state.pathParameters['slug']!;
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: CaseStudyDetailPage(slug: slug),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: child,
+              );
+            },
+          );
+        },
       ),
       GoRoute(
         path: '/projects',

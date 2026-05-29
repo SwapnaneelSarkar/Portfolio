@@ -1,5 +1,5 @@
 name: portfolio
-description: "Swapnaneel Sarkar's Portfolio"
+description: "Swapnaneel Sarkar — Technical Product Manager Portfolio"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -35,6 +35,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/lottie/
     - assets/images/
     - assets/icons/
-    - assets/lottie/

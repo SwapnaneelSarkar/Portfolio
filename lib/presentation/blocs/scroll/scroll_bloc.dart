@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-// Events
 abstract class ScrollEvent extends Equatable {
   const ScrollEvent();
 
@@ -27,7 +26,6 @@ class UpdateScrollPosition extends ScrollEvent {
   List<Object> get props => [position];
 }
 
-// States
 abstract class ScrollState extends Equatable {
   const ScrollState();
 
@@ -56,7 +54,6 @@ class ScrollPositionUpdated extends ScrollState {
   List<Object> get props => [position, activeSection ?? ''];
 }
 
-// BLoC
 class ScrollBloc extends Bloc<ScrollEvent, ScrollState> {
   ScrollBloc() : super(ScrollInitial()) {
     on<ScrollToSection>(_onScrollToSection);
@@ -67,24 +64,27 @@ class ScrollBloc extends Bloc<ScrollEvent, ScrollState> {
     emit(ScrollInProgress(event.sectionId));
   }
 
-  void _onUpdateScrollPosition(UpdateScrollPosition event, Emitter<ScrollState> emit) {
-    // Determine active section based on scroll position
+  void _onUpdateScrollPosition(
+      UpdateScrollPosition event, Emitter<ScrollState> emit) {
+    final p = event.position;
     String? activeSection;
-    
-    if (event.position < 500) {
+
+    if (p < 500) {
       activeSection = 'hero';
-    } else if (event.position < 1200) {
+    } else if (p < 1100) {
       activeSection = 'about';
-    } else if (event.position < 2000) {
+    } else if (p < 1700) {
       activeSection = 'skills';
-    } else if (event.position < 2800) {
+    } else if (p < 2300) {
       activeSection = 'experience';
-    } else if (event.position < 3600) {
+    } else if (p < 2900) {
       activeSection = 'projects';
+    } else if (p < 3400) {
+      activeSection = 'caseStudies';
     } else {
       activeSection = 'contact';
     }
-    
-    emit(ScrollPositionUpdated(event.position, activeSection: activeSection));
+
+    emit(ScrollPositionUpdated(p, activeSection: activeSection));
   }
 }

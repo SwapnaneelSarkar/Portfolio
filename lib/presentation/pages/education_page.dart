@@ -15,23 +15,24 @@ class EducationPage extends StatefulWidget {
   State<EducationPage> createState() => _EducationPageState();
 }
 
-class _EducationPageState extends State<EducationPage> with TickerProviderStateMixin {
+class _EducationPageState extends State<EducationPage>
+    with TickerProviderStateMixin {
   late final AnimationController _backgroundController;
   late final AnimationController _contentController;
   bool _isVisible = false;
-  
+
   final List<Map<String, dynamic>> _education = [
     {
-      'institution': 'Vellore Institute of Technology, Andhra Pradesh',
-      'degree': 'B. Tech in Computer Science and Business Technology',
-      'period': 'September 2022 - Present',
-      'location': 'Andhra Pradesh',
-      'description': 'Pursuing Bachelors of Technology with a major in Computer Science and Business System with a CGPA of 7.88.',
+      'institution': 'Vellore Institute of Technology, Andhra Pradesh (VIT-AP)',
+      'degree': 'B.Tech in Computer Science and Business Systems',
+      'period': 'September 2022 – May 2026',
+      'location': 'Amaravati',
+      'description':
+          'Pursuing B.Tech in Computer Science and Business Systems with a CGPA of 8.05/10.0.',
       'courses': [
         'Data Structures and Algorithms',
         'Object-Oriented Programming',
         'Database Management Systems',
-        'Operating Systems',
         'Software Engineering',
         'Web Technologies',
         'Mobile Application Development',
@@ -41,10 +42,11 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
     },
     {
       'institution': 'Kendriya Vidyalaya, Cooch Behar',
-      'degree': 'Intermediate',
-      'period': 'April 2010 - July 2022',
+      'degree': 'Higher Secondary Education',
+      'period': 'April 2010 – July 2022',
       'location': 'Cooch Behar, West Bengal',
-      'description': 'Studied intermediate with Physics, Chemistry, Mathematics and Biology with a percentage of 71.2%.',
+      'description':
+          'Completed higher secondary education with focus on science and mathematics.',
       'courses': [
         'Physics',
         'Chemistry',
@@ -57,13 +59,14 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       'animation': Assets.schoolAnimation,
     },
   ];
-  
+
   final List<Map<String, dynamic>> _certificates = [
     {
       'title': 'Problem Solving',
       'issuer': 'HackerRank',
       'date': 'January 2024',
-      'description': 'Certification for problem-solving skills in algorithms and data structures.',
+      'description':
+          'Certification for problem-solving skills in algorithms and data structures.',
       'color': AppColors.accentPrimary,
       'url': Assets.certificateUrls['Problem Solving'],
     },
@@ -71,7 +74,8 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       'title': 'Software Engineer',
       'issuer': 'LinkedIn Learning',
       'date': 'March 2024',
-      'description': 'Comprehensive certification covering software engineering principles and practices.',
+      'description':
+          'Comprehensive certification covering software engineering principles and practices.',
       'color': AppColors.accentSecondary,
       'url': Assets.certificateUrls['Software Engineer'],
     },
@@ -79,7 +83,8 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       'title': 'Flutter & Dart',
       'issuer': 'Udemy',
       'date': 'November 2023',
-      'description': 'Complete Flutter development bootcamp with Dart programming language.',
+      'description':
+          'Complete Flutter development bootcamp with Dart programming language.',
       'color': AppColors.accentTertiary,
       'url': Assets.certificateUrls['Flutter & Dart'],
     },
@@ -87,34 +92,32 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       'title': 'Flutter Essentials',
       'issuer': 'Google Developers',
       'date': 'December 2023',
-      'description': 'Essential Flutter development concepts and best practices.',
+      'description':
+          'Essential Flutter development concepts and best practices.',
       'color': AppColors.accentPrimary,
       'url': Assets.certificateUrls['Flutter Essentials'],
     },
   ];
-  
+
   @override
   void initState() {
     super.initState();
     _backgroundController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 24),
     )..repeat();
-    
+
     _contentController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
     );
-    
-    // Add post-frame callback to start animation after build
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _isVisible = true;
-      });
+      setState(() => _isVisible = true);
       _contentController.forward();
     });
   }
-  
+
   @override
   void dispose() {
     _backgroundController.dispose();
@@ -126,26 +129,22 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
-    
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: Size.fromHeight(72),
         child: CustomAppBar(),
       ),
       body: Stack(
         children: [
-          // Animated Background
           AnimatedBackground(controller: _backgroundController),
-          
-          // Main Content
           SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                // Header
                 Container(
-                  height: 300,
+                  height: 280,
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Center(
@@ -198,8 +197,6 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
                     ),
                   ),
                 ),
-                
-                // Education
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
                   child: Column(
@@ -216,13 +213,15 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
                         ),
                       ),
                       const SizedBox(height: 40),
-                      ..._education.map((edu) {
-                        final index = _education.indexOf(edu);
-                        return _buildEducationCard(edu, index, textTheme, size);
-                      }).toList(),
-                      
+                      ..._education.asMap().entries.map((entry) {
+                        return _buildEducationCard(
+                          entry.value,
+                          entry.key,
+                          textTheme,
+                          size,
+                        );
+                      }),
                       const SizedBox(height: 80),
-                      
                       AnimatedOpacity(
                         opacity: _isVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 800),
@@ -238,8 +237,6 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
                     ],
                   ),
                 ),
-                
-                // Footer
                 const Footer(),
               ],
             ),
@@ -248,24 +245,26 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       ),
     );
   }
-  
-  Widget _buildEducationCard(Map<String, dynamic> education, int index, TextTheme textTheme, Size size) {
+
+  Widget _buildEducationCard(
+    Map<String, dynamic> education,
+    int index,
+    TextTheme textTheme,
+    Size size,
+  ) {
     final isMobile = size.width < 768;
     final isEven = index % 2 == 0;
-    
+
     return AnimatedBuilder(
       animation: _contentController,
       builder: (context, child) {
         final delay = _contentController.value - (index * 0.2);
         final offset = delay < 0 ? 100.0 : 0.0;
         final opacity = delay < 0 ? 0.0 : 1.0;
-        
+
         return Transform.translate(
           offset: Offset(isEven ? -offset : offset, 0),
-          child: Opacity(
-            opacity: opacity,
-            child: child,
-          ),
+          child: Opacity(opacity: opacity, child: child),
         );
       },
       child: Container(
@@ -305,23 +304,18 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       ),
     );
   }
-  
-  Widget _buildEducationContent(Map<String, dynamic> education, TextTheme textTheme) {
+
+  Widget _buildEducationContent(
+    Map<String, dynamic> education,
+    TextTheme textTheme,
+  ) {
     return Container(
       padding: const EdgeInsets.all(30),
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: education['color'].withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
         border: Border.all(
-          color: education['color'].withOpacity(0.2),
-          width: 1,
+          color: (education['color'] as Color).withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -341,7 +335,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: education['color'].withOpacity(0.1),
+                  color: (education['color'] as Color).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -358,34 +352,21 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
           const SizedBox(height: 8),
           Text(
             education['degree'],
-            style: textTheme.titleLarge?.copyWith(
-              color: AppColors.textPrimary,
-            ),
+            style: textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
           Row(
             children: [
-              Icon(
-                Icons.location_on,
-                color: education['color'],
-                size: 16,
-              ),
+              Icon(Icons.location_on, color: education['color'], size: 16),
               const SizedBox(width: 4),
               Text(
                 education['location'],
-                style: textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+                style: textTheme.bodyMedium,
               ),
             ],
           ),
           const SizedBox(height: 16),
-          Text(
-            education['description'],
-            style: textTheme.bodyLarge?.copyWith(
-              color: AppColors.textPrimary,
-            ),
-          ),
+          Text(education['description'], style: textTheme.bodyLarge),
           const SizedBox(height: 24),
           Text(
             'Courses',
@@ -401,7 +382,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: education['color'].withOpacity(0.1),
+                  color: (education['color'] as Color).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -419,30 +400,27 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       ),
     );
   }
-  
+
   Widget _buildEducationAnimation(Map<String, dynamic> education) {
     return Lottie.network(
       education['animation'],
       fit: BoxFit.contain,
     );
   }
-  
+
   Widget _buildCertificationsGrid(TextTheme textTheme, Size size) {
     final isMobile = size.width < 768;
-    
+
     return AnimatedBuilder(
       animation: _contentController,
       builder: (context, child) {
-        return Opacity(
-          opacity: _contentController.value,
-          child: child,
-        );
+        return Opacity(opacity: _contentController.value, child: child);
       },
       child: isMobile
           ? Column(
-              children: _certificates.map((cert) {
-                return _buildCertificateCard(cert, textTheme);
-              }).toList(),
+              children: _certificates
+                  .map((cert) => _buildCertificateCard(cert, textTheme))
+                  .toList(),
             )
           : GridView.count(
               crossAxisCount: 2,
@@ -450,15 +428,18 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
               physics: const NeverScrollableScrollPhysics(),
               crossAxisSpacing: 20,
               mainAxisSpacing: 20,
-              childAspectRatio: 2.0, // Made cards smaller
-              children: _certificates.map((cert) {
-                return _buildCertificateCard(cert, textTheme);
-              }).toList(),
+              childAspectRatio: 2.0,
+              children: _certificates
+                  .map((cert) => _buildCertificateCard(cert, textTheme))
+                  .toList(),
             ),
     );
   }
-  
-  Widget _buildCertificateCard(Map<String, dynamic> certificate, TextTheme textTheme) {
+
+  Widget _buildCertificateCard(
+    Map<String, dynamic> certificate,
+    TextTheme textTheme,
+  ) {
     return GestureDetector(
       onTap: () => _showCertificateDialog(certificate),
       child: Container(
@@ -467,16 +448,8 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
         decoration: BoxDecoration(
           color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: certificate['color'].withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
           border: Border.all(
-            color: certificate['color'].withOpacity(0.2),
-            width: 1,
+            color: (certificate['color'] as Color).withValues(alpha: 0.2),
           ),
         ),
         child: Column(
@@ -485,13 +458,9 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.verified,
-                  color: certificate['color'],
-                  size: 24,
-                ),
+                Icon(Icons.verified, color: certificate['color'], size: 24),
                 const SizedBox(width: 8),
-                Expanded(
+                Flexible(
                   child: Text(
                     certificate['title'],
                     style: textTheme.titleLarge?.copyWith(
@@ -504,19 +473,17 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
             const SizedBox(height: 8),
             Row(
               children: [
-                Expanded(
+                Flexible(
                   child: Text(
                     certificate['issuer'],
-                    style: textTheme.titleMedium?.copyWith(
-                      color: AppColors.textPrimary,
-                    ),
+                    style: textTheme.titleMedium,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: certificate['color'].withOpacity(0.1),
+                    color: (certificate['color'] as Color).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -531,15 +498,11 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
               ],
             ),
             const SizedBox(height: 8),
-            Expanded(
-              child: Text(
-                certificate['description'],
-                style: textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+            Text(
+              certificate['description'],
+              style: textTheme.bodyMedium,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 8),
             Row(
@@ -554,11 +517,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
                   ),
                 ),
                 const SizedBox(width: 4),
-                Icon(
-                  Icons.touch_app,
-                  color: certificate['color'],
-                  size: 16,
-                ),
+                Icon(Icons.touch_app, color: certificate['color'], size: 16),
               ],
             ),
           ],
@@ -566,7 +525,7 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
       ),
     );
   }
-  
+
   void _showCertificateDialog(Map<String, dynamic> certificate) {
     showDialog(
       context: context,
@@ -579,25 +538,13 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: Column(
+        content: const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Do you want to download this certificate to see if I\'m telling the truth? 🧐',
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'I promise it\'s legit... or is it? 😏',
-              style: TextStyle(
-                color: certificate['color'],
-                fontSize: 14,
-                fontStyle: FontStyle.italic,
-              ),
+              'Download this certificate to verify credentials.',
+              style: TextStyle(color: AppColors.textPrimary, fontSize: 16),
             ),
           ],
         ),
@@ -617,22 +564,18 @@ class _EducationPageState extends State<EducationPage> with TickerProviderStateM
             style: ElevatedButton.styleFrom(
               backgroundColor: certificate['color'],
             ),
-            child: const Text('Yes, I\'m Curious!'),
+            child: const Text('Download'),
           ),
         ],
       ),
     );
   }
-  
-  void _downloadCertificate(String? url) async {
-    if (url != null) {
-      try {
-        final Uri uri = Uri.parse(url);
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } catch (e) {
-        // Handle error
-        debugPrint('Could not launch certificate URL: $e');
-      }
+
+  Future<void> _downloadCertificate(String? url) async {
+    if (url == null) return;
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      debugPrint('Could not launch certificate URL: $url');
     }
   }
 }

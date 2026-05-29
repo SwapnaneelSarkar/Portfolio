@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
           return MaterialApp.router(
-            title: 'Swapnaneel Sarkar | Portfolio',
+            title: 'Swapnaneel Sarkar | Technical Product Manager',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.darkTheme,
             routerConfig: AppRouter.router,

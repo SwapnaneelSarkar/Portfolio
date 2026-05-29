@@ -20,7 +20,7 @@ class ScrollIndicator extends StatelessWidget {
             child: Center(
               child: Container(
                 width: 20,
-                height: 200,
+                height: 240,
                 decoration: BoxDecoration(
                   color: AppColors.backgroundLight.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(10),
@@ -33,6 +33,7 @@ class ScrollIndicator extends StatelessWidget {
                     _buildDot('skills', activeSection),
                     _buildDot('experience', activeSection),
                     _buildDot('projects', activeSection),
+                    _buildDot('caseStudies', activeSection),
                     _buildDot('contact', activeSection),
                   ],
                 ),

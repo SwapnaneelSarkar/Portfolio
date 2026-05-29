@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/data/portfolio_content.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
+import 'package:portfolio/presentation/widgets/content_container.dart';
+import 'package:portfolio/presentation/widgets/section_header.dart';
 import 'package:lottie/lottie.dart';
 import 'package:portfolio/assets.dart';
 
@@ -45,35 +48,18 @@ class _ContactPreviewState extends State<ContactPreview> with SingleTickerProvid
     final textTheme = Theme.of(context).textTheme;
     final isMobile = size.width < 768;
     
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+    return ContentContainer(
       child: Column(
         children: [
-          // Section title
           AnimatedOpacity(
             opacity: _isVisible ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 500),
-            child: Text(
-              'Get In Touch',
-              style: textTheme.displaySmall?.copyWith(
-                color: AppColors.textPrimary,
-              ),
+            child: const SectionHeader(
+              title: 'Get In Touch',
+              subtitle: 'Let\'s build something that ships',
             ),
           ),
-          const SizedBox(height: 16),
-          
-          // Section subtitle
-          AnimatedOpacity(
-            opacity: _isVisible ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 700),
-            child: Text(
-              'Let\'s work together',
-              style: textTheme.titleLarge?.copyWith(
-                color: AppColors.accentSecondary,
-              ),
-            ),
-          ),
-          const SizedBox(height: 60),
+          const SizedBox(height: 48),
           
           // Content
           isMobile
@@ -103,6 +89,7 @@ class _ContactPreviewState extends State<ContactPreview> with SingleTickerProvid
   }
   
   Widget _buildContactContent(TextTheme textTheme) {
+    final profile = PortfolioContent.profile;
     return AnimatedOpacity(
       opacity: _isVisible ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 1000),
@@ -124,19 +111,19 @@ class _ContactPreviewState extends State<ContactPreview> with SingleTickerProvid
           _buildContactItem(
             Icons.email,
             'Email',
-            'swapnaneelsarkar571@gmail.com',
+            profile.email,
           ),
           const SizedBox(height: 16),
           _buildContactItem(
             Icons.phone,
             'Phone',
-            '+91 8967853033',
+            profile.phone,
           ),
           const SizedBox(height: 16),
           _buildContactItem(
             Icons.location_on,
             'Location',
-            'Hitendra Narayan Road, Cooch Behar- 736101',
+            profile.location,
           ),
           const SizedBox(height: 40),
           AnimatedButton(

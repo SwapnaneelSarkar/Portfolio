@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/data/portfolio_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/presentation/pages/snake_game_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -58,36 +59,40 @@ class Footer extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 16),
+          Text(
+            PortfolioContent.profile.title,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
+            ),
+          ),
           const SizedBox(height: 32),
-          
-          // Social links
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildSocialButton(
                 FontAwesomeIcons.linkedin,
-                'https://www.linkedin.com/in/swapnaneel-sarkar/',
+                PortfolioContent.profile.linkedInUrl,
                 AppColors.accentPrimary,
               ),
               const SizedBox(width: 20),
               _buildSocialButton(
                 FontAwesomeIcons.github,
-                'https://github.com/SwapnaneelSarkar',
+                PortfolioContent.profile.githubUrl,
                 AppColors.accentSecondary,
               ),
               const SizedBox(width: 20),
               _buildSocialButton(
-                FontAwesomeIcons.instagram,
-                'https://www.instagram.com/horcrux.x_x/',
+                FontAwesomeIcons.envelope,
+                'mailto:${PortfolioContent.profile.email}',
                 AppColors.accentTertiary,
               ),
             ],
           ),
           const SizedBox(height: 32),
-          
-          // Copyright
           const Text(
-            '© 2025 Swapnaneel Sarkar. All rights reserved.',
+            '© 2026 Swapnaneel Sarkar. All rights reserved.',
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 14,

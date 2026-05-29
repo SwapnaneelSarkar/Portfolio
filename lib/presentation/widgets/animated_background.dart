@@ -4,31 +4,37 @@ import 'package:portfolio/core/theme/app_theme.dart';
 
 class AnimatedBackground extends StatefulWidget {
   final AnimationController controller;
-  
+  /// Particle network (disabled by default — too distracting).
+  final bool showParticles;
+  /// Floating laptop/phone shapes (disabled by default).
+  final bool showFloatingDecorations;
+
   const AnimatedBackground({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+    this.showParticles = false,
+    this.showFloatingDecorations = false,
+  });
 
   @override
   State<AnimatedBackground> createState() => _AnimatedBackgroundState();
 }
 
 class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTickerProviderStateMixin {
-  late final AnimationController _particleController;
+  AnimationController? _particleController;
   final List<Particle> _particles = [];
   final Random _random = Random();
   
   @override
   void initState() {
     super.initState();
-    _particleController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 30),
-    )..repeat();
-    
-    // Initialize particles
-    _initParticles();
+    if (widget.showParticles) {
+      _particleController = AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 30),
+      )..repeat();
+      _initParticles();
+    }
   }
   
   void _initParticles() {
@@ -64,7 +70,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
   
   @override
   void dispose() {
-    _particleController.dispose();
+    _particleController?.dispose();
     super.dispose();
   }
 
@@ -88,7 +94,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
           },
         ),
         
-        // Floating elements
+        if (widget.showFloatingDecorations) ...[
         Positioned(
           top: 100,
           right: 100,
@@ -151,20 +157,20 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
             child: _buildCodeBlock(),
           ),
         ),
-        
-        // Animated particles
-        AnimatedBuilder(
-          animation: _particleController,
-          builder: (context, child) {
-            return CustomPaint(
-              painter: ParticlesPainter(
-                particles: _particles,
-                animation: _particleController,
-              ),
-              size: Size.infinite,
-            );
-          },
-        ),
+        ],
+        if (widget.showParticles && _particleController != null)
+          AnimatedBuilder(
+            animation: _particleController!,
+            builder: (context, child) {
+              return CustomPaint(
+                painter: ParticlesPainter(
+                  particles: _particles,
+                  animation: _particleController!,
+                ),
+                size: Size.infinite,
+              );
+            },
+          ),
       ],
     );
   }

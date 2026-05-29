@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'dart:async';
 import 'dart:math';
@@ -26,12 +27,18 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
   bool _isPaused = false;
   double _swipeStartX = 0;
   double _swipeStartY = 0;
-  
+  late final FocusNode _focusNode;
+
   @override
   void initState() {
     super.initState();
+    _focusNode = FocusNode();
+    HardwareKeyboard.instance.addHandler(_handleHardwareKey);
     _loadHighScore();
     _initGame();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
   }
   
   Future<void> _loadHighScore() async {
@@ -211,9 +218,44 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
     _swipeStartY = details.globalPosition.dy;
   }
   
+  bool _handleHardwareKey(KeyEvent event) {
+    if (event is! KeyDownEvent || _isGameOver) {
+      return false;
+    }
+
+    final key = event.logicalKey;
+    if (key == LogicalKeyboardKey.arrowUp ||
+        key == LogicalKeyboardKey.keyW) {
+      _onDirectionChange(Direction.up);
+      return true;
+    }
+    if (key == LogicalKeyboardKey.arrowDown ||
+        key == LogicalKeyboardKey.keyS) {
+      _onDirectionChange(Direction.down);
+      return true;
+    }
+    if (key == LogicalKeyboardKey.arrowLeft ||
+        key == LogicalKeyboardKey.keyA) {
+      _onDirectionChange(Direction.left);
+      return true;
+    }
+    if (key == LogicalKeyboardKey.arrowRight ||
+        key == LogicalKeyboardKey.keyD) {
+      _onDirectionChange(Direction.right);
+      return true;
+    }
+    if (key == LogicalKeyboardKey.space) {
+      _togglePause();
+      return true;
+    }
+    return false;
+  }
+
   @override
   void dispose() {
+    HardwareKeyboard.instance.removeHandler(_handleHardwareKey);
     _timer?.cancel();
+    _focusNode.dispose();
     super.dispose();
   }
   
@@ -235,10 +277,14 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
           ),
         ],
       ),
-      body: GestureDetector(
-        onPanStart: _handleSwipeStart,
-        onPanUpdate: _handleSwipeUpdate,
-        child: Column(
+      body: Focus(
+        focusNode: _focusNode,
+        autofocus: true,
+        child: GestureDetector(
+          onTap: () => _focusNode.requestFocus(),
+          onPanStart: _handleSwipeStart,
+          onPanUpdate: _handleSwipeUpdate,
+          child: Column(
           children: [
             // Game stats
             Container(
@@ -295,7 +341,17 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
               ),
             ),
             
-            // Controls
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Use arrow keys or WASD · Space to pause · Tap board to focus',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.textSecondary.withValues(alpha: 0.9),
+                  fontSize: 12,
+                ),
+              ),
+            ),
             Container(
               padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.all(16),
@@ -382,10 +438,11 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
               ),
           ],
         ),
+        ),
       ),
     );
   }
-  
+
   Widget _buildStatItem(String label, String value, IconData icon, Color color) {
     return Column(
       children: [

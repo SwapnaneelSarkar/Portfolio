@@ -19,8 +19,9 @@ class Assets {
   static const String flutterAnimation = 'https://assets3.lottiefiles.com/packages/lf20_puciaact.json';
   static const String goAnimation = 'https://assets9.lottiefiles.com/packages/lf20_kyu7xb1v.json';
   
-  // Resume download URL - replace with your actual resume URL
-  static const String resumeUrl = 'https://docs.google.com/document/d/1D3Mn7jahk61fksFFxkarDuCi7H84fFce/export?format=pdf';
+  // Resume (Google Drive)
+  static const String resumeUrl =
+      'https://drive.google.com/file/d/1KLA3Ttu3Bv_EFI72DeNHV_dtl198Llt0/view?usp=sharing';
   
   // Certificate URLs - replace with your actual certificate URLs
   static const Map<String, String> certificateUrls = {

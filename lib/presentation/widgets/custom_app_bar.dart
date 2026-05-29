@@ -24,6 +24,7 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
   final List<Map<String, String>> _menuItems = [
     {'title': 'Home', 'route': '/'},
     {'title': 'Projects', 'route': '/projects'},
+    {'title': 'Case Studies', 'route': '/case-studies'},
     {'title': 'Experience', 'route': '/experience'},
     {'title': 'Education', 'route': '/education'},
     {'title': 'Contact', 'route': '/contact'},
@@ -63,6 +64,7 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isCompact = size.width < 992;
     final isMobile = size.width < 768;
     
     return Stack(
@@ -86,10 +88,10 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
             ),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Logo
-              GestureDetector(
+              Flexible(
+                child: GestureDetector(
                 onTap: () {
                   context.go('/');
                   
@@ -117,16 +119,7 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.accentPrimary,
-                              AppColors.accentSecondary,
-                              AppColors.primaryLight,
-                              AppColors.accentTertiary,
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
+                          color: AppColors.accentPrimary,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Center(
@@ -154,26 +147,29 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
                   ],
                 ),
               ),
-              
-              // Navigation
-              if (!isMobile)
-                Row(
-                  children: _menuItems.map((item) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _NavItem(
-                        title: item['title']!,
-                        route: item['route']!,
-                      ),
-                    );
-                  }).toList(),
+              ),
+              const Spacer(),
+              if (!isCompact)
+                Flexible(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _menuItems.map((item) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: _NavItem(
+                            title: item['title']!,
+                            route: item['route']!,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ),
-              
-              // Contact button or menu button
-              if (!isMobile)
+              if (!isCompact)
                 AnimatedButton(
                   onPressed: () => context.go('/contact'),
-                  text: 'Hire Me',
+                  text: 'Contact',
                   isPrimary: true,
                 )
               else
@@ -217,8 +213,7 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
           ),
         ),
         
-        // Mobile Menu Overlay
-        if (isMobile)
+        if (isCompact)
           AnimatedBuilder(
             animation: _menuAnimation,
             builder: (context, child) {
@@ -316,7 +311,7 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
           ),
         
         // Backdrop for mobile menu
-        if (_isMenuOpen && isMobile)
+        if (_isMenuOpen && isCompact)
           Positioned.fill(
             child: GestureDetector(
               onTap: _toggleMenu,

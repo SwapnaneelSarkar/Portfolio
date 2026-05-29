@@ -1,250 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
-import 'package:portfolio/presentation/pages/snake_game_page.dart';
-import 'package:portfolio/presentation/widgets/animated_text.dart';
+import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
-import 'package:lottie/lottie.dart';
+import 'package:portfolio/presentation/widgets/content_container.dart';
+import 'package:portfolio/presentation/widgets/metric_card.dart';
 import 'package:go_router/go_router.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:portfolio/assets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HeroSection extends StatelessWidget {
   final AnimationController controller;
-  
+
   const HeroSection({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
-    
-    return Container(
-      height: size.height,
-      width: size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+    final profile = PortfolioContent.profile;
+    final isMobile = size.width < 900;
+    final showLottie = size.width > 900;
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight: size.height * 0.9,
+        minWidth: size.width,
+      ),
       child: Stack(
         children: [
-          // Background animated elements
-          Positioned(
-            right: -100,
-            top: size.height * 0.2,
-            child: AnimatedBuilder(
-              animation: controller,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(
-                    50 * (1 - controller.value),
-                    0,
-                  ),
-                  child: Opacity(
-                    opacity: controller.value,
-                    child: child,
-                  ),
-                );
-              },
-//               child: Lottie.asset(
-//   Assets.googleAnimation,
-//   height: 400,
-//   fit: BoxFit.contain,
-// ),
-            ),
-          ),
-          
-          // Main content
           Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Left side - Text content
-                Expanded(
-                  flex: 3,
-                  child: AnimatedBuilder(
-                    animation: controller,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                          -50 * (1 - controller.value),
-                          0,
-                        ),
-                        child: Opacity(
-                          opacity: controller.value,
-                          child: child,
-                        ),
-                      );
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Greeting
-                        Text(
-                          'Hello, I am',
-                          style: textTheme.headlineSmall?.copyWith(
-                            color: AppColors.accentSecondary,
+            child: ContentContainer(
+              padding: EdgeInsets.fromLTRB(
+                isMobile ? 24 : 48,
+                120,
+                isMobile ? 24 : 48,
+                80,
+              ),
+              child: AnimatedBuilder(
+                animation: controller,
+                builder: (context, child) {
+                  return Opacity(
+                    opacity: controller.value,
+                    child: Transform.translate(
+                      offset: Offset(0, 28 * (1 - controller.value)),
+                      child: child,
+                    ),
+                  );
+                },
+                child: isMobile
+                    ? _buildTextColumn(context, textTheme, profile)
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: _buildTextColumn(context, textTheme, profile),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        
-                        // Name
-                        Text(
-                          'Swapnaneel Sarkar',
-                          style: textTheme.displayMedium?.copyWith(
-                            background: Paint()
-                              ..shader = const LinearGradient(
-                                colors: AppColors.primaryGradient,
-                              ).createShader(
-                                const Rect.fromLTWH(0, 0, 300, 70),
+                          if (showLottie)
+                            Expanded(
+                              flex: 2,
+                              child: Lottie.network(
+                                Assets.workAnimation,
+                                fit: BoxFit.contain,
+                                height: 320,
                               ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        
-                        // Animated roles
-                        SizedBox(
-                          height: 50,
-                          child: DefaultTextStyle(
-                            style: textTheme.headlineMedium!.copyWith(
-                              color: AppColors.textPrimary,
                             ),
-                            child: AnimatedTextKit(
-                              animatedTexts: [
-                                TypewriterAnimatedText(
-                                  'Software Developer',
-                                  speed: const Duration(milliseconds: 100),
-                                ),
-                                TypewriterAnimatedText(
-                                  'Flutter Developer',
-                                  speed: const Duration(milliseconds: 100),
-                                ),
-                                TypewriterAnimatedText(
-                                  'Freelancer',
-                                  speed: const Duration(milliseconds: 100),
-                                ),
-                                TypewriterAnimatedText(
-                                  'Problem Solver',
-                                  speed: const Duration(milliseconds: 100),
-                                ),
-                              ],
-                              repeatForever: true,
-                              pause: const Duration(milliseconds: 1000),
-                              displayFullTextOnTap: true,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        
-                        // Description
-                        Text(
-                          'Building beautiful, responsive applications with Flutter and solving complex problems with a passion for clean code. Specializing in Google-oriented technologies like Flutter and Go.',
-                          style: textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 40),
-                        
-                        // Call to action buttons
-                        Row(
-                          children: [
-                            AnimatedButton(
-                              onPressed: () => context.go('/projects'),
-                              text: 'View Projects',
-                              isPrimary: true,
-                            ),
-                            const SizedBox(width: 16),
-                            AnimatedButton(
-                              onPressed: () => context.go('/contact'),
-                              text: 'Contact Me',
-                              isPrimary: false,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        
-                        // Resume download button
-                        OutlinedButton.icon(
-                          onPressed: () => _launchUrl(Assets.resumeUrl),
-                          icon: const Icon(Icons.download),
-                          label: const Text('Download Resume'),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppColors.accentPrimary,
-                            side: const BorderSide(color: AppColors.accentPrimary, width: 2),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                
-                // Right side - Animated illustration
-                if (size.width > 900)
-                  Expanded(
-                    flex: 2,
-                    child: AnimatedBuilder(
-                      animation: controller,
-                      builder: (context, child) {
-                        return Transform.translate(
-                          offset: Offset(
-                            50 * (1 - controller.value),
-                            0,
-                          ),
-                          child: Opacity(
-                            opacity: controller.value,
-                            child: child,
-                          ),
-                        );
-                      },
-                      child: Lottie.network(
-                        Assets.developerAnimation,
-                        fit: BoxFit.contain,
+                        ],
                       ),
-                    ),
-                  ),
-              ],
+              ),
             ),
           ),
-          
-          // Scroll down indicator
           Positioned(
-            bottom: 40,
+            bottom: 32,
             left: 0,
             right: 0,
             child: Center(
               child: Column(
                 children: [
-                  Text(
-                    'Scroll Down',
-                    style: textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 8),
+                  Text('Scroll', style: textTheme.bodySmall),
+                  const SizedBox(height: 4),
                   Lottie.network(
                     Assets.scrollDownAnimation,
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.contain,
+                    height: 40,
+                    width: 40,
                   ),
                 ],
-              ),
-            ),
-          ),
-          
-          // Easter egg trigger (hidden in the corner)
-          Positioned(
-            bottom: 10,
-            right: 10,
-            child: GestureDetector(
-              onTap: () => _showEasterEgg(context),
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(10),
-                ),
               ),
             ),
           ),
@@ -252,17 +97,124 @@ class HeroSection extends StatelessWidget {
       ),
     );
   }
-  
-  void _showEasterEgg(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SnakeGamePage(),
-      ),
+
+  Widget _buildTextColumn(
+    BuildContext context,
+    TextTheme textTheme,
+    ProfileInfo profile,
+  ) {
+    final isMobile = MediaQuery.of(context).size.width < 900;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          profile.title,
+          style: textTheme.labelLarge?.copyWith(
+            color: AppColors.accentPrimary,
+            letterSpacing: 1.5,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          profile.name,
+          style: textTheme.displayMedium?.copyWith(
+            fontSize: isMobile ? 40 : 52,
+            height: 1.1,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 44,
+          child: DefaultTextStyle(
+            style: textTheme.titleLarge!.copyWith(
+              color: AppColors.textSecondary,
+            ),
+            child: AnimatedTextKit(
+              animatedTexts: profile.animatedRoles
+                  .map(
+                    (r) => FadeAnimatedText(
+                      r,
+                      duration: const Duration(milliseconds: 2200),
+                    ),
+                  )
+                  .toList(),
+              repeatForever: true,
+              pause: const Duration(milliseconds: 800),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: Text(
+            'I turn ambiguous briefs into shipped products — discovery, roadmaps, and delivery across AI, SaaS, and mobile.',
+            style: textTheme.bodyLarge?.copyWith(
+              color: AppColors.textSecondary,
+              fontSize: 17,
+              height: 1.55,
+            ),
+          ),
+        ),
+        const SizedBox(height: 36),
+        _buildMetrics(isMobile),
+        const SizedBox(height: 36),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            AnimatedButton(
+              onPressed: () => context.go('/case-studies'),
+              text: 'Case Studies',
+              isPrimary: true,
+            ),
+            AnimatedButton(
+              onPressed: () => context.go('/projects'),
+              text: 'Projects',
+              isPrimary: false,
+            ),
+            OutlinedButton(
+              onPressed: () => _launchUrl(Assets.resumeUrl),
+              child: const Text('Resume'),
+            ),
+          ],
+        ),
+      ],
     );
   }
-  
+
+  Widget _buildMetrics(bool isMobile) {
+    final metrics = PortfolioContent.impactMetrics;
+    if (isMobile) {
+      return Column(
+        children: metrics
+            .map(
+              (m) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: MetricCard(value: m.value, label: m.label),
+              ),
+            )
+            .toList(),
+      );
+    }
+    return Row(
+      children: metrics
+          .map(
+            (m) => Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: MetricCard(value: m.value, label: m.label),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
   Future<void> _launchUrl(String url) async {
-    final Uri uri = Uri.parse(url);
+    final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $url');
     }

@@ -1,97 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
-import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
-import 'package:portfolio/presentation/widgets/footer.dart';
-import 'package:portfolio/presentation/widgets/animated_background.dart';
-import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
+import 'package:portfolio/presentation/widgets/page_scaffold.dart';
+import 'package:portfolio/assets.dart';
+import 'package:lottie/lottie.dart';
 
-class NotFoundPage extends StatefulWidget {
-  const NotFoundPage({Key? key}) : super(key: key);
-
-  @override
-  State<NotFoundPage> createState() => _NotFoundPageState();
-}
-
-class _NotFoundPageState extends State<NotFoundPage> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 20),
-    )..repeat();
-  }
-  
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class NotFoundPage extends StatelessWidget {
+  const NotFoundPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(80),
-        child: CustomAppBar(),
-      ),
-      body: Stack(
-        children: [
-          // Animated Background
-          AnimatedBackground(controller: _controller),
-          
-          // Main Content
-          Center(
+
+    return PageScaffold(
+      showFooter: false,
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.55,
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Lottie.network(
-                  'https://assets9.lottiefiles.com/packages/lf20_kcsr6fcp.json',
-                  height: 300,
-                  width: 300,
-                  fit: BoxFit.contain,
+                  Assets.notFoundAnimation,
+                  height: 220,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 Text(
                   '404',
-                  style: textTheme.displayLarge?.copyWith(
+                  style: textTheme.displayMedium?.copyWith(
                     color: AppColors.accentPrimary,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  'Page Not Found',
-                  style: textTheme.headlineMedium?.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'The page you are looking for doesn\'t exist or has been moved.',
-                  style: textTheme.bodyLarge?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 12),
+                Text('Page not found', style: textTheme.headlineSmall),
+                const SizedBox(height: 32),
                 AnimatedButton(
                   onPressed: () => context.go('/'),
-                  text: 'Go Home',
+                  text: 'Back to Home',
                   isPrimary: true,
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
