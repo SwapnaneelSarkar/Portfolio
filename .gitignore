@@ -46,4 +46,3 @@ app.*.map.json
 
 # Flutter installation for Netlify build
 flutter/
-flutter.tar.xz

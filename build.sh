@@ -1,17 +1,20 @@
 #!/bin/bash
+set -e  # Exit on any error
 
-# Download and install Flutter
+# Download and install Flutter using git
 echo "Installing Flutter..."
-FLUTTER_VERSION="3.24.5"
-FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+git clone https://github.com/flutter/flutter.git -b stable --depth 1
 
-curl -o flutter.tar.xz "$FLUTTER_URL"
-tar xf flutter.tar.xz
+echo "Setting up Flutter path..."
 export PATH="$PATH:$PWD/flutter/bin"
 
 # Verify Flutter installation
+echo "Flutter version:"
 flutter --version
-flutter doctor -v
+
+# Enable web support
+echo "Enabling Flutter web support..."
+flutter config --enable-web
 
 # Get dependencies
 echo "Getting Flutter dependencies..."
@@ -22,3 +25,4 @@ echo "Building Flutter web app..."
 flutter build web --release
 
 echo "Build completed successfully!"
+ls -la build/web
