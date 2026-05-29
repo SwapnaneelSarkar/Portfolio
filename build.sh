@@ -3,13 +3,7 @@ set -e  # Exit on any error
 
 # Download and install Flutter using git
 echo "Installing Flutter..."
-git clone https://github.com/flutter/flutter.git --depth 1
-
-# Use a specific stable version
-echo "Using Flutter 3.19.0..."
-cd flutter
-git checkout 3.19.0
-cd ..
+git clone https://github.com/flutter/flutter.git -b stable --depth 1
 
 echo "Setting up Flutter path..."
 export PATH="$PATH:$PWD/flutter/bin"
