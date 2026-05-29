@@ -1,4 +1,4 @@
-# Swapnaneel Sarkar — Technical Product Manager Portfolio
+# Swapnaneel Sarkar — Product Manager Portfolio
 
 Flutter Web portfolio with a calm, content-first layout.
 

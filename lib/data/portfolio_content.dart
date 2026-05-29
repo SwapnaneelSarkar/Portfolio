@@ -132,12 +132,12 @@ class EducationEntry {
 class PortfolioContent {
   static const profile = ProfileInfo(
     name: 'Swapnaneel Sarkar',
-    title: 'Technical Product Manager',
+    title: 'Product Manager',
     summary:
-        'Technical Product Manager with hands-on experience across supply chain, ERP, workforce management, and SaaS — including AI-powered and LLM/RAG-based products. I work at the intersection of user problems and engineering: discovery, roadmaps, and shipping products that move the needle.',
+        'Product Manager with hands-on experience across supply chain, ERP, workforce management, and SaaS — including AI-powered and LLM/RAG-based products. I work at the intersection of user problems and engineering: discovery, roadmaps, and shipping products that move the needle.',
     animatedRoles: [
-      'Technical Product Manager',
-      'Product Lead',
+      'Product Manager',
+      'Product Strategist',
       '0→1 Builder',
     ],
     email: 'swapnaneel.devwork@gmail.com',
