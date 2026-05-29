@@ -138,7 +138,7 @@ class AppTheme {
         letterSpacing: 1.25,
       ),
     ),
-    cardTheme: CardThemeData(
+    cardTheme: CardTheme(
       color: AppColors.cardBackground,
       elevation: 0,
       shape: RoundedRectangleBorder(

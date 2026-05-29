@@ -3,12 +3,12 @@ set -e  # Exit on any error
 
 # Download and install Flutter using git
 echo "Installing Flutter..."
-git clone https://github.com/flutter/flutter.git -b stable --depth 1
+git clone https://github.com/flutter/flutter.git --depth 1
 
-# Pin to a specific compatible Flutter version
-echo "Pinning Flutter to 3.27.0..."
+# Use a specific stable version
+echo "Using Flutter 3.19.0..."
 cd flutter
-git checkout 3.27.0
+git checkout 3.19.0
 cd ..
 
 echo "Setting up Flutter path..."
