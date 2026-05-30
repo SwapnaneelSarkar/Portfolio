@@ -71,20 +71,26 @@ class _SplashScreenState extends State<SplashScreen>
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: AppColors.primaryGradient,
+                      color: AppColors.backgroundLight,
+                      borderRadius: BorderRadius.circular(36),
+                      border: Border.all(
+                        color: AppColors.accentPrimary.withOpacity(0.35),
                       ),
-                      borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'SS',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Image.asset(
+                      Assets.avatar,
+                      fit: BoxFit.cover,
+                      alignment: const Alignment(0, -0.2),
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(
+                          child: Icon(
+                            Icons.person,
+                            color: AppColors.textPrimary,
+                            size: 34,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 28),

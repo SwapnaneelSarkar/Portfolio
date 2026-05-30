@@ -29,29 +29,39 @@ class _SkillsSectionState extends State<SkillsSection> {
           ),
           const SizedBox(height: 48),
           isMobile
-                ? Column(
-                    children: groups
+              ? Column(
+                children:
+                    groups
                         .map(
                           (g) => Padding(
                             padding: const EdgeInsets.only(bottom: 20),
-                            child: _SkillGroupCard(group: g, textTheme: textTheme),
-                          ),
-                        )
-                        .toList(),
-                  )
-                : Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: groups
-                        .map(
-                          (g) => Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: _SkillGroupCard(group: g, textTheme: textTheme),
+                            child: _SkillGroupCard(
+                              group: g,
+                              textTheme: textTheme,
                             ),
                           ),
                         )
                         .toList(),
-                  ),
+              )
+              : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:
+                    groups
+                        .map(
+                          (g) => Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: _SkillGroupCard(
+                                group: g,
+                                textTheme: textTheme,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+              ),
         ],
       ),
     );
@@ -62,10 +72,7 @@ class _SkillGroupCard extends StatelessWidget {
   final SkillGroup group;
   final TextTheme textTheme;
 
-  const _SkillGroupCard({
-    required this.group,
-    required this.textTheme,
-  });
+  const _SkillGroupCard({required this.group, required this.textTheme});
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +85,12 @@ class _SkillGroupCard extends StatelessWidget {
             children: [
               Icon(group.icon, color: group.color, size: 24),
               const SizedBox(width: 12),
-              Text(
-                group.name,
-                style: textTheme.titleLarge?.copyWith(color: group.color),
+              Expanded(
+                child: Text(
+                  group.name,
+                  style: textTheme.titleLarge?.copyWith(color: group.color),
+                  overflow: TextOverflow.visible,
+                ),
               ),
             ],
           ),
@@ -88,9 +98,10 @@ class _SkillGroupCard extends StatelessWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: group.skills
-                .map((s) => TagChip(label: s, color: group.color))
-                .toList(),
+            children:
+                group.skills
+                    .map((s) => TagChip(label: s, color: group.color))
+                    .toList(),
           ),
         ],
       ),

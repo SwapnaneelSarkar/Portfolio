@@ -1,11 +1,11 @@
 {
-    "name": "portfolio_web",
-    "short_name": "portfolio_web",
+    "name": "Swapnaneel Sarkar Portfolio",
+    "short_name": "Swapnaneel",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0B111A",
+    "theme_color": "#1AA99A",
+    "description": "Swapnaneel Sarkar - Product Manager portfolio.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -29,10 +29,7 @@ class ImpactMetric {
   final String value;
   final String label;
 
-  const ImpactMetric({
-    required this.value,
-    required this.label,
-  });
+  const ImpactMetric({required this.value, required this.label});
 }
 
 class ExperienceEntry {
@@ -134,12 +131,8 @@ class PortfolioContent {
     name: 'Swapnaneel Sarkar',
     title: 'Product Manager',
     summary:
-        'Product Manager with hands-on experience across supply chain, ERP, workforce management, and SaaS — including AI-powered and LLM/RAG-based products. I work at the intersection of user problems and engineering: discovery, roadmaps, and shipping products that move the needle.',
-    animatedRoles: [
-      'Product Manager',
-      'Product Strategist',
-      '0→1 Builder',
-    ],
+        'Product Manager with hands-on experience across supply chain, ERP, workforce management, and SaaS — including AI-powered and LLM/RAG-based products. I turn messy business problems into clear product bets, own discovery and prioritization, and partner with engineering to ship products that move the needle.',
+    animatedRoles: ['Product Manager', 'Product Strategist', '0→1 Builder'],
     email: 'swapnaneel.devwork@gmail.com',
     phone: '+91 8967853033',
     location: 'Cooch Behar, West Bengal, India',
@@ -148,22 +141,16 @@ class PortfolioContent {
   );
 
   static const impactMetrics = [
-    ImpactMetric(
-      value: '\$150k+',
-      label: 'Project value overseen (6 months)',
-    ),
+    ImpactMetric(value: '\$150k+', label: 'Project value overseen (6 months)'),
     ImpactMetric(
       value: '10+',
-      label: 'Client engagements',
+      label: 'Products published incl. enterprise products',
     ),
     ImpactMetric(
       value: 'INR 15–30L',
-      label: 'Annual savings (3+ clients)',
+      label: 'Annual savings unlocked through my product solution',
     ),
-    ImpactMetric(
-      value: '0→1',
-      label: 'AI & LLM/RAG products shipped',
-    ),
+    ImpactMetric(value: '0→1', label: 'AI & LLM/RAG products shipped'),
   ];
 
   static const experiences = [
@@ -173,13 +160,14 @@ class PortfolioContent {
       period: 'November 2025 – Present',
       location: 'Hyderabad',
       description:
-          'Managed 10+ client engagements across supply chain, ERP, workforce management, AI, and B2C SaaS — owned product delivery from discovery to launch on multiple concurrent projects.',
+          'Owned product discovery, scope, roadmaps, and delivery for 10+ published products across supply chain, ERP, workforce management, AI, B2C SaaS, and enterprise workflows.',
       responsibilities: [
         'Oversaw \$150k+ in total project value within 6 months',
+        'Published 10+ products, including enterprise products, from discovery through release',
+        'Designed a product solution projected to save INR 15–30 lakhs/year, then partnered with Heizen engineers to build and ship it',
         'Took multiple products from 0 to 1, including AI-powered and LLM/RAG-based platforms',
-        'Helped 3+ clients cut INR 15–30 lakhs/year by migrating manual processes onto custom platforms',
-        'Shipped B2B SaaS features that expanded the paying client base through user interviews and sprint-ready specs',
-        'Ran client discovery sessions and turned ambiguous briefs into requirements and wireframes',
+        'Shipped B2B SaaS features through user interviews, PRDs, prioritization, and sprint-ready specs',
+        'Ran client discovery sessions and turned ambiguous briefs into requirements, wireframes, and release plans',
       ],
       color: AppColors.accentPrimary,
     ),
@@ -332,8 +320,16 @@ class PortfolioContent {
       skills: [
         'Agile & Scrum',
         'Roadmap & Prioritization',
+        'PRDs & Product Specs',
+        'Backlog Management',
+        'MVP Definition',
+        'Product Discovery',
         'Stakeholder Management',
         'User Stories & Discovery',
+        'User Interviews',
+        'KPI Definition',
+        'Go-to-Market Thinking',
+        'Competitive Analysis',
         'Cross-functional Leadership',
       ],
       icon: Icons.lightbulb_outline,
@@ -347,16 +343,34 @@ class PortfolioContent {
         'REST APIs',
         'Firebase',
         'LLM/RAG Products',
+        'AI Product Workflows',
+        'API Integration',
+        'System Design Basics',
         'Figma',
+        'Wireframing',
       ],
       icon: Icons.code,
       color: AppColors.accentSecondary,
     ),
     SkillGroup(
       name: 'Languages',
-      skills: ['Dart', 'TypeScript', 'C++', 'SQL', 'Swift'],
+      skills: ['Dart', 'TypeScript', 'C++', 'SQL', 'Swift', 'Python'],
       icon: Icons.terminal,
       color: AppColors.accentTertiary,
+    ),
+    SkillGroup(
+      name: 'Analytics & Delivery',
+      skills: [
+        'Product Analytics',
+        'Funnel Thinking',
+        'Release Planning',
+        'Sprint Planning',
+        'Client Demos',
+        'Requirements Gathering',
+        'Acceptance Criteria',
+      ],
+      icon: Icons.insights_outlined,
+      color: AppColors.accentPrimary,
     ),
   ];
 

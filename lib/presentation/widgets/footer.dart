@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/assets.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,9 +11,6 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isMobile = size.width < 768;
-    
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
       decoration: BoxDecoration(
@@ -32,20 +30,26 @@ class Footer extends StatelessWidget {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: AppColors.primaryGradient,
+                  color: AppColors.backgroundDark,
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: AppColors.accentPrimary.withOpacity(0.35),
                   ),
-                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Center(
-                  child: Text(
-                    'SS',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
+                clipBehavior: Clip.antiAlias,
+                child: Image.asset(
+                  Assets.avatar,
+                  fit: BoxFit.cover,
+                  alignment: const Alignment(0, -0.2),
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Icon(
+                        Icons.person,
+                        color: AppColors.textPrimary,
+                        size: 26,
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 16),
@@ -93,23 +97,17 @@ class Footer extends StatelessWidget {
           const SizedBox(height: 32),
           const Text(
             '© 2026 Swapnaneel Sarkar. All rights reserved.',
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
           ),
           const SizedBox(height: 16),
-          
+
           // Made with Flutter
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
                 'Made with ',
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
               const Icon(
                 Icons.favorite,
@@ -118,22 +116,16 @@ class Footer extends StatelessWidget {
               ),
               const Text(
                 ' using ',
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
               const FlutterLogo(size: 16),
               const Text(
                 ' Flutter',
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
             ],
           ),
-          
+
           // Easter egg hint
           const SizedBox(height: 8),
           GestureDetector(
@@ -151,7 +143,7 @@ class Footer extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildSocialButton(IconData icon, String url, Color color) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -164,30 +156,22 @@ class Footer extends StatelessWidget {
             color: color.withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Center(
-            child: FaIcon(
-              icon,
-              color: color,
-              size: 20,
-            ),
-          ),
+          child: Center(child: FaIcon(icon, color: color, size: 20)),
         ),
       ),
     );
   }
-  
+
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $url');
     }
   }
-  
+
   void _showEasterEgg(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SnakeGamePage(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const SnakeGamePage()));
   }
 }
