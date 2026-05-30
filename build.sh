@@ -1,9 +1,11 @@
 #!/bin/bash
 set -e  # Exit on any error
 
-# Download and install Flutter using git
+# Download and install a pinned Flutter version using git.
+# Netlify's latest stable can move ahead of package compatibility.
 echo "Installing Flutter..."
-git clone https://github.com/flutter/flutter.git -b stable --depth 1
+FLUTTER_VERSION="3.29.3"
+git clone https://github.com/flutter/flutter.git -b "$FLUTTER_VERSION" --depth 1
 
 echo "Setting up Flutter path..."
 export PATH="$PATH:$PWD/flutter/bin"
