@@ -259,6 +259,26 @@ class PortfolioContent {
       projectUrl: 'https://github.com/SwapnaneelSarkar/codecontext-cli',
     ),
     ProjectEntry(
+      title: "PM's Portfolio hub",
+      role: 'Creator & Product Lead',
+      period: '2024',
+      description:
+          'A curated platform showcasing a portfolio of high-impact product management projects and strategic case studies.',
+      highlights: [
+        '0→1 portfolio product for PMs',
+        'Interactive showcase of product strategy and execution',
+        'Built for seamless performance and discovery',
+      ],
+      technologies: [
+        'React',
+        'Next.js',
+        'Tailwind CSS',
+        'Vercel',
+      ],
+      color: AppColors.accentSecondary,
+      projectUrl: 'https://port-folio-hub-gray.vercel.app/',
+    ),
+    ProjectEntry(
       title: 'Bird — Quick Commerce',
       role: 'Product Lead & Flutter Developer',
       period: '2025',
@@ -270,7 +290,7 @@ class PortfolioContent {
         'Dual-platform Flutter delivery',
       ],
       technologies: ['Flutter', 'BLoC', 'REST APIs', 'FCM'],
-      color: AppColors.accentSecondary,
+      color: AppColors.accentTertiary,
       projectUrl:
           'https://apps.apple.com/in/app/bird-instant-delivery/id6752969848',
     ),
@@ -286,7 +306,7 @@ class PortfolioContent {
         'AI-assisted symptom tracking',
       ],
       technologies: ['Flutter', 'Firebase', 'Google Maps', 'FCM'],
-      color: AppColors.accentTertiary,
+      color: AppColors.accentPrimary,
       projectUrl: 'https://github.com/SwapnaneelSarkar/grape',
     ),
   ];
