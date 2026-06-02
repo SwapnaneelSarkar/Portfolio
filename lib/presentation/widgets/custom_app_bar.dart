@@ -30,7 +30,6 @@ class _CustomAppBarState extends State<CustomAppBar>
     {'title': 'Case Studies', 'route': '/case-studies'},
     {'title': 'Experience', 'route': '/experience'},
     {'title': 'Education', 'route': '/education'},
-    {'title': 'Contact', 'route': '/contact'},
   ];
 
   @override

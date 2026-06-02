@@ -3,6 +3,8 @@
 class Assets {
   // Brand assets
   static const String avatar = 'assets/images/swapnaneel-avatar.png';
+  static const String rapidoLogo = 'assets/images/rapido_logo.png';
+  static const String hitwicketLogo = 'assets/images/hitwicket_logo.png';
 
   // Lottie animations - updated with working URLs
   static const String developerAnimation =

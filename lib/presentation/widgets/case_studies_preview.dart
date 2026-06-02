@@ -86,12 +86,32 @@ class _CaseStudyCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            study.title,
-            style: textTheme.titleLarge?.copyWith(color: study.color),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      study.title,
+                      style: textTheme.titleLarge?.copyWith(color: study.color),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(study.subtitle, style: textTheme.bodyMedium),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              Image.asset(
+                study.logoPath,
+                height: 40,
+                width: 100,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
-          Text(study.subtitle, style: textTheme.bodyMedium),
           const SizedBox(height: 12),
           Text(
             study.summary,

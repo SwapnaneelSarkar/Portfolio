@@ -50,14 +50,34 @@ class CaseStudiesPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          s.title,
-                          style: textTheme.headlineSmall?.copyWith(
-                            color: s.color,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    s.title,
+                                    style: textTheme.headlineSmall?.copyWith(
+                                      color: s.color,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(s.subtitle, style: textTheme.titleMedium),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Image.asset(
+                              s.logoPath,
+                              height: 48,
+                              width: 120,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 8),
-                        Text(s.subtitle, style: textTheme.titleMedium),
                         const SizedBox(height: 16),
                         Text(s.summary, style: textTheme.bodyLarge),
                         const SizedBox(height: 20),

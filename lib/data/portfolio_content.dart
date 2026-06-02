@@ -84,6 +84,7 @@ class CaseStudyEntry {
   final List<String> tags;
   final String externalUrl;
   final Color color;
+  final String logoPath;
 
   const CaseStudyEntry({
     required this.slug,
@@ -93,6 +94,7 @@ class CaseStudyEntry {
     required this.tags,
     required this.externalUrl,
     required this.color,
+    required this.logoPath,
   });
 }
 
@@ -155,7 +157,7 @@ class PortfolioContent {
 
   static const experiences = [
     ExperienceEntry(
-      company: 'Heizen Hybrid',
+      company: 'Heizen',
       position: 'Technical Product Manager Intern',
       period: 'November 2025 – Present',
       location: 'Hyderabad',
@@ -238,8 +240,31 @@ class PortfolioContent {
 
   static const projects = [
     ProjectEntry(
+      title: 'APKMaker',
+      role: 'Built & Shipped Solo',
+      period: '2026',
+      description:
+          'An AI-driven Android application compiler that transforms natural language prompts into production-grade, release-signed Flutter APKs, bypassing local setup entirely.',
+      highlights: [
+        'Dynamic clarification engine powered by Groq Llama-3.3-70B completion model',
+        'NPM workspaces monorepo structure (Next.js 15, NestJS backend, and shared TypeScript spec protocol)',
+        'Resilient execution pipelines supporting BullMQ + Redis async tasks with automated memory queue fallback',
+      ],
+      technologies: [
+        'Next.js',
+        'NestJS',
+        'Flutter',
+        'TypeScript',
+        'Groq LLM',
+        'BullMQ',
+        'Supabase',
+      ],
+      color: AppColors.accentPrimary,
+      projectUrl: 'https://github.com/SwapnaneelSarkar/APKmaker',
+    ),
+    ProjectEntry(
       title: 'CodeContext CLI',
-      role: 'Founder & Product Lead',
+      role: 'Built & Shipped Solo',
       period: '2025',
       description:
           'Open-source CLI that indexes local codebases into compact .ai-context/ bundles for AI coding assistants — per-file summaries, dependency graphs, and agent-ready markdown.',
@@ -260,7 +285,7 @@ class PortfolioContent {
     ),
     ProjectEntry(
       title: "PM's Portfolio hub",
-      role: 'Creator & Product Lead',
+      role: 'Built & Shipped Solo',
       period: '2024',
       description:
           'A curated platform showcasing a portfolio of high-impact product management projects and strategic case studies.',
@@ -280,7 +305,7 @@ class PortfolioContent {
     ),
     ProjectEntry(
       title: 'Bird — Quick Commerce',
-      role: 'Product Lead & Flutter Developer',
+      role: 'Built & Shipped Solo',
       period: '2025',
       description:
           'Dual-platform quick commerce app with real-time order tracking, led with a team of four engineers.',
@@ -296,7 +321,7 @@ class PortfolioContent {
     ),
     ProjectEntry(
       title: 'Grape — Healthcare Platform',
-      role: 'Flutter Developer',
+      role: 'Built & Shipped Solo',
       period: '2025',
       description:
           'Healthcare mobile app with Firebase, maps for nearby care, and an AI symptom assistant.',
@@ -319,8 +344,9 @@ class PortfolioContent {
       summary:
           'Strategic product analysis of HitWicket — a cricket strategy game built for mobile-first audiences. Examines core loops, monetization, retention mechanics, and growth levers in the sports gaming category.',
       tags: ['Gaming', 'Sports', 'Mobile', 'Strategy'],
-      externalUrl: 'https://hitwicket.com',
+      externalUrl: 'https://docs.google.com/presentation/d/e/2PACX-1vSBN5S3uvh-EVLk2MFka5U3jb0CJQ3cTVTFCW3kZht8v9dHnaH88DZcAzueaOmnuoiGnwJiuokvDOey/pub?start=false&loop=false&delayms=5000',
       color: AppColors.accentSecondary,
+      logoPath: 'assets/images/hitwicket_logo.png',
     ),
     CaseStudyEntry(
       slug: 'rapido',
@@ -329,8 +355,9 @@ class PortfolioContent {
       summary:
           'Rapido found a problem embedded in daily Indian life — from a Bengaluru dorm-room idea in 2015 to a \$1.1B unicorn completing 3.3M rides a day in 2025. This case study examines Rapido\'s journey, structural cracks in its model, and four high-conviction strategic interventions grounded in user behavior, operational economics, and Indian urban mobility.',
       tags: ['Mobility', 'Strategy', 'India', 'Growth'],
-      externalUrl: 'https://test.casestudy.rapido.com',
+      externalUrl: 'https://docs.google.com/presentation/d/e/2PACX-1vQ3rq54jbtTAaNcRm0pveJQcdfR22N87B4uTJIIoX2jqYuA3HTlgcmMuvk350BJvC4yJi0WXoiJ2Gn3/pub?start=false&loop=false&delayms=5000',
       color: AppColors.accentPrimary,
+      logoPath: 'assets/images/rapido_logo.png',
     ),
   ];
 

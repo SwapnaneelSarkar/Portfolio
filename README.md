@@ -13,7 +13,7 @@ Flutter Web portfolio with a calm, content-first layout.
 | Education | `/education` | Academic background |
 | Contact | `/contact` | Form and contact details |
 
-Case studies open on their own sites (e.g. [Rapido case study](https://test.casestudy.rapido.com)). Projects stay separate from case studies.
+Case studies open on their own sites (e.g. [Rapido case study](https://docs.google.com/presentation/d/e/2PACX-1vQ3rq54jbtTAaNcRm0pveJQcdfR22N87B4uTJIIoX2jqYuA3HTlgcmMuvk350BJvC4yJi0WXoiJ2Gn3/pub?start=false&loop=false&delayms=5000)). Projects stay separate from case studies.
 
 ## Resume
 
