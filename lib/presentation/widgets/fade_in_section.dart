@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-/// Gentle entrance animation for section content (no particles).
+/// Reveal-on-scroll entrance: content fades/slides in the first time it
+/// becomes visible in the viewport (plus an optional stagger [delay]).
 class FadeInSection extends StatefulWidget {
   final Widget child;
   final Duration delay;
@@ -23,18 +25,19 @@ class _FadeInSectionState extends State<FadeInSection>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _fade;
-  late final Animation<Offset> _slide;
+  final Key _visibilityKey = UniqueKey();
+  bool _revealed = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: widget.duration);
     _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic);
-    _slide = Tween<Offset>(
-      begin: widget.slideOffset,
-      end: Offset.zero,
-    ).animate(_fade);
+  }
 
+  void _onVisibility(VisibilityInfo info) {
+    if (_revealed || info.visibleFraction < 0.05) return;
+    _revealed = true;
     Future.delayed(widget.delay, () {
       if (mounted) _controller.forward();
     });
@@ -48,11 +51,21 @@ class _FadeInSectionState extends State<FadeInSection>
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _fade,
-      child: SlideTransition(
-        position: _slide,
-        child: widget.child,
+    return VisibilityDetector(
+      key: _visibilityKey,
+      onVisibilityChanged: _onVisibility,
+      child: FadeTransition(
+        opacity: _fade,
+        // Pixel-based rise (SlideTransition offsets are fractions of the
+        // child's size — a 24px intent would become 24x the height).
+        child: AnimatedBuilder(
+          animation: _fade,
+          builder: (context, child) => Transform.translate(
+            offset: widget.slideOffset * (1 - _fade.value),
+            child: child,
+          ),
+          child: widget.child,
+        ),
       ),
     );
   }

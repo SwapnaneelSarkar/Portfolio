@@ -2,42 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/assets.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
+import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:portfolio/presentation/widgets/content_container.dart';
+import 'package:portfolio/presentation/widgets/glass_card.dart';
 import 'package:portfolio/presentation/widgets/section_header.dart';
-import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AboutSection extends StatefulWidget {
+class AboutSection extends StatelessWidget {
   const AboutSection({Key? key}) : super(key: key);
-
-  @override
-  State<AboutSection> createState() => _AboutSectionState();
-}
-
-class _AboutSectionState extends State<AboutSection>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _lottieController;
-
-  @override
-  void initState() {
-    super.initState();
-    _lottieController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    )..forward();
-  }
-
-  @override
-  void dispose() {
-    _lottieController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final profile = PortfolioContent.profile;
-    final isMobile = MediaQuery.of(context).size.width < 768;
+    final isMobile = MediaQuery.of(context).size.width < 900;
 
     return ContentContainer(
       child: Column(
@@ -46,40 +24,27 @@ class _AboutSectionState extends State<AboutSection>
             title: 'About Me',
             subtitle: 'Product leadership with technical depth',
           ),
-          const SizedBox(height: 48),
+          const SizedBox(height: 56),
           isMobile
               ? Column(
                   children: [
                     _buildAboutContent(textTheme, profile),
                     const SizedBox(height: 32),
-                    _buildLottie(),
+                    const _HowIShipPanel(),
                   ],
                 )
               : Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(flex: 3, child: _buildAboutContent(textTheme, profile)),
-                    Expanded(flex: 2, child: _buildLottie()),
+                    Expanded(
+                      flex: 3,
+                      child: _buildAboutContent(textTheme, profile),
+                    ),
+                    const SizedBox(width: 48),
+                    const Expanded(flex: 2, child: _HowIShipPanel()),
                   ],
                 ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildLottie() {
-    return AnimatedBuilder(
-      animation: _lottieController,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: 0.85 + (0.15 * _lottieController.value),
-          child: Opacity(opacity: _lottieController.value, child: child),
-        );
-      },
-      child: Lottie.network(
-        Assets.codingAnimation,
-        fit: BoxFit.contain,
-        height: 280,
       ),
     );
   }
@@ -88,13 +53,6 @@ class _AboutSectionState extends State<AboutSection>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Professional Summary',
-          style: textTheme.headlineMedium?.copyWith(
-            color: AppColors.accentPrimary,
-          ),
-        ),
-        const SizedBox(height: 24),
         Text(profile.summary, style: textTheme.bodyLarge),
         const SizedBox(height: 32),
         Wrap(
@@ -102,17 +60,19 @@ class _AboutSectionState extends State<AboutSection>
           runSpacing: 12,
           children: [
             _buildInfoItem(Icons.work_outline, profile.title),
-            _buildInfoItem(Icons.school_outlined, 'VIT-AP · CS & Business Systems'),
+            _buildInfoItem(
+                Icons.school_outlined, 'VIT-AP · CS & Business Systems'),
             _buildInfoItem(Icons.location_on_outlined, profile.location),
             _buildInfoItem(Icons.email_outlined, profile.email),
             _buildInfoItem(Icons.phone_outlined, profile.phone),
           ],
         ),
         const SizedBox(height: 32),
-        ElevatedButton.icon(
+        AnimatedButton(
           onPressed: () => _launchUrl(Assets.resumeUrl),
-          icon: const Icon(Icons.download),
-          label: const Text('Download Resume'),
+          text: 'Download Resume',
+          isPrimary: true,
+          trailingIcon: Icons.download_outlined,
         ),
       ],
     );
@@ -122,7 +82,7 @@ class _AboutSectionState extends State<AboutSection>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -150,5 +110,92 @@ class _AboutSectionState extends State<AboutSection>
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $url');
     }
+  }
+}
+
+/// The operating loop — how a brief becomes a shipped product.
+class _HowIShipPanel extends StatelessWidget {
+  const _HowIShipPanel();
+
+  static const _steps = [
+    (
+      index: '01',
+      title: 'Discover',
+      detail: 'User interviews, workflow mapping, and problem framing',
+    ),
+    (
+      index: '02',
+      title: 'Define',
+      detail: 'PRDs, roadmaps, prioritization, and sprint-ready specs',
+    ),
+    (
+      index: '03',
+      title: 'Deliver',
+      detail: 'Ship with engineering, measure impact, iterate',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return GlassCard(
+      accentColor: AppColors.accentSecondary,
+      padding: const EdgeInsets.all(28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'HOW I SHIP',
+            style: AppFonts.mono(
+              fontSize: 11,
+              color: AppColors.accentSecondary,
+            ),
+          ),
+          const SizedBox(height: 20),
+          for (var i = 0; i < _steps.length; i++) ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: AppColors.primaryGradient,
+                  ).createShader(bounds),
+                  child: Text(
+                    _steps[i].index,
+                    style: AppFonts.mono(
+                      fontSize: 15,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(_steps[i].title, style: textTheme.titleMedium),
+                      const SizedBox(height: 4),
+                      Text(_steps[i].detail, style: textTheme.bodySmall),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            if (i != _steps.length - 1)
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Container(
+                  width: 1,
+                  height: 24,
+                  margin: const EdgeInsets.symmetric(vertical: 6),
+                  color: Colors.white.withValues(alpha: 0.1),
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
   }
 }

@@ -6,8 +6,6 @@ import 'package:portfolio/presentation/widgets/glass_card.dart';
 import 'package:portfolio/presentation/widgets/page_scaffold.dart';
 import 'package:portfolio/presentation/widgets/section_header.dart';
 import 'package:portfolio/presentation/widgets/tag_chip.dart';
-import 'package:portfolio/assets.dart';
-import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CaseStudiesPage extends StatelessWidget {
@@ -25,16 +23,7 @@ class CaseStudiesPage extends StatelessWidget {
             subtitle: 'Product strategy — read the full analysis on each site',
           ),
         ),
-        const SizedBox(height: 24),
-        FadeInSection(
-          delay: const Duration(milliseconds: 150),
-          child: Lottie.network(
-            Assets.trackingAnimation,
-            height: 140,
-            fit: BoxFit.contain,
-          ),
-        ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 48),
         ContentContainer(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
@@ -42,7 +31,7 @@ class CaseStudiesPage extends StatelessWidget {
               final index = entry.key;
               final s = entry.value;
               return FadeInSection(
-                delay: Duration(milliseconds: 250 + index * 120),
+                delay: Duration(milliseconds: 100 * (index % 3)),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 24),
                   child: GlassCard(

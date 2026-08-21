@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  // Backgrounds
-  static const Color backgroundDark = Color(0xFF0B0F14);
-  static const Color backgroundLight = Color(0xFF141A22);
-  static const Color cardBackground = Color(0xFF1A222D);
-  static const Color cardHover = Color(0xFF232D3B);
-  static const Color cardActive = Color(0xFF2C3849);
+  // Backgrounds — deep space navy
+  static const Color backgroundDark = Color(0xFF05070D);
+  static const Color backgroundLight = Color(0xFF0A0F1A);
+  static const Color cardBackground = Color(0xFF0D1522);
+  static const Color cardHover = Color(0xFF13202F);
+  static const Color cardActive = Color(0xFF1A2A3D);
 
-  // Accents
-  static const Color accentPrimary = Color(0xFF14B8A6); // Teal
-  static const Color accentSecondary = Color(0xFF38BDF8); // Sky blue
-  static const Color accentTertiary = Color(0xFFF59E0B); // Amber
+  // Accents — electric cyan / violet / pink
+  static const Color accentPrimary = Color(0xFF22D3EE);
+  static const Color accentSecondary = Color(0xFFA78BFA);
+  static const Color accentTertiary = Color(0xFFF471B5);
   static const Color accentWarm = Color(0xFFF59E0B);
 
   // Legacy aliases for gradual migration
@@ -26,32 +26,57 @@ class AppColors {
   static const Color primaryGreenLight = Color(0xFF46B565);
 
   // Text
-  static const Color textPrimary = Color(0xFFF1F5F9);
-  static const Color textSecondary = Color(0xFF94A3B8);
+  static const Color textPrimary = Color(0xFFE9EFFB);
+
+  /// In-card paragraph text — dim prose so titles and figures pop.
+  static const Color textBody = Color(0xFFB6C2D9);
+  static const Color textSecondary = Color(0xFF8C9BB8);
   static const Color borderSubtle = Color(0x14FFFFFF);
 
   // Gradients
   static const List<Color> primaryGradient = [
-    Color(0xFF14B8A6),
-    Color(0xFF38BDF8),
+    Color(0xFF22D3EE),
+    Color(0xFFA78BFA),
   ];
 
   static const List<Color> secondaryGradient = [
-    Color(0xFF38BDF8),
-    Color(0xFF14B8A6),
+    Color(0xFFA78BFA),
+    Color(0xFF22D3EE),
   ];
 
   // Skill level colors
   static const Color beginnerLevel = Color(0xFFEB6A5E);
   static const Color intermediateLevel = Color(0xFFFDD663);
   static const Color advancedLevel = Color(0xFF38BDF8);
-  static const Color expertLevel = Color(0xFF14B8A6);
+  static const Color expertLevel = Color(0xFF22D3EE);
 }
 
 class AppLayout {
   static const double maxContentWidth = 1200;
+
+  /// Comfortable reading measure for paragraphs inside wide cards.
+  static const double maxProseWidth = 760;
   static const EdgeInsets sectionPadding =
-      EdgeInsets.symmetric(horizontal: 24, vertical: 80);
+      EdgeInsets.symmetric(horizontal: 24, vertical: 96);
+}
+
+/// Monospace accent type — eyebrows, indices, badges ("HUD" text).
+class AppFonts {
+  static TextStyle mono({
+    double fontSize = 12,
+    FontWeight fontWeight = FontWeight.w600,
+    Color color = AppColors.textSecondary,
+    double letterSpacing = 2,
+    double? height,
+  }) {
+    return GoogleFonts.jetBrainsMono(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      letterSpacing: letterSpacing,
+      height: height,
+    );
+  }
 }
 
 class AppTheme {
@@ -66,76 +91,85 @@ class AppTheme {
       surface: AppColors.cardBackground,
     ),
     textTheme: TextTheme(
-      displayLarge: GoogleFonts.poppins(
+      displayLarge: GoogleFonts.spaceGrotesk(
         fontSize: 72,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
+        color: AppColors.textPrimary,
+        letterSpacing: -2,
+        height: 1.05,
+      ),
+      displayMedium: GoogleFonts.spaceGrotesk(
+        fontSize: 56,
+        fontWeight: FontWeight.w700,
         color: AppColors.textPrimary,
         letterSpacing: -1.5,
         height: 1.1,
       ),
-      displayMedium: GoogleFonts.poppins(
-        fontSize: 56,
-        fontWeight: FontWeight.bold,
+      displaySmall: GoogleFonts.spaceGrotesk(
+        fontSize: 40,
+        fontWeight: FontWeight.w700,
         color: AppColors.textPrimary,
-        letterSpacing: -0.5,
+        letterSpacing: -1,
         height: 1.15,
       ),
-      displaySmall: GoogleFonts.poppins(
-        fontSize: 40,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
-        height: 1.2,
-      ),
-      headlineMedium: GoogleFonts.poppins(
+      headlineMedium: GoogleFonts.spaceGrotesk(
         fontSize: 32,
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,
-        letterSpacing: 0.25,
+        letterSpacing: -0.5,
         height: 1.25,
       ),
-      headlineSmall: GoogleFonts.poppins(
+      headlineSmall: GoogleFonts.spaceGrotesk(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,
+        letterSpacing: -0.25,
         height: 1.3,
       ),
-      titleLarge: GoogleFonts.poppins(
+      titleLarge: GoogleFonts.spaceGrotesk(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,
-        letterSpacing: 0.15,
+        letterSpacing: 0,
       ),
-      titleMedium: GoogleFonts.poppins(
+      titleMedium: GoogleFonts.inter(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,
-        letterSpacing: 0.15,
+        letterSpacing: 0.1,
       ),
-      titleSmall: GoogleFonts.poppins(
+      titleSmall: GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,
         letterSpacing: 0.1,
       ),
-      bodyLarge: GoogleFonts.poppins(
+      bodyLarge: GoogleFonts.inter(
         fontSize: 16,
         fontWeight: FontWeight.normal,
         color: AppColors.textPrimary,
-        letterSpacing: 0.25,
-        height: 1.6,
+        letterSpacing: 0.1,
+        height: 1.65,
       ),
-      bodyMedium: GoogleFonts.poppins(
+      bodyMedium: GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.normal,
         color: AppColors.textSecondary,
-        letterSpacing: 0.25,
-        height: 1.55,
+        letterSpacing: 0.1,
+        height: 1.6,
       ),
-      labelLarge: GoogleFonts.poppins(
-        fontSize: 14,
+      bodySmall: GoogleFonts.inter(
+        fontSize: 12.5,
+        fontWeight: FontWeight.normal,
+        color: AppColors.textSecondary,
+        letterSpacing: 0.1,
+        height: 1.5,
+      ),
+      labelLarge: GoogleFonts.jetBrainsMono(
+        fontSize: 13,
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,
-        letterSpacing: 1.25,
+        letterSpacing: 1.5,
       ),
     ),
     cardTheme: CardThemeData(
@@ -154,25 +188,28 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        textStyle: GoogleFonts.poppins(
-          fontSize: 16,
+        textStyle: GoogleFonts.inter(
+          fontSize: 15,
           fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
+          letterSpacing: 0.3,
         ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.accentPrimary,
-        side: const BorderSide(color: AppColors.accentPrimary, width: 1.5),
+        side: BorderSide(
+          color: AppColors.accentPrimary.withValues(alpha: 0.6),
+          width: 1.2,
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        textStyle: GoogleFonts.poppins(
-          fontSize: 16,
+        textStyle: GoogleFonts.inter(
+          fontSize: 15,
           fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
+          letterSpacing: 0.3,
         ),
       ),
     ),
@@ -180,17 +217,17 @@ class AppTheme {
       style: TextButton.styleFrom(
         foregroundColor: AppColors.accentPrimary,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        textStyle: GoogleFonts.poppins(
-          fontSize: 16,
+        textStyle: GoogleFonts.inter(
+          fontSize: 15,
           fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
+          letterSpacing: 0.3,
         ),
       ),
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      titleTextStyle: GoogleFonts.poppins(
+      titleTextStyle: GoogleFonts.spaceGrotesk(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,

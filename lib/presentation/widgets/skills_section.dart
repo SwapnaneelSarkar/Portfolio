@@ -43,24 +43,36 @@ class _SkillsSectionState extends State<SkillsSection> {
                         )
                         .toList(),
               )
-              : Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                    groups
-                        .map(
-                          (g) => Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              child: _SkillGroupCard(
-                                group: g,
-                                textTheme: textTheme,
-                              ),
+              // 2×2 grid, top-aligned so shorter cards don't stretch into
+              // large blank bottoms.
+              : Column(
+                children: [
+                  for (var row = 0; row < groups.length; row += 2)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: _SkillGroupCard(
+                              group: groups[row],
+                              textTheme: textTheme,
                             ),
                           ),
-                        )
-                        .toList(),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child:
+                                row + 1 < groups.length
+                                    ? _SkillGroupCard(
+                                      group: groups[row + 1],
+                                      textTheme: textTheme,
+                                    )
+                                    : const SizedBox(),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ),
         ],
       ),

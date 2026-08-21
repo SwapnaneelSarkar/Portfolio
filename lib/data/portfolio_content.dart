@@ -39,6 +39,9 @@ class ExperienceEntry {
   final String location;
   final String description;
   final List<String> responsibilities;
+
+  /// Domain chips shown with emphasis (only for differentiating roles).
+  final List<String> domains;
   final Color color;
 
   const ExperienceEntry({
@@ -48,6 +51,24 @@ class ExperienceEntry {
     this.location = 'Remote',
     required this.description,
     required this.responsibilities,
+    this.domains = const [],
+    required this.color,
+  });
+}
+
+/// A vertical/domain the candidate has shipped real products in.
+class DomainEntry {
+  final String title;
+  final String description;
+  final List<String> tags;
+  final IconData icon;
+  final Color color;
+
+  const DomainEntry({
+    required this.title,
+    required this.description,
+    required this.tags,
+    required this.icon,
     required this.color,
   });
 }
@@ -55,23 +76,27 @@ class ExperienceEntry {
 /// Shipped products and builds (portfolio projects).
 class ProjectEntry {
   final String title;
-  final String role;
   final String period;
   final String description;
   final List<String> highlights;
   final List<String> technologies;
   final Color color;
+
+  /// Primary link — live product if it exists, otherwise repo/store.
   final String? projectUrl;
+
+  /// Optional source link shown alongside a live [projectUrl].
+  final String? githubUrl;
 
   const ProjectEntry({
     required this.title,
-    required this.role,
     required this.period,
     required this.description,
     required this.highlights,
     required this.technologies,
     required this.color,
     this.projectUrl,
+    this.githubUrl,
   });
 }
 
@@ -133,8 +158,13 @@ class PortfolioContent {
     name: 'Swapnaneel Sarkar',
     title: 'Product Manager',
     summary:
-        'Product Manager with hands-on experience across supply chain, ERP, workforce management, and SaaS — including AI-powered and LLM/RAG-based products. I turn messy business problems into clear product bets, own discovery and prioritization, and partner with engineering to ship products that move the needle.',
-    animatedRoles: ['Product Manager', 'Product Strategist', '0→1 Builder'],
+        'Technical Product Manager working at the intersection of user problems and engineering — with a specialty most early-career PMs don\'t have: supply chain. At Heizen I\'ve shipped procurement software, supplier management platforms, end-to-end SCM solutions, and AI intelligence layers over supply-chain portals, while managing 15+ client engagements worth \$250k+ across ERP, workforce management, and SaaS. I gather requirements, shape roadmaps, and partner with engineering to take products from 0 to 1.',
+    animatedRoles: [
+      'Product Manager',
+      'Supply Chain & ERP PM',
+      'AI Product Builder',
+      '0→1 Builder',
+    ],
     email: 'swapnaneel.devwork@gmail.com',
     phone: '+91 8967853033',
     location: 'Cooch Behar, West Bengal, India',
@@ -143,40 +173,97 @@ class PortfolioContent {
   );
 
   static const impactMetrics = [
-    ImpactMetric(value: '\$150k+', label: 'Project value overseen (6 months)'),
+    ImpactMetric(value: '\$250k+', label: 'Delivery value in 1 year'),
     ImpactMetric(
-      value: '10+',
-      label: 'Products published incl. enterprise products',
+      value: '15+',
+      label: 'Engagements in SCM, ERP & SaaS',
     ),
     ImpactMetric(
-      value: 'INR 15–30L',
-      label: 'Annual savings unlocked through my product solution',
+      value: '₹15–30L',
+      label: 'Client savings unlocked per year',
     ),
-    ImpactMetric(value: '0→1', label: 'AI & LLM/RAG products shipped'),
+    ImpactMetric(value: '0→1', label: 'AI products shipped, incl. AI-over-SCM'),
+  ];
+
+  /// Verticals with real shipped products behind them.
+  static const domains = [
+    DomainEntry(
+      title: 'Supply Chain & Procurement',
+      description:
+          'Shipped procurement software and supplier management platforms at Heizen — owning discovery with client ops teams, mapping source-to-pay workflows, and delivering end-to-end SCM solutions that replaced spreadsheet-driven operations.',
+      tags: [
+        'Procurement Workflows',
+        'Supplier Management',
+        'End-to-End SCM',
+        'Vendor Onboarding',
+      ],
+      icon: Icons.inventory_2_outlined,
+      color: AppColors.accentPrimary,
+    ),
+    DomainEntry(
+      title: 'AI on Supply Chain',
+      description:
+          'Defined and launched AI intelligence layers on top of supply-chain portals — LLM/RAG products that let ops teams query suppliers, orders, and procurement data in plain language instead of digging through dashboards.',
+      tags: [
+        'LLM / RAG',
+        'AI Intelligence Layer',
+        '0→1 Launches',
+        'SCM Portals',
+      ],
+      icon: Icons.auto_awesome_outlined,
+      color: AppColors.accentSecondary,
+    ),
+    DomainEntry(
+      title: 'ERP & Workforce Ops',
+      description:
+          'Moved clients off manual and legacy processes onto custom ERP and workforce management platforms — unlocking ₹15–30L/year in operational savings per client.',
+      tags: [
+        'ERP Migration',
+        'Workforce Management',
+        'Process Digitization',
+        'Cost Reduction',
+      ],
+      icon: Icons.hub_outlined,
+      color: AppColors.accentTertiary,
+    ),
+    DomainEntry(
+      title: 'B2B & B2C SaaS',
+      description:
+          'Shipped revenue-expanding features on a B2B SaaS platform and led consumer products from quick commerce to healthcare — every spec grounded in user interviews, not assumptions.',
+      tags: [
+        'Feature Discovery',
+        'User Interviews',
+        'Monetization',
+        'Cross-Platform',
+      ],
+      icon: Icons.rocket_launch_outlined,
+      color: AppColors.accentPrimary,
+    ),
   ];
 
   static const experiences = [
     ExperienceEntry(
       company: 'Heizen',
-      position: 'Technical Product Manager Intern',
-      period: 'November 2025 – Present',
-      location: 'Hyderabad',
+      position: 'Technical Product Manager',
+      period: 'Nov 2025 – Present',
+      location: 'Hybrid · Hyderabad · Intern → Full-time (Jul 2026)',
       description:
-          'Owned product discovery, scope, roadmaps, and delivery for 10+ published products across supply chain, ERP, workforce management, AI, B2C SaaS, and enterprise workflows.',
+          'Own product delivery from discovery to launch across 15+ client engagements — with deep work in supply chain: procurement software, supplier management platforms, end-to-end SCM solutions, and AI intelligence layers over supply-chain portals. Converted from TPM intern to full-time in July 2026.',
       responsibilities: [
-        'Oversaw \$150k+ in total project value within 6 months',
-        'Published 10+ products, including enterprise products, from discovery through release',
-        'Designed a product solution projected to save INR 15–30 lakhs/year, then partnered with Heizen engineers to build and ship it',
-        'Took multiple products from 0 to 1, including AI-powered and LLM/RAG-based platforms',
-        'Shipped B2B SaaS features through user interviews, PRDs, prioritization, and sprint-ready specs',
-        'Ran client discovery sessions and turned ambiguous briefs into requirements, wireframes, and release plans',
+        'Owned product delivery for procurement software and supplier management platforms — ran discovery with client operations teams, mapped procurement and supplier workflows end-to-end, and shipped sprint-ready specs through launch',
+        'Defined and shipped an AI intelligence layer over a client\'s supply-chain portal — an LLM/RAG product that lets ops teams query suppliers, orders, and procurement data in plain language',
+        'Took end-to-end SCM solutions from 0 to 1, replacing spreadsheet-driven procurement and supplier tracking with custom-built platforms',
+        'Managed 15+ client engagements on concurrent projects, overseeing \$250k+ in total project value within a year',
+        'Helped 3+ clients cut ₹15–30 lakhs/year in operational costs by migrating manual and legacy ERP and workforce processes onto custom platforms',
+        'Shipped new features on a B2B SaaS platform that expanded the paying client base — identified gaps through user interviews and translated them into sprint-ready specs',
       ],
+      domains: ['Supply Chain', 'Procurement', 'ERP', 'SCM × AI'],
       color: AppColors.accentPrimary,
     ),
     ExperienceEntry(
       company: 'Crowdbuzz',
-      position: 'Manager',
-      period: 'April 2025 – October 2025',
+      position: 'Project Manager & App Developer (Freelance)',
+      period: 'Apr 2025 – Oct 2025',
       location: 'Remote · Dubai & UK clients',
       description:
           'Managed three simultaneous client projects end-to-end while coordinating designers and engineers. Primary stakeholders were overseas clients in Dubai and the UK — balancing time zones, delivery cadence, and clear product communication.',
@@ -192,7 +279,7 @@ class PortfolioContent {
     ExperienceEntry(
       company: 'Meet & More',
       position: 'Flutter Developer Intern',
-      period: 'April 2025 – October 2025',
+      period: 'Apr 2025 – Oct 2025',
       location: 'Remote',
       description:
           'Developed end-to-end mobile applications using Flutter with BLoC state management and RESTful API integration in an Agile environment.',
@@ -207,7 +294,7 @@ class PortfolioContent {
     ExperienceEntry(
       company: 'Taxian',
       position: 'Software Engineer Intern',
-      period: 'March 2025 – April 2025',
+      period: 'Mar 2025 – Apr 2025',
       location: 'Remote',
       description:
           'Developed scalable web and mobile experiences using Flutter, with focus on user experience, payments, and reliable deployment workflows.',
@@ -223,7 +310,7 @@ class PortfolioContent {
     ExperienceEntry(
       company: 'Apps AiT',
       position: 'Android Developer Intern',
-      period: 'September 2024 – March 2025',
+      period: 'Sep 2024 – Mar 2025',
       location: 'Remote',
       description:
           'Built mobile applications using Flutter and Firebase in an Agile team, translating designs into production-ready features.',
@@ -240,8 +327,50 @@ class PortfolioContent {
 
   static const projects = [
     ProjectEntry(
+      title: 'Vorizon',
+      period: '2026',
+      description:
+          'AI Employee Platform — build, train, test, and deploy AI voice agents that handle inbound and outbound business phone calls end-to-end, with usage-based billing at \$0.10/conversation minute.',
+      highlights: [
+        'Swappable voice engine abstraction — mock for testing, Retell AI for real calls',
+        'Telephony compliance built in: TCPA consent tracking, Do-Not-Call enforcement, recording disclosure, audit logs',
+        'Production hardening — RBAC, rate limiting, non-blocking campaign workers, automatic usage metering with Razorpay billing',
+      ],
+      technologies: [
+        'React',
+        'TypeScript',
+        'Node.js',
+        'MongoDB',
+        'Retell AI',
+        'Razorpay',
+      ],
+      color: AppColors.accentPrimary,
+      projectUrl: 'https://vorizon.vercel.app/',
+      githubUrl: 'https://github.com/SwapnaneelSarkar/Vorizon',
+    ),
+    ProjectEntry(
+      title: 'MindMark',
+      period: '2026',
+      description:
+          'A PWA that captures a knowledge worker\'s mental context at the moment of interruption and uses AI to generate a re-entry brief when they return — built around capture speed, brief quality, and habit formation.',
+      highlights: [
+        'Sub-200ms capture panel on a global keyboard shortcut — voice and text, with Groq Whisper fallback',
+        'AI re-entry briefs via Llama 3.3 70B that surface your next action first',
+        'Offline-first PWA with guest mode, Google OAuth, and a visual focus timeline with recovery metrics',
+      ],
+      technologies: [
+        'Next.js 14',
+        'TypeScript',
+        'Supabase',
+        'Groq',
+        'Tailwind CSS',
+        'Zustand',
+      ],
+      color: AppColors.accentSecondary,
+      projectUrl: 'https://github.com/SwapnaneelSarkar/MindMark',
+    ),
+    ProjectEntry(
       title: 'APKMaker',
-      role: 'Built & Shipped Solo',
       period: '2026',
       description:
           'An AI-driven Android application compiler that transforms natural language prompts into production-grade, release-signed Flutter APKs, bypassing local setup entirely.',
@@ -259,12 +388,32 @@ class PortfolioContent {
         'BullMQ',
         'Supabase',
       ],
-      color: AppColors.accentPrimary,
+      color: AppColors.accentTertiary,
       projectUrl: 'https://github.com/SwapnaneelSarkar/APKmaker',
     ),
     ProjectEntry(
+      title: 'PortfolioHub',
+      period: '2026',
+      description:
+          'SaaS portfolio builder for product managers — "prove your judgment, not just your title." Structured case studies with measurable impact, artifact attachments, and public portfolio pages at /p/username.',
+      highlights: [
+        'Guided PM path that extracts the reasoning behind product decisions',
+        'Artifact proof — attach PRDs, strategy decks, and roadmap documents',
+        'One-click hosting: SEO-optimized, mobile-responsive public portfolio pages',
+      ],
+      technologies: [
+        'Next.js',
+        'TypeScript',
+        'Tailwind CSS',
+        'Supabase',
+        'Vercel',
+      ],
+      color: AppColors.accentPrimary,
+      projectUrl: 'https://port-folio-hub-gray.vercel.app/',
+      githubUrl: 'https://github.com/SwapnaneelSarkar/PortFolioHub',
+    ),
+    ProjectEntry(
       title: 'CodeContext CLI',
-      role: 'Built & Shipped Solo',
       period: '2025',
       description:
           'Open-source CLI that indexes local codebases into compact .ai-context/ bundles for AI coding assistants — per-file summaries, dependency graphs, and agent-ready markdown.',
@@ -280,32 +429,11 @@ class PortfolioContent {
         'Turborepo',
         'Next.js',
       ],
-      color: AppColors.accentPrimary,
+      color: AppColors.accentSecondary,
       projectUrl: 'https://github.com/SwapnaneelSarkar/codecontext-cli',
     ),
     ProjectEntry(
-      title: "PM's Portfolio hub",
-      role: 'Built & Shipped Solo',
-      period: '2024',
-      description:
-          'A curated platform showcasing a portfolio of high-impact product management projects and strategic case studies.',
-      highlights: [
-        '0→1 portfolio product for PMs',
-        'Interactive showcase of product strategy and execution',
-        'Built for seamless performance and discovery',
-      ],
-      technologies: [
-        'React',
-        'Next.js',
-        'Tailwind CSS',
-        'Vercel',
-      ],
-      color: AppColors.accentSecondary,
-      projectUrl: 'https://port-folio-hub-gray.vercel.app/',
-    ),
-    ProjectEntry(
       title: 'Bird — Quick Commerce',
-      role: 'Built & Shipped Solo',
       period: '2025',
       description:
           'Dual-platform quick commerce app with real-time order tracking, led with a team of four engineers.',
@@ -321,7 +449,6 @@ class PortfolioContent {
     ),
     ProjectEntry(
       title: 'Grape — Healthcare Platform',
-      role: 'Built & Shipped Solo',
       period: '2025',
       description:
           'Healthcare mobile app with Firebase, maps for nearby care, and an AI symptom assistant.',
@@ -383,26 +510,35 @@ class PortfolioContent {
       color: AppColors.accentPrimary,
     ),
     SkillGroup(
+      name: 'Supply Chain & ERP Domain',
+      skills: [
+        'Procurement Workflows',
+        'Supplier Management',
+        'Source-to-Pay',
+        'Inventory & Order Flows',
+        'ERP Migration',
+        'Workforce Management',
+        'AI over SCM Portals',
+      ],
+      icon: Icons.account_tree_outlined,
+      color: AppColors.accentSecondary,
+    ),
+    SkillGroup(
       name: 'Technical',
       skills: [
         'Flutter & Dart',
-        'BLoC',
+        'TypeScript',
+        'SQL',
+        'Python',
         'REST APIs',
         'Firebase',
         'LLM/RAG Products',
         'AI Product Workflows',
-        'API Integration',
         'System Design Basics',
         'Figma',
         'Wireframing',
       ],
       icon: Icons.code,
-      color: AppColors.accentSecondary,
-    ),
-    SkillGroup(
-      name: 'Languages',
-      skills: ['Dart', 'TypeScript', 'C++', 'SQL', 'Swift', 'Python'],
-      icon: Icons.terminal,
       color: AppColors.accentTertiary,
     ),
     SkillGroup(
@@ -427,7 +563,7 @@ class PortfolioContent {
       degree: 'B.Tech — Computer Science and Business Systems',
       period: 'September 2022 – May 2026',
       location: 'Amaravati',
-      detail: 'CGPA: 8.05/10.0',
+      detail: 'CGPA: 8.19/10.0',
     ),
     EducationEntry(
       institution: 'Kendriya Vidyalaya',

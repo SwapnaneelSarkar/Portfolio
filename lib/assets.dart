@@ -50,7 +50,7 @@ class Assets {
         'https://drive.google.com/uc?export=download&id=1i09Kxe0W9uX2_w2uiY9ejzDHschdQZqr',
     'Flutter & Dart':
         'https://drive.google.com/uc?export=download&id=1gNgvgcpOWu77oVJamjHXiM1FZ3Tt7OXw',
-    'Flutter Essentials':
-        'https://example.com/certificates/flutter_essentials.pdf',
+    // 'Flutter Essentials' has no hosted certificate yet — omitting the key
+    // renders its card without a (dead) link.
   };
 }

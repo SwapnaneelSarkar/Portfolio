@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:portfolio/presentation/widgets/content_container.dart';
 import 'package:portfolio/presentation/widgets/glass_card.dart';
 import 'package:portfolio/presentation/widgets/section_header.dart';
 import 'package:portfolio/presentation/widgets/tag_chip.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectsPreview extends StatefulWidget {
   const ProjectsPreview({super.key});
@@ -36,102 +38,150 @@ class _ProjectsPreviewState extends State<ProjectsPreview>
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final isMobile = MediaQuery.of(context).size.width < 768;
-    final items = PortfolioContent.projects;
+    final isMobile = MediaQuery.of(context).size.width < 900;
+    final featured = PortfolioContent.projects.take(3).toList();
+    final total = PortfolioContent.projects.length;
 
     return FadeTransition(
       opacity: _controller,
       child: ContentContainer(
-      child: Column(
-        children: [
-          const SectionHeader(
-            title: 'Projects',
-            subtitle: 'Products built and shipped',
-          ),
-          const SizedBox(height: 40),
-          if (isMobile)
-            ...items.map((p) => Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: _ProjectCard(project: p, textTheme: textTheme),
-                ))
-          else
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: items
-                  .map(
-                    (p) => Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: _ProjectCard(project: p, textTheme: textTheme),
+        child: Column(
+          children: [
+            const SectionHeader(
+              title: 'Products I\'ve Shipped',
+              subtitle: 'Featured 0→1 builds',
+            ),
+            const SizedBox(height: 48),
+            if (isMobile)
+              ...featured.asMap().entries.map(
+                    (e) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _ProjectCard(
+                        project: e.value,
+                        index: e.key,
+                        textTheme: textTheme,
+                        fillHeight: false,
                       ),
                     ),
                   )
-                  .toList(),
+            else
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (var i = 0; i < featured.length; i++)
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            right: i == featured.length - 1 ? 0 : 16,
+                          ),
+                          child: _ProjectCard(
+                            project: featured[i],
+                            index: i,
+                            textTheme: textTheme,
+                            fillHeight: true,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 40),
+            AnimatedButton(
+              onPressed: () => context.go('/projects'),
+              text: 'View All $total Products',
+              isPrimary: false,
             ),
-          const SizedBox(height: 32),
-          AnimatedButton(
-            onPressed: () => context.go('/projects'),
-            text: 'View All Projects',
-            isPrimary: false,
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
 }
 
 class _ProjectCard extends StatelessWidget {
   final ProjectEntry project;
+  final int index;
   final TextTheme textTheme;
+
+  /// True when the card sits in a stretched row and can expand vertically.
+  final bool fillHeight;
 
   const _ProjectCard({
     required this.project,
+    required this.index,
     required this.textTheme,
+    required this.fillHeight,
   });
 
   @override
   Widget build(BuildContext context) {
+    final url = project.projectUrl;
+    final description = Text(
+      project.description,
+      maxLines: 5,
+      overflow: TextOverflow.ellipsis,
+      style: textTheme.bodyMedium,
+    );
+
     return GlassCard(
-      accentColor: project.color,
+      accentColor: AppColors.accentPrimary,
+      tilt: true,
+      onTap: url == null
+          ? null
+          : () => launchUrl(
+                Uri.parse(url),
+                mode: LaunchMode.externalApplication,
+              ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            project.title,
-            style: textTheme.titleLarge?.copyWith(color: project.color),
+            '0${index + 1}',
+            style: AppFonts.mono(
+              fontSize: 12,
+              color: AppColors.accentSecondary,
+            ),
           ),
+          const SizedBox(height: 12),
+          Text(project.title, style: textTheme.titleLarge),
           const SizedBox(height: 6),
-          Text(
-            '${project.role} · ${project.period}',
-            style: textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            project.description,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: textTheme.bodyLarge?.copyWith(fontSize: 14),
-          ),
-          const SizedBox(height: 12),
+          Text(project.period, style: textTheme.bodySmall),
+          const SizedBox(height: 14),
+          if (fillHeight) Expanded(child: description) else description,
+          const SizedBox(height: 16),
           Wrap(
             spacing: 6,
             runSpacing: 6,
             children: project.technologies
                 .take(3)
-                .map((t) => TagChip(label: t, color: project.color))
+                .map((t) => TagChip(label: t))
                 .toList(),
           ),
-          if (project.projectUrl != null) ...[
-            const SizedBox(height: 12),
-            Text(
-              project.projectUrl!.contains('github.com')
-                  ? 'GitHub →'
-                  : 'App Store →',
-              style: textTheme.labelLarge?.copyWith(
-                color: project.color,
-                fontSize: 12,
-              ),
+          if (url != null) ...[
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Text(
+                  url.contains('github.com')
+                      ? 'VIEW ON GITHUB'
+                      : (url.contains('apps.apple.com') ||
+                              url.contains('play.google.com'))
+                          ? 'ON THE APP STORE'
+                          : 'VIEW LIVE',
+                  style: AppFonts.mono(
+                    fontSize: 10,
+                    color: AppColors.accentPrimary,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Icon(
+                  Icons.arrow_outward,
+                  size: 13,
+                  color: AppColors.accentPrimary,
+                ),
+              ],
             ),
           ],
         ],

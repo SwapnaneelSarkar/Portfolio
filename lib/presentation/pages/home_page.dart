@@ -4,15 +4,16 @@ import 'package:portfolio/presentation/blocs/animation/animation_bloc.dart';
 import 'package:portfolio/presentation/blocs/scroll/scroll_bloc.dart';
 import 'package:portfolio/presentation/widgets/animated_background.dart';
 import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
+import 'package:portfolio/presentation/widgets/domain_expertise_section.dart';
 import 'package:portfolio/presentation/widgets/footer.dart';
 import 'package:portfolio/presentation/widgets/hero_section.dart';
 import 'package:portfolio/presentation/widgets/about_section.dart';
+import 'package:portfolio/presentation/widgets/scroll_progress_bar.dart';
 import 'package:portfolio/presentation/widgets/skills_section.dart';
 import 'package:portfolio/presentation/widgets/experience_preview.dart';
 import 'package:portfolio/presentation/widgets/projects_preview.dart';
 import 'package:portfolio/presentation/widgets/case_studies_preview.dart';
 import 'package:portfolio/presentation/widgets/contact_preview.dart';
-import 'package:portfolio/presentation/widgets/scroll_indicator.dart';
 import 'package:portfolio/presentation/widgets/fade_in_section.dart';
 
 class HomePage extends StatefulWidget {
@@ -74,36 +75,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                HeroSection(controller: _heroAnimationController),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 100),
-                  child: AboutSection(),
+                HeroSection(
+                  controller: _heroAnimationController,
+                  scrollController: _scrollController,
                 ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 200),
-                  child: SkillsSection(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 300),
-                  child: ExperiencePreview(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 400),
-                  child: ProjectsPreview(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 500),
-                  child: CaseStudiesPreview(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 600),
-                  child: ContactPreview(),
-                ),
+                // Proof-first order for a 60-second recruiter skim:
+                // numbers → where they come from → who/how → receipts.
+                const FadeInSection(child: DomainExpertiseSection()),
+                const FadeInSection(child: AboutSection()),
+                const FadeInSection(child: ExperiencePreview()),
+                const FadeInSection(child: ProjectsPreview()),
+                const FadeInSection(child: SkillsSection()),
+                const FadeInSection(child: CaseStudiesPreview()),
+                const FadeInSection(child: ContactPreview()),
                 const Footer(),
               ],
             ),
           ),
-          const ScrollIndicator(),
+          Positioned(
+            top: 72,
+            left: 0,
+            right: 0,
+            child: ScrollProgressBar(controller: _scrollController),
+          ),
         ],
       ),
     );

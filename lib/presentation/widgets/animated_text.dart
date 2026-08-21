@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio/core/theme/app_theme.dart';
 
 class AnimatedText extends StatefulWidget {
   final String text;

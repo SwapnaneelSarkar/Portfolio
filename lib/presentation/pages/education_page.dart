@@ -1,35 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio/core/theme/app_theme.dart';
-import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
-import 'package:portfolio/presentation/widgets/footer.dart';
-import 'package:portfolio/presentation/widgets/animated_background.dart';
-import 'package:lottie/lottie.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:portfolio/assets.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/presentation/widgets/content_container.dart';
+import 'package:portfolio/presentation/widgets/fade_in_section.dart';
+import 'package:portfolio/presentation/widgets/glass_card.dart';
+import 'package:portfolio/presentation/widgets/page_scaffold.dart';
+import 'package:portfolio/presentation/widgets/section_header.dart';
+import 'package:portfolio/presentation/widgets/tag_chip.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class EducationPage extends StatefulWidget {
-  const EducationPage({Key? key}) : super(key: key);
+class EducationPage extends StatelessWidget {
+  const EducationPage({super.key});
 
-  @override
-  State<EducationPage> createState() => _EducationPageState();
-}
-
-class _EducationPageState extends State<EducationPage>
-    with TickerProviderStateMixin {
-  late final AnimationController _backgroundController;
-  late final AnimationController _contentController;
-  bool _isVisible = false;
-
-  final List<Map<String, dynamic>> _education = [
-    {
-      'institution': 'Vellore Institute of Technology, Andhra Pradesh (VIT-AP)',
-      'degree': 'B.Tech in Computer Science and Business Systems',
-      'period': 'September 2022 – May 2026',
-      'location': 'Amaravati',
-      'description':
-          'Pursuing B.Tech in Computer Science and Business Systems with a CGPA of 8.05/10.0.',
-      'courses': [
+  static const _education = [
+    (
+      institution: 'Vellore Institute of Technology, Andhra Pradesh (VIT-AP)',
+      degree: 'B.Tech in Computer Science and Business Systems',
+      period: 'Sep 2022 – May 2026',
+      location: 'Amaravati',
+      description:
+          'Pursuing B.Tech in Computer Science and Business Systems with a CGPA of 8.19/10.0.',
+      courses: [
         'Data Structures and Algorithms',
         'Object-Oriented Programming',
         'Database Management Systems',
@@ -37,17 +28,16 @@ class _EducationPageState extends State<EducationPage>
         'Web Technologies',
         'Mobile Application Development',
       ],
-      'color': AppColors.accentPrimary,
-      'animation': Assets.educationAnimation,
-    },
-    {
-      'institution': 'Kendriya Vidyalaya, Cooch Behar',
-      'degree': 'Higher Secondary Education',
-      'period': 'April 2010 – July 2022',
-      'location': 'Cooch Behar, West Bengal',
-      'description':
+      color: AppColors.accentPrimary,
+    ),
+    (
+      institution: 'Kendriya Vidyalaya, Cooch Behar',
+      degree: 'Higher Secondary Education',
+      period: 'Apr 2010 – Jul 2022',
+      location: 'Cooch Behar, West Bengal',
+      description:
           'Completed higher secondary education with focus on science and mathematics.',
-      'courses': [
+      courses: [
         'Physics',
         'Chemistry',
         'Mathematics',
@@ -55,527 +45,347 @@ class _EducationPageState extends State<EducationPage>
         'English',
         'Computer Science',
       ],
-      'color': AppColors.accentSecondary,
-      'animation': Assets.schoolAnimation,
-    },
+      color: AppColors.accentSecondary,
+    ),
   ];
 
-  final List<Map<String, dynamic>> _certificates = [
-    {
-      'title': 'Problem Solving',
-      'issuer': 'HackerRank',
-      'date': 'January 2024',
-      'description':
+  static final _certificates = [
+    (
+      title: 'Problem Solving',
+      issuer: 'HackerRank',
+      date: 'January 2024',
+      description:
           'Certification for problem-solving skills in algorithms and data structures.',
-      'color': AppColors.accentPrimary,
-      'url': Assets.certificateUrls['Problem Solving'],
-    },
-    {
-      'title': 'Software Engineer',
-      'issuer': 'LinkedIn Learning',
-      'date': 'March 2024',
-      'description':
+      url: Assets.certificateUrls['Problem Solving'],
+    ),
+    (
+      title: 'Software Engineer',
+      issuer: 'LinkedIn Learning',
+      date: 'March 2024',
+      description:
           'Comprehensive certification covering software engineering principles and practices.',
-      'color': AppColors.accentSecondary,
-      'url': Assets.certificateUrls['Software Engineer'],
-    },
-    {
-      'title': 'Flutter & Dart',
-      'issuer': 'Udemy',
-      'date': 'November 2023',
-      'description':
+      url: Assets.certificateUrls['Software Engineer'],
+    ),
+    (
+      title: 'Flutter & Dart',
+      issuer: 'Udemy',
+      date: 'November 2023',
+      description:
           'Complete Flutter development bootcamp with Dart programming language.',
-      'color': AppColors.accentTertiary,
-      'url': Assets.certificateUrls['Flutter & Dart'],
-    },
-    {
-      'title': 'Flutter Essentials',
-      'issuer': 'Google Developers',
-      'date': 'December 2023',
-      'description':
+      url: Assets.certificateUrls['Flutter & Dart'],
+    ),
+    (
+      title: 'Flutter Essentials',
+      issuer: 'Google Developers',
+      date: 'December 2023',
+      description:
           'Essential Flutter development concepts and best practices.',
-      'color': AppColors.accentPrimary,
-      'url': Assets.certificateUrls['Flutter Essentials'],
-    },
+      url: Assets.certificateUrls['Flutter Essentials'],
+    ),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    _backgroundController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 24),
-    )..repeat();
-
-    _contentController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() => _isVisible = true);
-      _contentController.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _backgroundController.dispose();
-    _contentController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+    final showRail = MediaQuery.sizeOf(context).width >= 700;
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(72),
-        child: CustomAppBar(),
-      ),
-      body: Stack(
-        children: [
-          AnimatedBackground(controller: _backgroundController),
-          SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                Container(
-                  height: 280,
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+    return PageScaffold(
+      children: [
+        const FadeInSection(
+          child: SectionHeader(
+            title: 'Education',
+            subtitle: 'Foundation',
+          ),
+        ),
+        const SizedBox(height: 48),
+        ContentContainer(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var i = 0; i < _education.length; i++)
+                _buildTimelineEntry(
+                  context,
+                  textTheme,
+                  _education[i],
+                  isLast: i == _education.length - 1,
+                  showRail: showRail,
+                  index: i,
+                ),
+              const SizedBox(height: 56),
+              FadeInSection(
+                child: Text(
+                  'CERTIFICATIONS',
+                  style: AppFonts.mono(
+                    fontSize: 11,
+                    color: AppColors.accentPrimary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              FadeInSection(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final twoCol = constraints.maxWidth >= 800;
+                    final cardWidth = twoCol
+                        ? (constraints.maxWidth - 20) / 2
+                        : constraints.maxWidth;
+                    return Wrap(
+                      spacing: 20,
+                      runSpacing: 20,
                       children: [
-                        AnimatedOpacity(
-                          opacity: _isVisible ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
-                            'Education',
-                            style: textTheme.displayMedium?.copyWith(
-                              color: AppColors.textPrimary,
+                        for (final cert in _certificates)
+                          SizedBox(
+                            width: cardWidth,
+                            child: _CertificateCard(
+                              title: cert.title,
+                              issuer: cert.issuer,
+                              date: cert.date,
+                              description: cert.description,
+                              url: cert.url,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        AnimatedOpacity(
-                          opacity: _isVisible ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 700),
-                          child: SizedBox(
-                            height: 50,
-                            child: DefaultTextStyle(
-                              style: textTheme.headlineSmall!.copyWith(
-                                color: AppColors.accentSecondary,
-                              ),
-                              child: AnimatedTextKit(
-                                animatedTexts: [
-                                  TypewriterAnimatedText(
-                                    'Academic journey',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                  TypewriterAnimatedText(
-                                    'Learning and growth',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                  TypewriterAnimatedText(
-                                    'Knowledge foundation',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                ],
-                                repeatForever: true,
-                                pause: const Duration(milliseconds: 1000),
-                                displayFullTextOnTap: true,
-                              ),
-                            ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimelineEntry(
+    BuildContext context,
+    TextTheme textTheme,
+    ({
+      Color color,
+      List<String> courses,
+      String degree,
+      String description,
+      String institution,
+      String location,
+      String period
+    }) entry, {
+    required bool isLast,
+    required bool showRail,
+    required int index,
+  }) {
+    final card = FadeInSection(
+      delay: Duration(milliseconds: 80 * (index % 2)),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: GlassCard(
+          accentColor: entry.color,
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(entry.institution, style: textTheme.titleLarge),
+                        const SizedBox(height: 6),
+                        Text(
+                          entry.degree,
+                          style: textTheme.titleMedium?.copyWith(
+                            color: entry.color,
                           ),
                         ),
+                        const SizedBox(height: 4),
+                        Text(entry.location, style: textTheme.bodySmall),
                       ],
                     ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AnimatedOpacity(
-                        opacity: _isVisible ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 800),
-                        child: Text(
-                          'Academic Background',
-                          style: textTheme.headlineMedium?.copyWith(
-                            color: AppColors.accentPrimary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      ..._education.asMap().entries.map((entry) {
-                        return _buildEducationCard(
-                          entry.value,
-                          entry.key,
-                          textTheme,
-                          size,
-                        );
-                      }),
-                      const SizedBox(height: 80),
-                      AnimatedOpacity(
-                        opacity: _isVisible ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 800),
-                        child: Text(
-                          'Certifications',
-                          style: textTheme.headlineMedium?.copyWith(
-                            color: AppColors.accentPrimary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      _buildCertificationsGrid(textTheme, size),
-                    ],
+                  const SizedBox(width: 16),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.backgroundLight,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: AppColors.borderSubtle),
+                    ),
+                    child: Text(
+                      entry.period,
+                      style: AppFonts.mono(fontSize: 11, letterSpacing: 0.5),
+                    ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                entry.description,
+                style: textTheme.bodyLarge?.copyWith(
+                  color: AppColors.textBody,
                 ),
-                const Footer(),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'RELEVANT COURSEWORK',
+                style: AppFonts.mono(
+                  fontSize: 10,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final course in entry.courses) TagChip(label: course),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (!showRail) return card;
+
+    // Stack-based rail: sizes to the card, so cards with Wrap content
+    // never get clipped by intrinsic-height guesses.
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 44),
+          child: card,
+        ),
+        Positioned(
+          left: 4,
+          top: 26,
+          child: Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: entry.color,
+              boxShadow: [
+                BoxShadow(
+                  color: entry.color.withValues(alpha: 0.55),
+                  blurRadius: 12,
+                  spreadRadius: 1,
+                ),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEducationCard(
-    Map<String, dynamic> education,
-    int index,
-    TextTheme textTheme,
-    Size size,
-  ) {
-    final isMobile = size.width < 768;
-    final isEven = index % 2 == 0;
-
-    return AnimatedBuilder(
-      animation: _contentController,
-      builder: (context, child) {
-        final delay = _contentController.value - (index * 0.2);
-        final offset = delay < 0 ? 100.0 : 0.0;
-        final opacity = delay < 0 ? 0.0 : 1.0;
-
-        return Transform.translate(
-          offset: Offset(isEven ? -offset : offset, 0),
-          child: Opacity(opacity: opacity, child: child),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 60),
-        child: isMobile
-            ? Column(
-                children: [
-                  _buildEducationContent(education, textTheme),
-                  const SizedBox(height: 30),
-                  _buildEducationAnimation(education),
-                ],
-              )
-            : Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: isEven
-                    ? [
-                        Expanded(
-                          flex: 3,
-                          child: _buildEducationContent(education, textTheme),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: _buildEducationAnimation(education),
-                        ),
-                      ]
-                    : [
-                        Expanded(
-                          flex: 2,
-                          child: _buildEducationAnimation(education),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: _buildEducationContent(education, textTheme),
-                        ),
-                      ],
-              ),
-      ),
-    );
-  }
-
-  Widget _buildEducationContent(
-    Map<String, dynamic> education,
-    TextTheme textTheme,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(30),
-      decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: (education['color'] as Color).withValues(alpha: 0.2),
         ),
-      ),
+        if (!isLast)
+          Positioned(
+            left: 9.25,
+            top: 46,
+            bottom: 0,
+            child: Container(
+              width: 1.5,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    entry.color.withValues(alpha: 0.5),
+                    Colors.white.withValues(alpha: 0.06),
+                  ],
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _CertificateCard extends StatelessWidget {
+  final String title;
+  final String issuer;
+  final String date;
+  final String description;
+  final String? url;
+
+  const _CertificateCard({
+    required this.title,
+    required this.issuer,
+    required this.date,
+    required this.description,
+    this.url,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return GlassCard(
+      accentColor: AppColors.accentPrimary,
+      padding: const EdgeInsets.all(24),
+      onTap: url == null
+          ? null
+          : () => launchUrl(
+                Uri.parse(url!),
+                mode: LaunchMode.externalApplication,
+              ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Icon(
+                Icons.verified_outlined,
+                color: AppColors.accentPrimary,
+                size: 20,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(title, style: textTheme.titleMedium),
+              ),
+              if (url != null)
+                const Icon(
+                  Icons.open_in_new,
+                  size: 14,
+                  color: AppColors.textSecondary,
+                ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
             children: [
               Expanded(
                 child: Text(
-                  education['institution'],
-                  style: textTheme.headlineSmall?.copyWith(
-                    color: education['color'],
-                  ),
+                  issuer,
+                  style: textTheme.bodySmall,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: (education['color'] as Color).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  education['period'],
-                  style: TextStyle(
-                    color: education['color'],
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            education['degree'],
-            style: textTheme.titleLarge,
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Icon(Icons.location_on, color: education['color'], size: 16),
-              const SizedBox(width: 4),
               Text(
-                education['location'],
-                style: textTheme.bodyMedium,
+                date.toUpperCase(),
+                style: AppFonts.mono(
+                  fontSize: 9.5,
+                  color: AppColors.textSecondary,
+                  letterSpacing: 1,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text(education['description'], style: textTheme.bodyLarge),
-          const SizedBox(height: 24),
+          const SizedBox(height: 10),
           Text(
-            'Courses',
-            style: textTheme.titleMedium?.copyWith(
-              color: AppColors.accentSecondary,
+            description,
+            style: textTheme.bodyMedium?.copyWith(
+              color: AppColors.textBody,
+              fontSize: 13,
             ),
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: (education['courses'] as List<String>).map((course) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: (education['color'] as Color).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  course,
-                  style: TextStyle(
-                    color: education['color'],
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            }).toList(),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
     );
-  }
-
-  Widget _buildEducationAnimation(Map<String, dynamic> education) {
-    return Lottie.network(
-      education['animation'],
-      fit: BoxFit.contain,
-    );
-  }
-
-  Widget _buildCertificationsGrid(TextTheme textTheme, Size size) {
-    final isMobile = size.width < 768;
-
-    return AnimatedBuilder(
-      animation: _contentController,
-      builder: (context, child) {
-        return Opacity(opacity: _contentController.value, child: child);
-      },
-      child: isMobile
-          ? Column(
-              children: _certificates
-                  .map((cert) => _buildCertificateCard(cert, textTheme))
-                  .toList(),
-            )
-          : GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              childAspectRatio: 2.0,
-              children: _certificates
-                  .map((cert) => _buildCertificateCard(cert, textTheme))
-                  .toList(),
-            ),
-    );
-  }
-
-  Widget _buildCertificateCard(
-    Map<String, dynamic> certificate,
-    TextTheme textTheme,
-  ) {
-    return GestureDetector(
-      onTap: () => _showCertificateDialog(certificate),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: (certificate['color'] as Color).withValues(alpha: 0.2),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.verified, color: certificate['color'], size: 24),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    certificate['title'],
-                    style: textTheme.titleLarge?.copyWith(
-                      color: certificate['color'],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    certificate['issuer'],
-                    style: textTheme.titleMedium,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: (certificate['color'] as Color).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    certificate['date'],
-                    style: TextStyle(
-                      color: certificate['color'],
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              certificate['description'],
-              style: textTheme.bodyMedium,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Tap to view',
-                  style: TextStyle(
-                    color: certificate['color'],
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Icon(Icons.touch_app, color: certificate['color'], size: 16),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showCertificateDialog(Map<String, dynamic> certificate) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.cardBackground,
-        title: Text(
-          certificate['title'],
-          style: TextStyle(
-            color: certificate['color'],
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Download this certificate to verify credentials.',
-              style: TextStyle(color: AppColors.textPrimary, fontSize: 16),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Maybe Later',
-              style: TextStyle(color: AppColors.textSecondary),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _downloadCertificate(certificate['url']);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: certificate['color'],
-            ),
-            child: const Text('Download'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _downloadCertificate(String? url) async {
-    if (url == null) return;
-    final uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      debugPrint('Could not launch certificate URL: $url');
-    }
   }
 }
