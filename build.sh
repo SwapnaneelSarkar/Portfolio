@@ -3,9 +3,24 @@ set -e  # Exit on any error
 
 # Download and install a pinned Flutter version using git.
 # Netlify's latest stable can move ahead of package compatibility.
-echo "Installing Flutter..."
 FLUTTER_VERSION="3.29.3"
-git clone https://github.com/flutter/flutter.git -b "$FLUTTER_VERSION" --depth 1
+
+# Netlify can restore a cached ./flutter from a previous build — reuse it
+# when it matches the pinned version, otherwise wipe and re-clone.
+if [ -d "flutter" ]; then
+  INSTALLED=$(git -C flutter describe --tags 2>/dev/null || echo "unknown")
+  if [ "$INSTALLED" = "$FLUTTER_VERSION" ]; then
+    echo "Reusing cached Flutter $INSTALLED"
+  else
+    echo "Cached Flutter is '$INSTALLED', want $FLUTTER_VERSION — removing..."
+    rm -rf flutter
+  fi
+fi
+
+if [ ! -d "flutter" ]; then
+  echo "Installing Flutter $FLUTTER_VERSION..."
+  git clone https://github.com/flutter/flutter.git -b "$FLUTTER_VERSION" --depth 1
+fi
 
 echo "Setting up Flutter path..."
 export PATH="$PATH:$PWD/flutter/bin"
