@@ -38,9 +38,11 @@ class Assets {
   static const String goAnimation =
       'https://assets9.lottiefiles.com/packages/lf20_kyu7xb1v.json';
 
-  // Resume (Google Drive)
-  static const String resumeUrl =
-      'https://drive.google.com/file/d/1KLA3Ttu3Bv_EFI72DeNHV_dtl198Llt0/view?usp=sharing';
+  // Resume — bundled with the site (web/Swapnaneel_Sarkar_Resume.pdf is
+  // copied to the site root at build time). Resolved against the current
+  // origin at click time because url_launcher rejects relative URLs.
+  static String get resumeUrl =>
+      Uri.base.resolve('/Swapnaneel_Sarkar_Resume.pdf').toString();
 
   // Certificate URLs - replace with your actual certificate URLs
   static const Map<String, String> certificateUrls = {
