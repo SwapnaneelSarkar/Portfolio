@@ -1,38 +1,570 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" prefix="og: https://ogp.me/ns# profile: https://ogp.me/ns/profile#">
 <head>
   <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
+    Base href placeholder — replaced by `flutter build web --base-href`.
+    Must start and end with "/".
   -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Swapnaneel Sarkar - Product Manager portfolio.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-  <!-- iOS meta tags & icons -->
+  <!-- ===== Primary SEO ===== -->
+  <title>Swapnaneel Sarkar — Technical Product Manager | AI, Supply Chain &amp; ERP PM</title>
+  <meta name="title" content="Swapnaneel Sarkar — Technical Product Manager | AI, Supply Chain & ERP PM">
+  <meta name="description" content="Swapnaneel Sarkar is a Technical Product Manager at Heizen shipping AI, supply chain, procurement and ERP products — 15+ client engagements, $250k+ delivered, 0→1 AI launches.">
+  <meta name="keywords" content="Swapnaneel Sarkar, Swapnaneel, Product Manager, Technical Product Manager, AI Product Manager, AI PM, Heizen Product Manager, Heizen, Supply Chain Product Manager, ERP Product Manager, Procurement Software Product Manager, LLM RAG Product Manager, Product Manager Hyderabad, Product Manager India, PM Portfolio, Product Case Studies, VIT-AP University">
+  <meta name="author" content="Swapnaneel Sarkar">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="rating" content="general">
+  <meta name="theme-color" content="#05070D">
+  <meta name="color-scheme" content="dark">
+  <meta name="geo.region" content="IN-TG">
+  <meta name="geo.placename" content="Hyderabad, India">
+  <link rel="canonical" href="https://swapnaneel-portfolio.netlify.app/">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <link rel="me" href="https://www.linkedin.com/in/swapnaneel-sarkar/">
+  <link rel="me" href="https://github.com/SwapnaneelSarkar">
+  <link rel="author" href="https://www.linkedin.com/in/swapnaneel-sarkar/">
+
+  <!-- Search engine ownership verification — paste the tokens from
+       Google Search Console / Bing Webmaster Tools here:
+       <meta name="google-site-verification" content="...">
+       <meta name="msvalidate.01" content="..."> -->
+
+  <!-- ===== Open Graph (LinkedIn, WhatsApp, Slack, Facebook) ===== -->
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Swapnaneel Sarkar — Product Manager Portfolio">
+  <meta property="og:title" content="Swapnaneel Sarkar — Technical Product Manager | AI, Supply Chain & ERP PM">
+  <meta property="og:description" content="Technical Product Manager at Heizen shipping AI, supply chain, procurement and ERP products — 15+ client engagements, $250k+ delivered, 0→1 AI launches.">
+  <meta property="og:url" content="https://swapnaneel-portfolio.netlify.app/">
+  <meta property="og:image" content="https://swapnaneel-portfolio.netlify.app/og-image.png">
+  <meta property="og:image:secure_url" content="https://swapnaneel-portfolio.netlify.app/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Swapnaneel Sarkar — Technical Product Manager (AI · Supply Chain · ERP)">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="en_IN">
+  <meta property="profile:first_name" content="Swapnaneel">
+  <meta property="profile:last_name" content="Sarkar">
+  <meta property="profile:username" content="swapnaneel-sarkar">
+
+  <!-- ===== Twitter / X ===== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Swapnaneel Sarkar — Technical Product Manager | AI, Supply Chain & ERP PM">
+  <meta name="twitter:description" content="Technical Product Manager at Heizen shipping AI, supply chain, procurement and ERP products — 15+ client engagements, $250k+ delivered, 0→1 AI launches.">
+  <meta name="twitter:image" content="https://swapnaneel-portfolio.netlify.app/og-image.png">
+  <meta name="twitter:image:alt" content="Swapnaneel Sarkar — Technical Product Manager (AI · Supply Chain · ERP)">
+
+  <!-- ===== PWA / iOS ===== -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Swapnaneel Sarkar">
+  <meta name="application-name" content="Swapnaneel Sarkar">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>Swapnaneel Sarkar | Product Manager</title>
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="manifest" href="manifest.json">
+
+  <!-- ===== Performance hints (google_fonts + CanvasKit fetch at runtime) ===== -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://www.gstatic.com">
+
+  <!-- ===== Structured data (schema.org JSON-LD) ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://swapnaneel-portfolio.netlify.app/#person",
+        "name": "Swapnaneel Sarkar",
+        "givenName": "Swapnaneel",
+        "familyName": "Sarkar",
+        "alternateName": ["Swapnaneel", "Swapnaneel S."],
+        "url": "https://swapnaneel-portfolio.netlify.app/",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://swapnaneel-portfolio.netlify.app/swapnaneel-sarkar.png",
+          "caption": "Swapnaneel Sarkar, Technical Product Manager"
+        },
+        "jobTitle": "Technical Product Manager",
+        "description": "Technical Product Manager working at the intersection of user problems and engineering, with a specialty in supply chain. At Heizen, ships procurement software, supplier management platforms, end-to-end SCM solutions and AI intelligence layers over supply-chain portals, while managing 15+ client engagements worth $250k+ across ERP, workforce management and SaaS.",
+        "email": "mailto:swapnaneel.devwork@gmail.com",
+        "worksFor": {
+          "@type": "Organization",
+          "@id": "https://www.heizen.work/#organization",
+          "name": "Heizen",
+          "url": "https://www.heizen.work/"
+        },
+        "hasOccupation": {
+          "@type": "Occupation",
+          "name": "Technical Product Manager",
+          "occupationLocation": { "@type": "City", "name": "Hyderabad, India" },
+          "skills": "Product Management, Product Discovery, Roadmaps, PRDs, Agile, AI Products (LLM/RAG), Supply Chain, Procurement, Supplier Management, ERP, Workforce Management, SaaS, Flutter, TypeScript, SQL, Python"
+        },
+        "alumniOf": [
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "VIT-AP University",
+            "sameAs": "https://vitap.ac.in/"
+          },
+          {
+            "@type": "EducationalOrganization",
+            "name": "Kendriya Vidyalaya, Cooch Behar"
+          }
+        ],
+        "workLocation": {
+          "@type": "Place",
+          "name": "Hyderabad",
+          "address": { "@type": "PostalAddress", "addressLocality": "Hyderabad", "addressRegion": "Telangana", "addressCountry": "IN" }
+        },
+        "homeLocation": {
+          "@type": "Place",
+          "name": "Cooch Behar",
+          "address": { "@type": "PostalAddress", "addressLocality": "Cooch Behar", "addressRegion": "West Bengal", "addressCountry": "IN" }
+        },
+        "nationality": { "@type": "Country", "name": "India" },
+        "knowsAbout": [
+          "Product Management", "Technical Product Management", "AI Product Management",
+          "Large Language Models", "Retrieval-Augmented Generation", "AI Voice Agents",
+          "Supply Chain Management", "Procurement Software", "Supplier Management",
+          "Source-to-Pay", "ERP Migration", "Workforce Management", "B2B SaaS",
+          "Product Discovery", "Roadmap Prioritization", "PRDs", "Agile & Scrum",
+          "User Interviews", "Product Analytics", "Go-to-Market Strategy",
+          "Flutter", "Dart", "TypeScript", "Next.js", "SQL", "Python", "Firebase", "REST APIs"
+        ],
+        "sameAs": [
+          "https://www.linkedin.com/in/swapnaneel-sarkar/",
+          "https://github.com/SwapnaneelSarkar"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://swapnaneel-portfolio.netlify.app/#website",
+        "url": "https://swapnaneel-portfolio.netlify.app/",
+        "name": "Swapnaneel Sarkar — Technical Product Manager Portfolio",
+        "alternateName": ["Swapnaneel Sarkar Portfolio", "Swapnaneel Portfolio", "Swapnaneel Sarkar PM Portfolio"],
+        "description": "Portfolio of Swapnaneel Sarkar, Technical Product Manager at Heizen: AI, supply chain, procurement and ERP products, project experience, case studies and contact.",
+        "inLanguage": "en",
+        "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" },
+        "publisher": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" },
+        "about": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" },
+        "copyrightHolder": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" }
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://swapnaneel-portfolio.netlify.app/#profilepage",
+        "url": "https://swapnaneel-portfolio.netlify.app/",
+        "name": "Swapnaneel Sarkar — Technical Product Manager",
+        "isPartOf": { "@id": "https://swapnaneel-portfolio.netlify.app/#website" },
+        "mainEntity": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" },
+        "dateModified": "2026-09-06",
+        "primaryImageOfPage": "https://swapnaneel-portfolio.netlify.app/og-image.png",
+        "hasPart": [
+          { "@type": "WebPage", "url": "https://swapnaneel-portfolio.netlify.app/experience", "name": "Experience — Swapnaneel Sarkar" },
+          { "@type": "WebPage", "url": "https://swapnaneel-portfolio.netlify.app/projects", "name": "Projects — Swapnaneel Sarkar" },
+          { "@type": "WebPage", "url": "https://swapnaneel-portfolio.netlify.app/case-studies", "name": "Product Case Studies — Swapnaneel Sarkar" },
+          { "@type": "WebPage", "url": "https://swapnaneel-portfolio.netlify.app/education", "name": "Education — Swapnaneel Sarkar" },
+          { "@type": "WebPage", "url": "https://swapnaneel-portfolio.netlify.app/contact", "name": "Contact — Swapnaneel Sarkar" }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://swapnaneel-portfolio.netlify.app/projects#list",
+        "name": "Products and projects by Swapnaneel Sarkar",
+        "itemListOrder": "https://schema.org/ItemListOrderDescending",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "item": { "@type": "SoftwareApplication", "name": "Vorizon", "url": "https://vorizon.vercel.app/", "applicationCategory": "BusinessApplication", "description": "AI Employee Platform — build, train, test and deploy AI voice agents that handle inbound and outbound business phone calls end-to-end.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } },
+          { "@type": "ListItem", "position": 2, "item": { "@type": "SoftwareApplication", "name": "MindMark", "url": "https://github.com/SwapnaneelSarkar/MindMark", "applicationCategory": "ProductivityApplication", "description": "PWA that captures a knowledge worker's mental context at the moment of interruption and uses AI to generate a re-entry brief.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } },
+          { "@type": "ListItem", "position": 3, "item": { "@type": "SoftwareApplication", "name": "APKMaker", "url": "https://github.com/SwapnaneelSarkar/APKmaker", "applicationCategory": "DeveloperApplication", "description": "AI-driven Android application compiler that turns natural-language prompts into release-signed Flutter APKs.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } },
+          { "@type": "ListItem", "position": 4, "item": { "@type": "SoftwareApplication", "name": "PortfolioHub", "url": "https://port-folio-hub-gray.vercel.app/", "applicationCategory": "BusinessApplication", "description": "SaaS portfolio builder for product managers with structured case studies and public portfolio pages.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } },
+          { "@type": "ListItem", "position": 5, "item": { "@type": "SoftwareSourceCode", "name": "CodeContext CLI", "url": "https://github.com/SwapnaneelSarkar/codecontext-cli", "codeRepository": "https://github.com/SwapnaneelSarkar/codecontext-cli", "programmingLanguage": "TypeScript", "license": "https://opensource.org/licenses/MIT", "description": "Open-source CLI that indexes local codebases into compact .ai-context bundles for AI coding assistants.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } },
+          { "@type": "ListItem", "position": 6, "item": { "@type": "MobileApplication", "name": "Bird — Quick Commerce", "url": "https://apps.apple.com/in/app/bird-instant-delivery/id6752969848", "operatingSystem": "iOS, Android", "applicationCategory": "ShoppingApplication", "description": "Dual-platform quick commerce app with real-time order tracking, led with a team of four engineers.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } },
+          { "@type": "ListItem", "position": 7, "item": { "@type": "MobileApplication", "name": "Grape — Healthcare Platform", "url": "https://github.com/SwapnaneelSarkar/grape", "operatingSystem": "iOS, Android", "applicationCategory": "HealthApplication", "description": "Healthcare mobile app with Firebase, maps for nearby care and an AI symptom assistant.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://swapnaneel-portfolio.netlify.app/case-studies#list",
+        "name": "Product strategy case studies by Swapnaneel Sarkar",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "item": { "@type": "Article", "name": "Rapido — Strategic product analysis of Indian urban mobility", "url": "https://swapnaneel-portfolio.netlify.app/case-studies/rapido", "about": "Rapido", "description": "Examines Rapido's journey from a 2015 Bengaluru idea to a $1.1B unicorn completing 3.3M rides a day, structural cracks in its model, and four strategic interventions grounded in user behavior and operational economics.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } },
+          { "@type": "ListItem", "position": 2, "item": { "@type": "Article", "name": "HitWicket — Cricket strategy gaming product analysis", "url": "https://swapnaneel-portfolio.netlify.app/case-studies/hitwicket", "about": "HitWicket", "description": "Strategic product analysis of HitWicket covering core loops, monetization, retention mechanics and growth levers in sports gaming.", "author": { "@id": "https://swapnaneel-portfolio.netlify.app/#person" } } }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* ---- Pre-render shell: visible until Flutter paints, then sits behind the app. ---- */
+    :root { color-scheme: dark; }
+    html, body { background: #05070D; margin: 0; }
+    #seo-shell {
+      font-family: "Space Grotesk", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #B6C2D9; background: #05070D; line-height: 1.6; -webkit-font-smoothing: antialiased;
+    }
+    #seo-shell .wrap { max-width: 960px; margin: 0 auto; padding: 48px 24px 64px; }
+    #seo-shell header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 24px; margin-bottom: 40px; }
+    #seo-shell header .brand { font-weight: 700; color: #E9EFFB; font-size: 18px; letter-spacing: -0.01em; text-decoration: none; }
+    #seo-shell nav a { color: #8C9BB8; text-decoration: none; margin-left: 18px; font-size: 14px; }
+    #seo-shell nav a:hover, #seo-shell a:hover { color: #22D3EE; }
+    #seo-shell h1 { color: #E9EFFB; font-size: clamp(34px, 6vw, 56px); line-height: 1.05; letter-spacing: -0.03em; margin: 0 0 10px; }
+    #seo-shell h2 { color: #E9EFFB; font-size: 26px; letter-spacing: -0.02em; margin: 56px 0 18px; }
+    #seo-shell h3 { color: #E9EFFB; font-size: 18px; margin: 22px 0 4px; }
+    #seo-shell .role { color: #22D3EE; font-size: 20px; font-weight: 600; margin: 0 0 18px; }
+    #seo-shell p { margin: 0 0 12px; max-width: 72ch; }
+    #seo-shell .muted { color: #8C9BB8; font-size: 14px; }
+    #seo-shell a { color: #22D3EE; }
+    #seo-shell ul { padding-left: 20px; margin: 6px 0 12px; }
+    #seo-shell li { margin: 4px 0; }
+    #seo-shell .cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 0; }
+    #seo-shell .cta a { border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 8px 16px; text-decoration: none; color: #E9EFFB; font-size: 14px; }
+    #seo-shell .cta a.primary { background: #22D3EE; color: #05070D; border-color: #22D3EE; font-weight: 600; }
+    #seo-shell .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 32px; }
+    #seo-shell .metric { background: #0D1522; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 18px; }
+    #seo-shell .metric strong { display: block; color: #E9EFFB; font-size: 26px; letter-spacing: -0.02em; }
+    #seo-shell .metric span { font-size: 13px; color: #8C9BB8; }
+    #seo-shell .card { background: #0D1522; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px 22px; margin: 14px 0; }
+    #seo-shell .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+    #seo-shell .tags li { font-size: 12px; color: #8C9BB8; border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 3px 10px; margin: 0; }
+    #seo-shell footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 13px; color: #8C9BB8; }
+    #seo-shell img.headshot { float: right; width: 160px; height: 160px; object-fit: cover; object-position: top; border-radius: 24px; margin: 0 0 16px 24px; border: 1px solid rgba(34,211,238,0.35); }
+    @media (max-width: 640px) { #seo-shell img.headshot { float: none; display: block; width: 120px; height: 120px; margin: 0 0 20px; } }
+
+    /* Thin progress bar while the Flutter bundle downloads. */
+    #seo-loader { position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 2; background: linear-gradient(90deg, #22D3EE, #A78BFA); animation: seo-load 4s cubic-bezier(.2,.7,.3,1) forwards; }
+    @keyframes seo-load { from { width: 0 } to { width: 88% } }
+
+    /* Once Flutter has painted: the app owns the viewport, the shell stays in the DOM behind it. */
+    html.app-ready #seo-loader { display: none; }
+    html.app-ready #seo-shell { position: absolute; top: 0; left: 0; width: 100%; z-index: 0; pointer-events: none; user-select: none; }
+    flutter-view { position: relative; z-index: 1; }
+  </style>
 </head>
 <body>
+  <div id="seo-loader" role="presentation"></div>
+
+  <!--
+    Crawlable HTML mirror of the Flutter app. Flutter web paints to a canvas,
+    so this is what search engines, link previews and no-JS clients read.
+    Content is sourced from lib/data/portfolio_content.dart — keep them in sync.
+  -->
+  <div id="seo-shell">
+    <div class="wrap">
+      <header>
+        <a class="brand" href="/">Swapnaneel Sarkar</a>
+        <nav aria-label="Primary">
+          <a href="/experience">Experience</a>
+          <a href="/projects">Projects</a>
+          <a href="/case-studies">Case Studies</a>
+          <a href="/education">Education</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </header>
+
+      <main>
+        <section id="about" aria-labelledby="name">
+          <img class="headshot" src="/swapnaneel-sarkar.png" alt="Swapnaneel Sarkar, Technical Product Manager" width="160" height="160" loading="eager" decoding="async">
+          <h1 id="name">Swapnaneel Sarkar</h1>
+          <p class="role">Technical Product Manager · AI, Supply Chain &amp; ERP · Heizen, Hyderabad</p>
+          <p>Technical Product Manager working at the intersection of user problems and engineering — with a specialty most early-career PMs don't have: supply chain. At Heizen I've shipped procurement software, supplier management platforms, end-to-end SCM solutions, and AI intelligence layers over supply-chain portals, while managing 15+ client engagements worth $250k+ across ERP, workforce management, and SaaS. I gather requirements, shape roadmaps, and partner with engineering to take products from 0 to 1.</p>
+          <p class="muted">Product Manager · Supply Chain &amp; ERP PM · AI Product Builder · 0→1 Builder</p>
+          <div class="cta">
+            <a class="primary" href="/contact">Hire me</a>
+            <a href="/Swapnaneel_Sarkar_Resume.pdf">Resume (PDF)</a>
+            <a href="https://www.linkedin.com/in/swapnaneel-sarkar/" rel="me noopener">LinkedIn</a>
+            <a href="https://github.com/SwapnaneelSarkar" rel="me noopener">GitHub</a>
+            <a href="mailto:swapnaneel.devwork@gmail.com">Email</a>
+          </div>
+          <div class="metrics" aria-label="Impact metrics">
+            <div class="metric"><strong>$250k+</strong><span>Delivery value in 1 year</span></div>
+            <div class="metric"><strong>15+</strong><span>Engagements in SCM, ERP &amp; SaaS</span></div>
+            <div class="metric"><strong>₹15–30L</strong><span>Client savings unlocked per year</span></div>
+            <div class="metric"><strong>0→1</strong><span>AI products shipped, incl. AI-over-SCM</span></div>
+          </div>
+        </section>
+
+        <section id="domains" aria-labelledby="domains-h">
+          <h2 id="domains-h">Domains I've shipped in</h2>
+          <article class="card">
+            <h3>Supply Chain &amp; Procurement</h3>
+            <p>Shipped procurement software and supplier management platforms at Heizen — owning discovery with client ops teams, mapping source-to-pay workflows, and delivering end-to-end SCM solutions that replaced spreadsheet-driven operations.</p>
+            <ul class="tags"><li>Procurement Workflows</li><li>Supplier Management</li><li>End-to-End SCM</li><li>Vendor Onboarding</li></ul>
+          </article>
+          <article class="card">
+            <h3>AI on Supply Chain</h3>
+            <p>Defined and launched AI intelligence layers on top of supply-chain portals — LLM/RAG products that let ops teams query suppliers, orders, and procurement data in plain language instead of digging through dashboards.</p>
+            <ul class="tags"><li>LLM / RAG</li><li>AI Intelligence Layer</li><li>0→1 Launches</li><li>SCM Portals</li></ul>
+          </article>
+          <article class="card">
+            <h3>ERP &amp; Workforce Ops</h3>
+            <p>Moved clients off manual and legacy processes onto custom ERP and workforce management platforms — unlocking ₹15–30L/year in operational savings per client.</p>
+            <ul class="tags"><li>ERP Migration</li><li>Workforce Management</li><li>Process Digitization</li><li>Cost Reduction</li></ul>
+          </article>
+          <article class="card">
+            <h3>B2B &amp; B2C SaaS</h3>
+            <p>Shipped revenue-expanding features on a B2B SaaS platform and led consumer products from quick commerce to healthcare — every spec grounded in user interviews, not assumptions.</p>
+            <ul class="tags"><li>Feature Discovery</li><li>User Interviews</li><li>Monetization</li><li>Cross-Platform</li></ul>
+          </article>
+        </section>
+
+        <section id="experience" aria-labelledby="experience-h">
+          <h2 id="experience-h">Experience</h2>
+          <article class="card">
+            <h3>Technical Product Manager — Heizen</h3>
+            <p class="muted">Nov 2025 – Present · Hybrid · Hyderabad · Intern → Full-time (Jul 2026)</p>
+            <p>Own product delivery from discovery to launch across 15+ client engagements — with deep work in supply chain: procurement software, supplier management platforms, end-to-end SCM solutions, and AI intelligence layers over supply-chain portals. Converted from TPM intern to full-time in July 2026.</p>
+            <ul>
+              <li>Owned product delivery for procurement software and supplier management platforms — ran discovery with client operations teams, mapped procurement and supplier workflows end-to-end, and shipped sprint-ready specs through launch</li>
+              <li>Defined and shipped an AI intelligence layer over a client's supply-chain portal — an LLM/RAG product that lets ops teams query suppliers, orders, and procurement data in plain language</li>
+              <li>Took end-to-end SCM solutions from 0 to 1, replacing spreadsheet-driven procurement and supplier tracking with custom-built platforms</li>
+              <li>Managed 15+ client engagements on concurrent projects, overseeing $250k+ in total project value within a year</li>
+              <li>Helped 3+ clients cut ₹15–30 lakhs/year in operational costs by migrating manual and legacy ERP and workforce processes onto custom platforms</li>
+              <li>Shipped new features on a B2B SaaS platform that expanded the paying client base — identified gaps through user interviews and translated them into sprint-ready specs</li>
+            </ul>
+            <ul class="tags"><li>Supply Chain</li><li>Procurement</li><li>ERP</li><li>SCM × AI</li></ul>
+          </article>
+          <article class="card">
+            <h3>Project Manager &amp; App Developer (Freelance) — Crowdbuzz</h3>
+            <p class="muted">Apr 2025 – Oct 2025 · Remote · Dubai &amp; UK clients</p>
+            <p>Managed three simultaneous client projects end-to-end while coordinating designers and engineers. Primary stakeholders were overseas clients in Dubai and the UK — balancing time zones, delivery cadence, and clear product communication.</p>
+            <ul>
+              <li>Led 3 concurrent projects as manager, from discovery through release</li>
+              <li>Worked directly with overseas clients in Dubai and the UK on requirements and demos</li>
+              <li>Translated business objectives into roadmaps, milestones, and technical specifications</li>
+              <li>Ran Agile ceremonies and sprint planning; maintained on-time delivery across all engagements</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Flutter Developer Intern — Meet &amp; More</h3>
+            <p class="muted">Apr 2025 – Oct 2025 · Remote</p>
+            <p>Developed end-to-end mobile applications using Flutter with BLoC state management and RESTful API integration in an Agile environment, including real-time chat and Firebase Cloud Messaging notifications.</p>
+          </article>
+          <article class="card">
+            <h3>Software Engineer Intern — Taxian</h3>
+            <p class="muted">Mar 2025 – Apr 2025 · Remote</p>
+            <p>Developed scalable web and mobile experiences using Flutter with focus on user experience, Stripe and PayPal payment flows, CI/CD and Play Store publication.</p>
+          </article>
+          <article class="card">
+            <h3>Android Developer Intern — Apps AiT</h3>
+            <p class="muted">Sep 2024 – Mar 2025 · Remote</p>
+            <p>Built mobile applications using Flutter and Firebase in an Agile team, translating Figma designs into production-ready features and contributing to apps that crossed 1,000+ downloads on Google Play.</p>
+          </article>
+        </section>
+
+        <section id="projects" aria-labelledby="projects-h">
+          <h2 id="projects-h">Products &amp; projects</h2>
+          <article class="card">
+            <h3><a href="https://vorizon.vercel.app/" rel="noopener">Vorizon</a> <span class="muted">· 2026</span></h3>
+            <p>AI Employee Platform — build, train, test, and deploy AI voice agents that handle inbound and outbound business phone calls end-to-end, with usage-based billing at $0.10/conversation minute. Swappable voice engine (Retell AI), TCPA consent tracking, Do-Not-Call enforcement, RBAC, rate limiting and Razorpay metering.</p>
+            <ul class="tags"><li>React</li><li>TypeScript</li><li>Node.js</li><li>MongoDB</li><li>Retell AI</li><li>Razorpay</li></ul>
+            <p class="muted"><a href="https://github.com/SwapnaneelSarkar/Vorizon" rel="noopener">Source on GitHub</a></p>
+          </article>
+          <article class="card">
+            <h3><a href="https://github.com/SwapnaneelSarkar/MindMark" rel="noopener">MindMark</a> <span class="muted">· 2026</span></h3>
+            <p>A PWA that captures a knowledge worker's mental context at the moment of interruption and uses AI to generate a re-entry brief when they return — sub-200ms capture, Groq Whisper voice fallback, Llama 3.3 70B briefs, offline-first with Google OAuth.</p>
+            <ul class="tags"><li>Next.js 14</li><li>TypeScript</li><li>Supabase</li><li>Groq</li><li>Tailwind CSS</li><li>Zustand</li></ul>
+          </article>
+          <article class="card">
+            <h3><a href="https://github.com/SwapnaneelSarkar/APKmaker" rel="noopener">APKMaker</a> <span class="muted">· 2026</span></h3>
+            <p>An AI-driven Android application compiler that transforms natural language prompts into production-grade, release-signed Flutter APKs — Groq Llama-3.3-70B clarification engine, Next.js 15 + NestJS monorepo, BullMQ + Redis pipelines.</p>
+            <ul class="tags"><li>Next.js</li><li>NestJS</li><li>Flutter</li><li>TypeScript</li><li>Groq LLM</li><li>BullMQ</li><li>Supabase</li></ul>
+          </article>
+          <article class="card">
+            <h3><a href="https://port-folio-hub-gray.vercel.app/" rel="noopener">PortfolioHub</a> <span class="muted">· 2026</span></h3>
+            <p>SaaS portfolio builder for product managers — "prove your judgment, not just your title." Structured case studies with measurable impact, artifact attachments (PRDs, strategy decks, roadmaps), and SEO-optimized public portfolio pages.</p>
+            <ul class="tags"><li>Next.js</li><li>TypeScript</li><li>Tailwind CSS</li><li>Supabase</li><li>Vercel</li></ul>
+            <p class="muted"><a href="https://github.com/SwapnaneelSarkar/PortFolioHub" rel="noopener">Source on GitHub</a></p>
+          </article>
+          <article class="card">
+            <h3><a href="https://github.com/SwapnaneelSarkar/codecontext-cli" rel="noopener">CodeContext CLI</a> <span class="muted">· 2025</span></h3>
+            <p>Open-source, MIT-licensed CLI that indexes local codebases into compact .ai-context/ bundles for AI coding assistants — per-file summaries, dependency graphs, Tree-sitter parsing, Ollama by default with cloud LLM opt-in.</p>
+            <ul class="tags"><li>TypeScript</li><li>Node.js</li><li>Tree-sitter</li><li>Turborepo</li><li>Next.js</li></ul>
+          </article>
+          <article class="card">
+            <h3><a href="https://apps.apple.com/in/app/bird-instant-delivery/id6752969848" rel="noopener">Bird — Quick Commerce</a> <span class="muted">· 2025</span></h3>
+            <p>Dual-platform quick commerce app with real-time order tracking, led with a team of four engineers — product roadmap, client discovery, BLoC + FCM + REST tracking.</p>
+            <ul class="tags"><li>Flutter</li><li>BLoC</li><li>REST APIs</li><li>FCM</li></ul>
+          </article>
+          <article class="card">
+            <h3><a href="https://github.com/SwapnaneelSarkar/grape" rel="noopener">Grape — Healthcare Platform</a> <span class="muted">· 2025</span></h3>
+            <p>Healthcare mobile app with Firebase Auth, database, storage and FCM, Google Maps for nearby pharmacies and hospitals, and an AI symptom assistant.</p>
+            <ul class="tags"><li>Flutter</li><li>Firebase</li><li>Google Maps</li><li>FCM</li></ul>
+          </article>
+        </section>
+
+        <section id="case-studies" aria-labelledby="cases-h">
+          <h2 id="cases-h">Product case studies</h2>
+          <article class="card">
+            <h3><a href="/case-studies/rapido">Rapido — Strategic product analysis · Indian urban mobility</a></h3>
+            <p>Rapido found a problem embedded in daily Indian life — from a Bengaluru dorm-room idea in 2015 to a $1.1B unicorn completing 3.3M rides a day in 2025. This case study examines Rapido's journey, structural cracks in its model, and four high-conviction strategic interventions grounded in user behavior, operational economics, and Indian urban mobility.</p>
+            <ul class="tags"><li>Mobility</li><li>Strategy</li><li>India</li><li>Growth</li></ul>
+          </article>
+          <article class="card">
+            <h3><a href="/case-studies/hitwicket">HitWicket — Cricket strategy gaming · Product analysis</a></h3>
+            <p>Strategic product analysis of HitWicket — a cricket strategy game built for mobile-first audiences. Examines core loops, monetization, retention mechanics, and growth levers in the sports gaming category.</p>
+            <ul class="tags"><li>Gaming</li><li>Sports</li><li>Mobile</li><li>Strategy</li></ul>
+          </article>
+        </section>
+
+        <section id="skills" aria-labelledby="skills-h">
+          <h2 id="skills-h">Skills</h2>
+          <h3>Product Management</h3>
+          <p>Agile &amp; Scrum · Roadmap &amp; Prioritization · PRDs &amp; Product Specs · Backlog Management · MVP Definition · Product Discovery · Stakeholder Management · User Stories · User Interviews · KPI Definition · Go-to-Market Thinking · Competitive Analysis · Cross-functional Leadership</p>
+          <h3>Supply Chain &amp; ERP Domain</h3>
+          <p>Procurement Workflows · Supplier Management · Source-to-Pay · Inventory &amp; Order Flows · ERP Migration · Workforce Management · AI over SCM Portals</p>
+          <h3>Technical</h3>
+          <p>Flutter &amp; Dart · TypeScript · SQL · Python · REST APIs · Firebase · LLM/RAG Products · AI Product Workflows · System Design Basics · Figma · Wireframing</p>
+          <h3>Analytics &amp; Delivery</h3>
+          <p>Product Analytics · Funnel Thinking · Release Planning · Sprint Planning · Client Demos · Requirements Gathering · Acceptance Criteria</p>
+        </section>
+
+        <section id="education" aria-labelledby="education-h">
+          <h2 id="education-h">Education</h2>
+          <article class="card">
+            <h3>VIT-AP University — B.Tech, Computer Science and Business Systems</h3>
+            <p class="muted">September 2022 – May 2026 · Amaravati · CGPA 8.19/10.0</p>
+          </article>
+          <article class="card">
+            <h3>Kendriya Vidyalaya — Higher Secondary Education</h3>
+            <p class="muted">April 2010 – July 2022 · Cooch Behar, West Bengal</p>
+          </article>
+        </section>
+
+        <section id="contact" aria-labelledby="contact-h">
+          <h2 id="contact-h">Contact</h2>
+          <p>Open to Technical Product Manager and AI Product Manager roles. Based in Hyderabad, India (from Cooch Behar, West Bengal); available for hybrid and remote work.</p>
+          <ul>
+            <li>Email: <a href="mailto:swapnaneel.devwork@gmail.com">swapnaneel.devwork@gmail.com</a></li>
+            <li>LinkedIn: <a href="https://www.linkedin.com/in/swapnaneel-sarkar/" rel="me noopener">linkedin.com/in/swapnaneel-sarkar</a></li>
+            <li>GitHub: <a href="https://github.com/SwapnaneelSarkar" rel="me noopener">github.com/SwapnaneelSarkar</a></li>
+            <li>Resume: <a href="/Swapnaneel_Sarkar_Resume.pdf">Swapnaneel_Sarkar_Resume.pdf</a></li>
+          </ul>
+        </section>
+      </main>
+
+      <footer>
+        © 2026 Swapnaneel Sarkar · Technical Product Manager · <a href="https://swapnaneel-portfolio.netlify.app/">swapnaneel-portfolio.netlify.app</a>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // ---- Per-route <title>, description, canonical and social tags for the SPA. ----
+    // go_router uses history.pushState with path URLs; hook it so each route gets its own metadata.
+    (function () {
+      var SITE = 'https://swapnaneel-portfolio.netlify.app';
+      var DEFAULT_ROBOTS = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+      var ROUTES = {
+        '/': {
+          t: 'Swapnaneel Sarkar — Technical Product Manager | AI, Supply Chain & ERP PM',
+          d: 'Swapnaneel Sarkar is a Technical Product Manager at Heizen shipping AI, supply chain, procurement and ERP products — 15+ client engagements, $250k+ delivered, 0→1 AI launches.'
+        },
+        '/experience': {
+          t: 'Experience — Swapnaneel Sarkar | Technical Product Manager at Heizen',
+          d: 'Work experience of Swapnaneel Sarkar: Technical Product Manager at Heizen (procurement, supplier management, SCM and AI over supply-chain portals), plus project management and Flutter engineering roles.'
+        },
+        '/projects': {
+          t: 'Projects — Swapnaneel Sarkar | AI Products Shipped 0→1',
+          d: 'Products built by Swapnaneel Sarkar: Vorizon AI voice agents, MindMark, APKMaker, PortfolioHub, CodeContext CLI, Bird quick commerce and the Grape healthcare platform.'
+        },
+        '/case-studies': {
+          t: 'Product Case Studies — Swapnaneel Sarkar | Rapido & HitWicket',
+          d: 'Product strategy case studies by Swapnaneel Sarkar: a strategic analysis of Rapido (Indian urban mobility) and HitWicket (cricket strategy gaming).'
+        },
+        '/case-studies/rapido': {
+          t: 'Rapido Product Strategy Case Study — Swapnaneel Sarkar',
+          d: 'Swapnaneel Sarkar examines Rapido\'s journey from a 2015 Bengaluru idea to a $1.1B unicorn doing 3.3M rides a day, the cracks in its model, and four strategic interventions.'
+        },
+        '/case-studies/hitwicket': {
+          t: 'HitWicket Product Analysis Case Study — Swapnaneel Sarkar',
+          d: 'Swapnaneel Sarkar\'s product analysis of HitWicket, a cricket strategy game: core loops, monetization, retention mechanics and growth levers in sports gaming.'
+        },
+        '/education': {
+          t: 'Education — Swapnaneel Sarkar | B.Tech CSBS, VIT-AP University',
+          d: 'Swapnaneel Sarkar studied B.Tech in Computer Science and Business Systems at VIT-AP University (CGPA 8.19) after Kendriya Vidyalaya, Cooch Behar.'
+        },
+        '/contact': {
+          t: 'Contact Swapnaneel Sarkar — Hire a Technical Product Manager',
+          d: 'Get in touch with Swapnaneel Sarkar, Technical Product Manager (AI, supply chain, ERP) — email, LinkedIn, GitHub and resume.'
+        },
+        '/easter-egg': { t: 'Snake — Swapnaneel Sarkar', d: 'A small easter egg on Swapnaneel Sarkar\'s portfolio.', noindex: true },
+        '/memory':     { t: 'Memory Game — Swapnaneel Sarkar', d: 'A small easter egg on Swapnaneel Sarkar\'s portfolio.', noindex: true }
+      };
+      var NOT_FOUND = { t: 'Page not found — Swapnaneel Sarkar', d: 'That page does not exist. Visit the portfolio of Swapnaneel Sarkar, Technical Product Manager.', noindex: true };
+      var current = null;
+
+      function setMeta(attr, key, value) {
+        var el = document.head.querySelector('meta[' + attr + '="' + key + '"]');
+        if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el); }
+        el.setAttribute('content', value);
+      }
+      function setLink(rel, href) {
+        var el = document.head.querySelector('link[rel="' + rel + '"]');
+        if (!el) { el = document.createElement('link'); el.setAttribute('rel', rel); document.head.appendChild(el); }
+        el.setAttribute('href', href);
+      }
+      function apply() {
+        var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
+        var meta = ROUTES[path];
+        var url = SITE + (meta ? (path === '/' ? '/' : path) : '/');
+        if (!meta) meta = NOT_FOUND;
+        current = meta.t;
+        if (document.title !== meta.t) document.title = meta.t;
+        setMeta('name', 'title', meta.t);
+        setMeta('name', 'description', meta.d);
+        setMeta('name', 'robots', meta.noindex ? 'noindex, nofollow' : DEFAULT_ROBOTS);
+        setMeta('name', 'googlebot', meta.noindex ? 'noindex, nofollow' : DEFAULT_ROBOTS);
+        setMeta('property', 'og:title', meta.t);
+        setMeta('property', 'og:description', meta.d);
+        setMeta('property', 'og:url', url);
+        setMeta('name', 'twitter:title', meta.t);
+        setMeta('name', 'twitter:description', meta.d);
+        setLink('canonical', url);
+      }
+
+      var push = history.pushState, replace = history.replaceState;
+      history.pushState = function () { var r = push.apply(this, arguments); setTimeout(apply, 0); return r; };
+      history.replaceState = function () { var r = replace.apply(this, arguments); setTimeout(apply, 0); return r; };
+      window.addEventListener('popstate', function () { setTimeout(apply, 0); });
+
+      // Flutter sets document.title from MaterialApp.title on startup; keep the route title authoritative.
+      var titleEl = document.querySelector('title');
+      if (titleEl && window.MutationObserver) {
+        new MutationObserver(function () {
+          if (current && document.title !== current) document.title = current;
+        }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+      }
+      apply();
+    })();
+
+    // ---- Hand the viewport to Flutter once it has mounted; keep the HTML mirror behind it. ----
+    (function () {
+      var shell = document.getElementById('seo-shell');
+      function ready() {
+        document.documentElement.classList.add('app-ready');
+        shell.setAttribute('aria-hidden', 'true');
+        shell.setAttribute('inert', '');
+      }
+      if (document.querySelector('flutter-view')) { ready(); return; }
+      var obs = new MutationObserver(function () {
+        if (document.querySelector('flutter-view')) {
+          obs.disconnect();
+          // Give the first frame a moment so the swap is invisible.
+          setTimeout(ready, 350);
+        }
+      });
+      obs.observe(document.body, { childList: true, subtree: true });
+    })();
+  </script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

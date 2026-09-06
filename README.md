@@ -27,3 +27,20 @@ flutter run -d chrome
 ```
 
 Content lives in `lib/data/portfolio_content.dart`.
+
+## SEO
+
+Flutter web paints to a canvas, so search engines cannot read the app itself. Everything crawlable lives in `web/`:
+
+| File | Purpose |
+|------|---------|
+| `web/index.html` | Title/description/keywords, canonical, Open Graph + Twitter tags, schema.org JSON-LD (`Person`, `WebSite`, `ProfilePage`, project and case-study `ItemList`s), a crawlable HTML mirror of the content (shown until Flutter paints, then kept behind the app), and a per-route `<title>`/meta updater hooked into `history.pushState`. |
+| `web/sitemap.xml` | All indexable routes. Bump `<lastmod>` when content changes. |
+| `web/robots.txt` | Allows everything except the two game routes; points at the sitemap. |
+| `web/_headers` | Netlify cache and security headers. |
+| `web/og-image.png` | 1200×630 social preview (LinkedIn, WhatsApp, X, Slack). |
+| `web/swapnaneel-sarkar.png` | Headshot referenced by the `Person` schema and the image sitemap. |
+
+When `lib/data/portfolio_content.dart` changes, update the HTML mirror in `web/index.html` to match.
+
+After deploying: verify the site in [Google Search Console](https://search.google.com/search-console) (paste the token into the placeholder comment in `web/index.html`), submit `https://swapnaneel-portfolio.netlify.app/sitemap.xml`, and request indexing for `/`.

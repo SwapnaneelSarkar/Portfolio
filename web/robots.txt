@@ -1,0 +1,8 @@
+# https://swapnaneel-portfolio.netlify.app — Swapnaneel Sarkar, Technical Product Manager
+User-agent: *
+Allow: /
+Disallow: /easter-egg
+Disallow: /memory
+Disallow: /splash
+
+Sitemap: https://swapnaneel-portfolio.netlify.app/sitemap.xml
