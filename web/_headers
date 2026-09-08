@@ -44,3 +44,6 @@
 /Swapnaneel_Sarkar_Resume.pdf
   Cache-Control: public, max-age=86400
   Content-Disposition: inline; filename="Swapnaneel_Sarkar_Resume.pdf"
+
+/_pages/*
+  X-Robots-Tag: noindex

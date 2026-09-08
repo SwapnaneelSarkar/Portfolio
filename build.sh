@@ -41,5 +41,10 @@ flutter pub get
 echo "Building Flutter web app..."
 flutter build web --release
 
+# One static HTML document per route (own title/description/canonical) —
+# see tool/prerender_routes.py and web/_redirects.
+echo "Prerendering route documents..."
+python3 tool/prerender_routes.py build/web
+
 echo "Build completed successfully!"
 ls -la build/web

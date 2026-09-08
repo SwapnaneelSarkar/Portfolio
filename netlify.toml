@@ -2,9 +2,6 @@
   command = "chmod +x build.sh && ./build.sh"
   publish = "build/web"
 
-# SPA fallback — the app uses path URLs (PathUrlStrategy), so deep links
-# like /projects must serve index.html.
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Redirects live in web/_redirects, not here. Netlify processes netlify.toml
+# rules ahead of _redirects, so a catch-all in this file would shadow the
+# per-route rewrites that tool/prerender_routes.py generates.

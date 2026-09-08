@@ -4,5 +4,6 @@ Allow: /
 Disallow: /easter-egg
 Disallow: /memory
 Disallow: /splash
+Disallow: /_pages/
 
 Sitemap: https://swapnaneel-portfolio.netlify.app/sitemap.xml
