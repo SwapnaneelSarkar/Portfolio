@@ -486,6 +486,17 @@ class PortfolioContent {
       color: AppColors.accentPrimary,
       logoPath: 'assets/images/rapido_logo.png',
     ),
+    CaseStudyEntry(
+      slug: 'ai-quoting-workflow',
+      title: 'AI Quoting Workflow',
+      subtitle: 'AI + rules-based automation · Industrial equipment manufacturer',
+      summary:
+          'A product case study on designing an AI quoting workflow for an industrial equipment manufacturer, where quotes took days because pricing knowledge sat in five disconnected places. As product manager, I owned the research, spec and prototype direction — splitting the system so a language model reads and extracts every enquiry while deterministic code prices it, gated by six checks and autonomy earned per customer segment before any quote can auto-send.',
+      tags: ['AI/LLM', 'B2B SaaS', 'Workflow Automation', 'Enterprise'],
+      externalUrl: 'https://docs.google.com/presentation/d/e/2PACX-1vRFsJG-cKPFWplXCt_hq1r3Tb5RfeGdkC2xb64Xeutn9tOFTfqo7BlagkNyJ6tFVfKn9FOspQI4spR9/pub?start=false&loop=false&delayms=5000',
+      color: AppColors.accentTertiary,
+      logoPath: 'assets/images/ai_quoting_logo.png',
+    ),
   ];
 
   static const skillGroups = [
