@@ -1,17 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
-import 'package:portfolio/presentation/widgets/glass_card.dart';
+import 'package:portfolio/presentation/widgets/responsive_grid.dart';
+import 'package:portfolio/presentation/widgets/status_pill.dart';
 import 'package:portfolio/presentation/widgets/tag_chip.dart';
 
-/// Professional experience block — readable on mobile and desktop.
+/// Experience entries joined by a roadmap rail. The current role gets a
+/// marigold node; past roles are hollow.
+class ExperienceTimeline extends StatelessWidget {
+  final List<ExperienceEntry> entries;
+
+  /// True when the list continues on another page, so the rail fades out
+  /// instead of ending.
+  final bool continues;
+
+  const ExperienceTimeline({
+    super.key,
+    required this.entries,
+    this.continues = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < entries.length; i++)
+          ExperienceCard(
+            experience: entries[i],
+            isLast: i == entries.length - 1 && !continues,
+          ),
+      ],
+    );
+  }
+}
+
 class ExperienceCard extends StatelessWidget {
   final ExperienceEntry experience;
+  final bool isLast;
 
   const ExperienceCard({
     super.key,
     required this.experience,
+    this.isLast = false,
   });
+
+  bool get isCurrent => experience.period.toLowerCase().contains('present');
 
   /// "Dim prose, bright numbers": figures and money get full weight so a
   /// recruiter can skim the outcomes in seconds.
@@ -19,7 +53,7 @@ class ExperienceCard extends StatelessWidget {
     r'([\$₹][\d,]+[kKLM]?\+?|\d+[\d,]*(?:–\d+[\d,]*)?\s?(?:lakhs?/year|lakhs?|L/year|L\b|%|\+)|\b\d+\+|\b0 to 1\b)',
   );
 
-  TextSpan _scanSpan(String text, TextStyle base) {
+  static TextSpan _scanSpan(String text, TextStyle base) {
     final spans = <TextSpan>[];
     var cursor = 0;
     for (final m in _figurePattern.allMatches(text)) {
@@ -45,177 +79,185 @@ class ExperienceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final isNarrow = MediaQuery.sizeOf(context).width < 600;
+    final width = MediaQuery.sizeOf(context).width;
+    final isNarrow = width < 760;
+    final nodeColor = isCurrent ? AppColors.now : AppColors.textFaint;
 
-    return GlassCard(
-      accentColor: experience.color,
-      padding: EdgeInsets.all(isNarrow ? 20 : 28),
+    final meta = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          experience.period,
+          style: AppText.mono(
+            size: 12,
+            weight: FontWeight.w600,
+            color: isCurrent ? AppColors.now : AppColors.textSecondary,
+            height: 1.5,
+          ),
+        ),
+        if (experience.location.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Text(
+            experience.location,
+            style: AppText.mono(size: 11.5, color: AppColors.textFaint),
+          ),
+        ],
+      ],
+    );
+
+    final content = Padding(
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 56),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isNarrow)
-            _buildHeaderColumn(textTheme)
-          else
-            _buildHeaderRow(textTheme),
-          if (experience.domains.isNotEmpty) ...[
-            const SizedBox(height: 18),
-            Text(
-              'DOMAINS',
-              style: AppFonts.mono(
-                fontSize: 10,
-                color: AppColors.textSecondary,
+          if (isNarrow) ...[meta, const SizedBox(height: 12)],
+          Wrap(
+            spacing: 12,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                experience.company,
+                style: AppText.display(
+                  size: isNarrow ? 22 : 26,
+                  weight: FontWeight.w700,
+                  letterSpacing: -0.6,
+                ),
               ),
+              if (isCurrent)
+                const StatusPill(label: 'Now', color: AppColors.now, pulse: true),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            experience.position,
+            style: AppText.body(
+              size: 16,
+              weight: FontWeight.w500,
+              color: AppColors.textSecondary,
             ),
-            const SizedBox(height: 10),
+          ),
+          if (experience.domains.isNotEmpty) ...[
+            const SizedBox(height: 14),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
                 for (final d in experience.domains)
-                  TagChip(
-                    label: d,
-                    color: experience.color,
-                    emphasized: true,
-                  ),
+                  TagChip(label: d, color: AppColors.now, emphasized: true),
               ],
             ),
           ],
           const SizedBox(height: 16),
           ConstrainedBox(
-            constraints:
-                const BoxConstraints(maxWidth: AppLayout.maxProseWidth),
+            constraints: const BoxConstraints(maxWidth: 760),
             child: Text(
               experience.description,
-              style: textTheme.bodyLarge?.copyWith(
-                color: AppColors.textBody,
-                height: 1.6,
-              ),
+              style: AppText.body(size: 16, height: 1.65),
             ),
           ),
-          const SizedBox(height: 24),
-          Text(
-            'KEY OUTCOMES',
-            style: AppFonts.mono(
-              fontSize: 10.5,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: 12),
-          ConstrainedBox(
-            constraints:
-                const BoxConstraints(maxWidth: AppLayout.maxProseWidth),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (final item in experience.responsibilities)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 9),
-                          child: Container(
-                            width: 12,
-                            height: 2,
-                            decoration: BoxDecoration(
-                              color:
-                                  experience.color.withValues(alpha: 0.8),
-                              borderRadius: BorderRadius.circular(1),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text.rich(
-                            _scanSpan(
-                              item,
-                              textTheme.bodyMedium!.copyWith(
-                                color: AppColors.textBody,
-                                height: 1.55,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+          const SizedBox(height: 18),
+          ...experience.responsibilities.map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 760),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                        width: 10,
+                        height: 2,
+                        color: isCurrent
+                            ? AppColors.now.withValues(alpha: 0.8)
+                            : AppColors.textFaint,
+                      ),
                     ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeaderRow(TextTheme textTheme) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(experience.company, style: textTheme.titleLarge),
-              const SizedBox(height: 6),
-              Text(
-                experience.position,
-                style: textTheme.titleMedium?.copyWith(
-                  color: experience.color,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text.rich(
+                        _scanSpan(
+                          item,
+                          AppText.body(
+                            size: 15,
+                            color: AppColors.textBody,
+                            height: 1.55,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              if (experience.location.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Text(experience.location, style: textTheme.bodySmall),
-              ],
-            ],
+            ),
           ),
-        ),
-        const SizedBox(width: 16),
-        _PeriodBadge(period: experience.period),
-      ],
-    );
-  }
-
-  Widget _buildHeaderColumn(TextTheme textTheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(experience.company, style: textTheme.titleLarge),
-        const SizedBox(height: 6),
-        Text(
-          experience.position,
-          style: textTheme.titleMedium?.copyWith(color: experience.color),
-        ),
-        if (experience.location.isNotEmpty) ...[
-          const SizedBox(height: 4),
-          Text(experience.location, style: textTheme.bodySmall),
         ],
-        const SizedBox(height: 10),
-        _PeriodBadge(period: experience.period),
-      ],
-    );
-  }
-}
-
-class _PeriodBadge extends StatelessWidget {
-  final String period;
-
-  const _PeriodBadge({required this.period});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundLight,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: AppColors.borderSubtle),
       ),
-      child: Text(
-        period,
-        style: AppFonts.mono(fontSize: 11, letterSpacing: 0.5),
+    );
+
+    final rail = SizedBox(
+      width: 28,
+      child: Column(
+        children: [
+          const SizedBox(height: 6),
+          Container(
+            width: 14,
+            height: 14,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isCurrent ? AppColors.now : AppColors.backgroundDark,
+              border: Border.all(color: nodeColor, width: 2),
+              boxShadow: isCurrent
+                  ? [
+                      BoxShadow(
+                        color: AppColors.now.withValues(alpha: 0.5),
+                        blurRadius: 14,
+                      ),
+                    ]
+                  : null,
+            ),
+          ),
+          if (!isLast)
+            Expanded(
+              child: Container(
+                width: 2,
+                margin: const EdgeInsets.only(top: 6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      (isCurrent ? AppColors.now : AppColors.textFaint)
+                          .withValues(alpha: 0.6),
+                      AppColors.textFaint.withValues(alpha: 0.18),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+
+    return FontSafeIntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (!isNarrow) ...[
+            SizedBox(
+              width: 190,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4, right: 20),
+                child: meta,
+              ),
+            ),
+          ],
+          rail,
+          SizedBox(width: isNarrow ? 14 : 24),
+          Expanded(child: content),
+        ],
       ),
     );
   }

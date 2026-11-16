@@ -91,15 +91,27 @@ class EducationPage extends StatelessWidget {
 
     return PageScaffold(
       children: [
-        const FadeInSection(
-          child: SectionHeader(
-            title: 'Education',
-            subtitle: 'Foundation',
+        ContentContainer(
+          padding: EdgeInsets.symmetric(horizontal: AppLayout.gutter(context)),
+          child: const FadeInSection(
+            child: SectionHeader(
+              eyebrow: 'Education',
+              title: 'The foundation',
+              description:
+                  'Computer Science and Business Systems at VIT-AP, plus certifications in problem solving, software engineering, and Flutter.',
+              accent: AppColors.lilac,
+              large: true,
+            ),
           ),
         ),
-        const SizedBox(height: 48),
+        const SizedBox(height: 56),
         ContentContainer(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.fromLTRB(
+            AppLayout.gutter(context),
+            0,
+            AppLayout.gutter(context),
+            88,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

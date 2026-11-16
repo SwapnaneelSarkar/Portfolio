@@ -88,15 +88,20 @@ class _ContactPageState extends State<ContactPage> {
 
     return PageScaffold(
       children: [
-        const FadeInSection(
-          child: SectionHeader(
-            title: 'Get In Touch',
-            subtitle: 'Open to Product Manager roles',
+        ContentContainer(
+          padding: EdgeInsets.symmetric(horizontal: AppLayout.gutter(context)),
+          child: const FadeInSection(
+            child: SectionHeader(
+              eyebrow: 'Contact',
+              title: 'Get in touch',
+              description: 'Open to Product Manager roles.',
+              large: true,
+            ),
           ),
         ),
-        const SizedBox(height: 48),
+        const SizedBox(height: 56),
         ContentContainer(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: AppLayout.gutter(context)),
           child: FadeInSection(
             child: isMobile
                 ? Column(
@@ -122,13 +127,13 @@ class _ContactPageState extends State<ContactPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 48),
+                      const SizedBox(width: 56),
                       Expanded(flex: 3, child: _buildContactForm(textTheme)),
                     ],
                   ),
           ),
         ),
-        const SizedBox(height: 48),
+        const SizedBox(height: 88),
       ],
     );
   }

@@ -44,6 +44,16 @@ class _FadeInSectionState extends State<FadeInSection>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Reduced motion: show content immediately instead of revealing it.
+    if (MediaQuery.maybeDisableAnimationsOf(context) ?? false) {
+      _revealed = true;
+      _controller.value = 1;
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();

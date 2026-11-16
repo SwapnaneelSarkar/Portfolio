@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _heroAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1900),
     )..forward();
 
     _backgroundAnimationController = AnimationController(
@@ -75,10 +75,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                HeroSection(
-                  controller: _heroAnimationController,
-                  scrollController: _scrollController,
-                ),
+                HeroSection(controller: _heroAnimationController),
+                const SizedBox(height: 24),
                 // Proof-first order for a 60-second recruiter skim:
                 // numbers → where they come from → who/how → receipts.
                 const FadeInSection(child: DomainExpertiseSection()),
@@ -93,7 +91,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ),
           Positioned(
-            top: 72,
+            top: 0,
             left: 0,
             right: 0,
             child: ScrollProgressBar(controller: _scrollController),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:portfolio/assets.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Footer extends StatelessWidget {
@@ -11,151 +11,159 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundLight.withOpacity(0.45),
-        border: Border(
-          top: BorderSide(color: Colors.white.withOpacity(0.07)),
+    final width = MediaQuery.sizeOf(context).width;
+    final gutter = AppLayout.gutter(context);
+    final isMobile = width < 700;
+    final profile = PortfolioContent.profile;
+
+    final identity = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const AvatarBadge(size: 44),
+        const SizedBox(width: 14),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              profile.name,
+              style: AppText.display(size: 16, weight: FontWeight.w600),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Product Manager · 0→1 Builder',
+              style: AppText.body(
+                size: 13.5,
+                color: AppColors.textSecondary,
+                height: 1.2,
+              ),
+            ),
+          ],
         ),
+      ],
+    );
+
+    final socials = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _buildSocialButton(
+          FontAwesomeIcons.linkedinIn,
+          'LinkedIn',
+          profile.linkedInUrl,
+        ),
+        const SizedBox(width: 10),
+        _buildSocialButton(
+          FontAwesomeIcons.github,
+          'GitHub',
+          profile.githubUrl,
+        ),
+        const SizedBox(width: 10),
+        _buildSocialButton(
+          FontAwesomeIcons.envelope,
+          'Email',
+          'mailto:${profile.email}',
+        ),
+      ],
+    );
+
+    final smallPrint = AppText.mono(size: 11.5, color: AppColors.textFaint);
+
+    return Container(
+      margin: const EdgeInsets.only(top: 24),
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.borderSubtle)),
       ),
-      child: Column(
-        children: [
-          // Logo and name
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundDark,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(
-                    color: AppColors.accentPrimary.withOpacity(0.35),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppLayout.maxContentWidth + gutter * 2,
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(gutter, 40, gutter, 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isMobile) ...[
+                  identity,
+                  const SizedBox(height: 24),
+                  socials,
+                ] else
+                  Row(children: [identity, const Spacer(), socials]),
+                const SizedBox(height: 28),
+                // Links carry their own hit padding; pull the row back so the
+                // first label lines up with the edge above.
+                Transform.translate(
+                  offset: const Offset(-10, 0),
+                  child: Wrap(
+                    spacing: 4,
+                    runSpacing: 4,
+                    children: const [
+                      _FooterLink(label: 'Home', route: '/'),
+                      _FooterLink(label: 'Projects', route: '/projects'),
+                      _FooterLink(
+                        label: 'Case studies',
+                        route: '/case-studies',
+                      ),
+                      _FooterLink(label: 'Experience', route: '/experience'),
+                      _FooterLink(label: 'Education', route: '/education'),
+                      _FooterLink(label: 'Contact', route: '/contact'),
+                    ],
                   ),
                 ),
-                clipBehavior: Clip.antiAlias,
-                child: Transform.scale(
-                  scale: 1.5,
-                  child: Image.asset(
-                    Assets.avatar,
-                    fit: BoxFit.cover,
-                    alignment: const Alignment(0, -0.05),
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Center(
-                        child: Icon(
-                          Icons.person,
-                          color: AppColors.textPrimary,
-                          size: 26,
+                const SizedBox(height: 28),
+                Wrap(
+                  spacing: 24,
+                  runSpacing: 10,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      '© 2026 ${profile.name}. All rights reserved.',
+                      style: smallPrint,
+                    ),
+                    Text('Designed & built in Flutter', style: smallPrint),
+                    // Easter egg hint
+                    InkWell(
+                      onTap: () => _showEasterEgg(context),
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          '// there is a hidden game somewhere',
+                          style: smallPrint.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(width: 16),
-              const Text(
-                'Swapnaneel Sarkar',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Product Manager · 0→1 Builder',
-            style: AppFonts.mono(
-              fontSize: 11,
-              color: AppColors.textSecondary,
-              letterSpacing: 2,
+              ],
             ),
           ),
-          const SizedBox(height: 28),
-          // Quick navigation
-          Wrap(
-            spacing: 4,
-            runSpacing: 4,
-            alignment: WrapAlignment.center,
-            children: const [
-              _FooterLink(label: 'Home', route: '/'),
-              _FooterLink(label: 'Projects', route: '/projects'),
-              _FooterLink(label: 'Case Studies', route: '/case-studies'),
-              _FooterLink(label: 'Experience', route: '/experience'),
-              _FooterLink(label: 'Education', route: '/education'),
-              _FooterLink(label: 'Contact', route: '/contact'),
-            ],
-          ),
-          const SizedBox(height: 28),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildSocialButton(
-                FontAwesomeIcons.linkedin,
-                PortfolioContent.profile.linkedInUrl,
-                AppColors.accentPrimary,
-              ),
-              const SizedBox(width: 20),
-              _buildSocialButton(
-                FontAwesomeIcons.github,
-                PortfolioContent.profile.githubUrl,
-                AppColors.accentSecondary,
-              ),
-              const SizedBox(width: 20),
-              _buildSocialButton(
-                FontAwesomeIcons.envelope,
-                'mailto:${PortfolioContent.profile.email}',
-                AppColors.accentTertiary,
-              ),
-            ],
-          ),
-          const SizedBox(height: 32),
-          const Text(
-            '© 2026 Swapnaneel Sarkar. All rights reserved.',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'DESIGNED & BUILT IN FLUTTER — 2026',
-            style: AppFonts.mono(
-              fontSize: 10,
-              color: AppColors.textSecondary.withOpacity(0.7),
-              letterSpacing: 2,
-            ),
-          ),
-          const SizedBox(height: 8),
-          GestureDetector(
-            onTap: () => _showEasterEgg(context),
-            child: Text(
-              '// there is a hidden game somewhere',
-              style: AppFonts.mono(
-                fontSize: 9.5,
-                color: AppColors.textSecondary.withOpacity(0.5),
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildSocialButton(IconData icon, String url, Color color) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => _launchUrl(url),
-        child: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(25),
+  Widget _buildSocialButton(IconData icon, String label, String url) {
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        link: true,
+        label: label,
+        child: InkWell(
+          onTap: () => _launchUrl(url),
+          customBorder: const CircleBorder(),
+          child: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.borderStrong),
+            ),
+            child: Center(
+              child: FaIcon(icon, color: AppColors.textSecondary, size: 16),
+            ),
           ),
-          child: Center(child: FaIcon(icon, color: color, size: 20)),
         ),
       ),
     );
@@ -188,23 +196,20 @@ class _FooterLinkState extends State<_FooterLink> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: () => context.go(widget.route),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          child: Text(
-            widget.label,
-            style: TextStyle(
-              fontSize: 13.5,
-              fontWeight: FontWeight.w500,
-              color: _hovered
-                  ? AppColors.accentPrimary
-                  : AppColors.textSecondary,
-            ),
+    return InkWell(
+      onTap: () => context.go(widget.route),
+      onHover: (v) => setState(() => _hovered = v),
+      borderRadius: BorderRadius.circular(999),
+      hoverColor: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        child: Text(
+          widget.label,
+          style: AppText.body(
+            size: 14,
+            weight: FontWeight.w500,
+            height: 1,
+            color: _hovered ? AppColors.textPrimary : AppColors.textSecondary,
           ),
         ),
       ),

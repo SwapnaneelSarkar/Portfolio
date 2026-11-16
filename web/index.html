@@ -20,7 +20,7 @@
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="rating" content="general">
-  <meta name="theme-color" content="#0B1020">
+  <meta name="theme-color" content="#0F0B24">
   <meta name="color-scheme" content="dark">
   <meta name="geo.region" content="IN-TG">
   <meta name="geo.placename" content="Hyderabad, India">
@@ -73,7 +73,7 @@
   <!-- ===== Performance hints (google_fonts + CanvasKit fetch at runtime) ===== -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Instrument+Sans:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="dns-prefetch" href="https://www.gstatic.com">
 
@@ -211,49 +211,49 @@
   <style>
     /* ---- Pre-render shell: visible until Flutter paints, then sits behind the app. ---- */
     :root { color-scheme: dark; }
-    html, body { background: #0B1020; margin: 0; }
+    html, body { background: #0F0B24; margin: 0; }
     #seo-shell {
-      font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      color: #C3C9D6; background: #0B1020; line-height: 1.6; -webkit-font-smoothing: antialiased;
+      font-family: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #C9C3E6; background: #0F0B24; line-height: 1.6; -webkit-font-smoothing: antialiased;
     }
     #seo-shell .wrap { max-width: 960px; margin: 0 auto; padding: 48px 24px 64px; }
     #seo-shell header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 24px; margin-bottom: 40px; }
-    #seo-shell header .brand { font-family: "Big Shoulders Display", "Arial Narrow", sans-serif; font-weight: 700; color: #F3EFE7; font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; }
-    #seo-shell nav a { color: #8E9BB3; text-decoration: none; margin-left: 18px; font-size: 14px; }
-    #seo-shell nav a:hover, #seo-shell a:hover { color: #FF6B2C; }
-    #seo-shell h1, #seo-shell .brand-h { font-family: "Big Shoulders Display", "Arial Narrow", sans-serif; font-weight: 800; color: #F3EFE7; font-size: clamp(44px, 8vw, 96px); line-height: 0.92; letter-spacing: 0.01em; text-transform: uppercase; margin: 0 0 14px; }
-    #seo-shell h2 { font-family: "Big Shoulders Display", "Arial Narrow", sans-serif; font-weight: 700; color: #F3EFE7; font-size: 34px; letter-spacing: 0.02em; text-transform: uppercase; margin: 56px 0 18px; }
-    #seo-shell h3 { color: #F3EFE7; font-size: 18px; font-weight: 600; margin: 22px 0 4px; }
-    #seo-shell h2.role { margin: 0 0 18px; font-size: 20px; text-transform: none; font-family: "IBM Plex Sans", sans-serif; }
-    #seo-shell .role { color: #FF6B2C; font-size: 20px; font-weight: 600; margin: 0 0 18px; }
+    #seo-shell header .brand { font-family: "Unbounded", "Arial", sans-serif; font-weight: 700; color: #F3F0FF; font-size: 18px; letter-spacing: -0.01em; text-decoration: none; }
+    #seo-shell nav a { color: #A9A2CB; text-decoration: none; margin-left: 18px; font-size: 14px; }
+    #seo-shell nav a:hover, #seo-shell a:hover { color: #FFB23F; }
+    #seo-shell h1, #seo-shell .brand-h { font-family: "Unbounded", "Arial", sans-serif; font-weight: 800; color: #F3F0FF; font-size: clamp(40px, 7vw, 84px); line-height: 1; letter-spacing: -0.03em; margin: 0 0 14px; }
+    #seo-shell h2 { font-family: "Unbounded", "Arial", sans-serif; font-weight: 700; color: #F3F0FF; font-size: 28px; letter-spacing: -0.02em; margin: 56px 0 18px; }
+    #seo-shell h3 { color: #F3F0FF; font-size: 18px; font-weight: 600; margin: 22px 0 4px; }
+    #seo-shell h2.role { margin: 0 0 18px; font-size: 20px; text-transform: none; font-family: "Instrument Sans", sans-serif; }
+    #seo-shell .role { color: #FFB23F; font-size: 20px; font-weight: 600; margin: 0 0 18px; }
     #seo-shell p { margin: 0 0 12px; max-width: 72ch; }
-    #seo-shell .muted { color: #8E9BB3; font-size: 13px; font-family: "IBM Plex Mono", monospace; letter-spacing: 0.06em; }
-    #seo-shell a { color: #7FDBFF; }
+    #seo-shell .muted { color: #A9A2CB; font-size: 13px; font-family: "JetBrains Mono", monospace; letter-spacing: 0.06em; }
+    #seo-shell a { color: #B49CFF; }
     #seo-shell ul { padding-left: 20px; margin: 6px 0 12px; }
     #seo-shell li { margin: 4px 0; }
     #seo-shell .cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 0; }
-    #seo-shell .cta a { border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 9px 16px; text-decoration: none; color: #F3EFE7; font-size: 14px; font-weight: 600; }
-    #seo-shell .cta a.primary { background: #FF6B2C; color: #0B1020; border-color: #FF6B2C; font-weight: 600; }
+    #seo-shell .cta a { border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 10px 18px; text-decoration: none; color: #F3F0FF; font-size: 14px; font-weight: 600; }
+    #seo-shell .cta a.primary { background: #FFB23F; color: #0F0B24; border-color: #FFB23F; font-weight: 600; }
     #seo-shell .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 32px; }
-    #seo-shell .metric { background: #111A2E; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px 18px; }
-    #seo-shell .metric strong { display: block; font-family: "Big Shoulders Display", "Arial Narrow", sans-serif; font-weight: 700; color: #F3EFE7; font-size: 34px; letter-spacing: 0.02em; }
-    #seo-shell .metric span { font-size: 12px; color: #8E9BB3; font-family: "IBM Plex Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; }
-    #seo-shell .card { background: #111A2E; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 20px 22px; margin: 14px 0; }
+    #seo-shell .metric { background: #1A1538; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 16px 18px; }
+    #seo-shell .metric strong { display: block; font-family: "Unbounded", "Arial", sans-serif; font-weight: 700; color: #F3F0FF; font-size: 28px; letter-spacing: -0.03em; }
+    #seo-shell .metric span { font-size: 12px; color: #A9A2CB; font-family: "JetBrains Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+    #seo-shell .card { background: #1A1538; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px 22px; margin: 14px 0; }
     #seo-shell .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
-    #seo-shell .tags li { font-size: 11px; color: #8E9BB3; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 3px 9px; margin: 0; font-family: "IBM Plex Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; }
-    #seo-shell footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 13px; color: #8E9BB3; }
-    #seo-shell img.headshot { float: right; width: 160px; height: 160px; object-fit: cover; object-position: top; border-radius: 10px; margin: 0 0 16px 24px; border: 1px solid rgba(255,107,44,0.45); background: #111A2E; }
+    #seo-shell .tags li { font-size: 11px; color: #A9A2CB; border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 3px 10px; margin: 0; font-family: "JetBrains Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+    #seo-shell footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 13px; color: #A9A2CB; }
+    #seo-shell img.headshot { float: right; width: 160px; height: 160px; object-fit: cover; object-position: top; border-radius: 10px; margin: 0 0 16px 24px; border: 1px solid rgba(255,178,63,0.45); background: #1A1538; }
     @media (max-width: 640px) { #seo-shell img.headshot { float: none; display: block; width: 120px; height: 120px; margin: 0 0 20px; } }
 
     #seo-shell table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 8px 0 12px; }
     #seo-shell th, #seo-shell td { border-bottom: 1px solid rgba(255,255,255,0.08); padding: 8px 10px; text-align: left; vertical-align: top; }
-    #seo-shell th { color: #8E9BB3; font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+    #seo-shell th { color: #A9A2CB; font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
     #seo-shell .route { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.08); }
     #seo-shell .route h1 { font-size: clamp(28px, 4.5vw, 44px); }
     #seo-shell .brand-h { font-size: 20px; font-weight: 700; margin: 0 0 10px; }
 
     /* Thin progress bar while the Flutter bundle downloads. */
-    #seo-loader { position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 2; background: #FF6B2C; animation: seo-load 4s cubic-bezier(.2,.7,.3,1) forwards; }
+    #seo-loader { position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 2; background: #FFB23F; animation: seo-load 4s cubic-bezier(.2,.7,.3,1) forwards; }
     @keyframes seo-load { from { width: 0 } to { width: 88% } }
 
     /* Once Flutter has painted: the app owns the viewport, the shell stays in the DOM behind it. */

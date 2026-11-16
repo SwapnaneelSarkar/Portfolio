@@ -3,6 +3,9 @@
 class Assets {
   // Brand assets
   static const String avatar = 'assets/images/swapnaneel-avatar.png';
+  // Same avatar cropped to the head, for round badges and the ID card.
+  static const String avatarCutout =
+      'assets/images/swapnaneel-avatar-cutout.png';
   static const String rapidoLogo = 'assets/images/rapido_logo.png';
   static const String hitwicketLogo = 'assets/images/hitwicket_logo.png';
 

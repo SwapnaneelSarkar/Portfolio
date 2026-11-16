@@ -4,7 +4,6 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:portfolio/presentation/widgets/content_container.dart';
-import 'package:portfolio/presentation/widgets/glass_card.dart';
 import 'package:portfolio/presentation/widgets/section_header.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,93 +12,55 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final profile = PortfolioContent.profile;
-    final isMobile = MediaQuery.of(context).size.width < 900;
+    final width = MediaQuery.sizeOf(context).width;
+    final isMobile = width < 900;
 
-    return ContentContainer(
-      child: Column(
-        children: [
-          const SectionHeader(
-            title: 'About Me',
-            subtitle: 'Product leadership with technical depth',
-          ),
-          const SizedBox(height: 56),
-          isMobile
-              ? Column(
-                  children: [
-                    _buildAboutContent(textTheme, profile),
-                    const SizedBox(height: 32),
-                    const _HowIShipPanel(),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: _buildAboutContent(textTheme, profile),
-                    ),
-                    const SizedBox(width: 48),
-                    const Expanded(flex: 2, child: _HowIShipPanel()),
-                  ],
-                ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAboutContent(TextTheme textTheme, ProfileInfo profile) {
-    return Column(
+    final summary = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(profile.summary, style: textTheme.bodyLarge),
-        const SizedBox(height: 32),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            _buildInfoItem(Icons.work_outline, profile.title),
-            _buildInfoItem(
-                Icons.school_outlined, 'VIT-AP · CS & Business Systems'),
-            _buildInfoItem(Icons.location_on_outlined, profile.location),
-            _buildInfoItem(Icons.email_outlined, profile.email),
-            _buildInfoItem(Icons.phone_outlined, profile.phone),
-          ],
+        Text(
+          profile.summary,
+          style: AppText.body(
+            size: isMobile ? 18 : 21,
+            height: 1.6,
+            color: AppColors.textPrimary,
+          ),
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 36),
+        const _HowIShip(),
+        const SizedBox(height: 36),
         AnimatedButton(
           onPressed: () => _launchUrl(Assets.resumeUrl),
-          text: 'Download Resume',
-          isPrimary: true,
-          trailingIcon: Icons.download_outlined,
+          text: 'Download resume',
+          isPrimary: false,
+          trailingIcon: Icons.download_rounded,
         ),
       ],
     );
-  }
 
-  Widget _buildInfoItem(IconData icon, String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: AppColors.borderSubtle),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+    return ContentContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppColors.accentPrimary, size: 18),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Text(
-              text,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 13,
-              ),
-            ),
+          const SectionHeader(
+            eyebrow: 'About me',
+            title: 'Product leadership with technical depth',
           ),
+          SizedBox(height: isMobile ? 32 : 48),
+          if (isMobile) ...[
+            summary,
+            const SizedBox(height: 40),
+            const _IdCard(),
+          ] else
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 7, child: summary),
+                const SizedBox(width: 56),
+                const Expanded(flex: 5, child: _IdCard()),
+              ],
+            ),
         ],
       ),
     );
@@ -113,87 +74,237 @@ class AboutSection extends StatelessWidget {
   }
 }
 
-/// The operating loop — how a brief becomes a shipped product.
-class _HowIShipPanel extends StatelessWidget {
-  const _HowIShipPanel();
+/// How I work, as the three steps they actually happen in.
+class _HowIShip extends StatelessWidget {
+  const _HowIShip();
 
   static const _steps = [
-    (
-      index: '01',
-      title: 'Discover',
-      detail: 'User interviews, workflow mapping, and problem framing',
-    ),
-    (
-      index: '02',
-      title: 'Define',
-      detail: 'PRDs, roadmaps, prioritization, and sprint-ready specs',
-    ),
-    (
-      index: '03',
-      title: 'Deliver',
-      detail: 'Ship with engineering, measure impact, iterate',
-    ),
+    ('Discover', 'User interviews, workflow mapping, and problem framing'),
+    ('Define', 'PRDs, roadmaps, prioritization, and sprint-ready specs'),
+    ('Deliver', 'Ship with engineering, measure impact, iterate'),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final stacked = MediaQuery.sizeOf(context).width < 700;
 
-    return GlassCard(
-      accentColor: AppColors.accentSecondary,
-      padding: const EdgeInsets.all(28),
-      child: Column(
+    Widget step(int i) {
+      final (title, detail) = _steps[i];
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'HOW I SHIP',
-            style: AppFonts.mono(
-              fontSize: 11,
-              color: AppColors.accentSecondary,
+          Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.marigold.withValues(alpha: 0.12),
+                  border: Border.all(
+                    color: AppColors.marigold.withValues(alpha: 0.4),
+                  ),
+                ),
+                child: Text(
+                  '${i + 1}',
+                  style: AppText.mono(
+                    size: 12,
+                    weight: FontWeight.w700,
+                    color: AppColors.marigold,
+                    letterSpacing: 0,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: AppText.body(size: 17, weight: FontWeight.w600, height: 1),
+              ),
+              if (!stacked && i < _steps.length - 1) ...[
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Container(height: 1, color: AppColors.borderStrong),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.only(right: stacked ? 0 : 16),
+            child: Text(
+              detail,
+              style: AppText.body(
+                size: 14,
+                color: AppColors.textSecondary,
+                height: 1.5,
+              ),
             ),
           ),
-          const SizedBox(height: 20),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'HOW I SHIP',
+          style: AppText.mono(
+            size: 11,
+            weight: FontWeight.w600,
+            color: AppColors.textFaint,
+            letterSpacing: 1.4,
+          ),
+        ),
+        const SizedBox(height: 16),
+        if (stacked)
           for (var i = 0; i < _steps.length; i++) ...[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            step(i),
+            if (i < _steps.length - 1) const SizedBox(height: 18),
+          ]
+        else
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var i = 0; i < _steps.length; i++)
+                Expanded(child: step(i)),
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+/// Avatar + quick facts, styled like a team-directory card.
+class _IdCard extends StatelessWidget {
+  const _IdCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final profile = PortfolioContent.profile;
+    final education = PortfolioContent.education.first;
+    final current = PortfolioContent.experiences.first;
+
+    final facts = <(String, String)>[
+      ('Now', '${current.position} · ${current.company}'),
+      ('Based in', profile.location),
+      ('Studied', '${education.institution} · CS & Business Systems'),
+      ('Email', profile.email),
+      ('Phone', profile.phone),
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: AppColors.borderSubtle),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 40,
+            offset: const Offset(0, 20),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 210,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF8E74FF), Color(0xFF4B2FC9), Color(0xFF2A1C78)],
+              ),
+            ),
+            child: Stack(
               children: [
-                ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: AppColors.primaryGradient,
-                  ).createShader(bounds),
-                  child: Text(
-                    _steps[i].index,
-                    style: AppFonts.mono(
-                      fontSize: 15,
-                      color: Colors.white,
-                      letterSpacing: 1,
+                Positioned(
+                  right: -30,
+                  top: -40,
+                  child: Container(
+                    width: 180,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.marigold.withValues(alpha: 0.9),
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(_steps[i].title, style: textTheme.titleMedium),
-                      const SizedBox(height: 4),
-                      Text(_steps[i].detail, style: textTheme.bodySmall),
-                    ],
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: -8,
+                  child: Image.asset(
+                    Assets.avatarCutout,
+                    height: 220,
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.medium,
+                    semanticLabel: 'Illustrated avatar of ${profile.name}',
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                   ),
                 ),
               ],
             ),
-            if (i != _steps.length - 1)
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Container(
-                  width: 1,
-                  height: 24,
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  color: Colors.white.withValues(alpha: 0.1),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(22, 20, 22, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  profile.name,
+                  style: AppText.display(
+                    size: 20,
+                    weight: FontWeight.w700,
+                    letterSpacing: -0.4,
+                  ),
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  profile.title,
+                  style: AppText.body(
+                    size: 14,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          for (final (label, value) in facts)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+              decoration: const BoxDecoration(
+                border: Border(top: BorderSide(color: AppColors.borderSubtle)),
               ),
-          ],
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 82,
+                    child: Text(
+                      label.toUpperCase(),
+                      style: AppText.mono(
+                        size: 10.5,
+                        color: AppColors.textFaint,
+                        letterSpacing: 1,
+                        height: 1.9,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: SelectableText(
+                      value,
+                      style: AppText.body(size: 14, height: 1.5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          const SizedBox(height: 8),
         ],
       ),
     );

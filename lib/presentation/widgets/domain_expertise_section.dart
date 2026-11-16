@@ -3,6 +3,7 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/content_container.dart';
 import 'package:portfolio/presentation/widgets/glass_card.dart';
+import 'package:portfolio/presentation/widgets/responsive_grid.dart';
 import 'package:portfolio/presentation/widgets/section_header.dart';
 import 'package:portfolio/presentation/widgets/tag_chip.dart';
 
@@ -12,59 +13,26 @@ class DomainExpertiseSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 900;
-    final domains = PortfolioContent.domains;
+    final isMobile = AppLayout.isMobile(context);
 
     return ContentContainer(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SectionHeader(
-            title: 'Where I\'ve Shipped',
-            subtitle: 'Domain depth',
-          ),
-          const SizedBox(height: 16),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 620),
-              child: Text(
+            eyebrow: 'Domain depth',
+            title: 'Where I\'ve shipped',
+            description:
                 'Most PMs my age have shipped a to-do app. I\'ve shipped procurement systems.',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ),
           ),
-          const SizedBox(height: 48),
-          if (isMobile)
-            Column(
-              children: [
-                for (final d in domains)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: _DomainCard(domain: d),
-                  ),
-              ],
-            )
-          else
-            Column(
-              children: [
-                for (var row = 0; row < domains.length; row += 2)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: _DomainCard(domain: domains[row])),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: row + 1 < domains.length
-                              ? _DomainCard(domain: domains[row + 1])
-                              : const SizedBox(),
-                        ),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
+          SizedBox(height: isMobile ? 32 : 48),
+          ResponsiveGrid(
+            minCellWidth: 440,
+            maxColumns: 2,
+            children: PortfolioContent.domains
+                .map((d) => _DomainCard(domain: d))
+                .toList(),
+          ),
         ],
       ),
     );
@@ -78,11 +46,7 @@ class _DomainCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return GlassCard(
-      accentColor: domain.color,
-      tilt: true,
       padding: const EdgeInsets.all(28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,26 +57,28 @@ class _DomainCard extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: domain.color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: domain.color.withValues(alpha: 0.3),
-                  ),
+                  color: domain.color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(domain.icon, color: domain.color, size: 22),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: Text(domain.title, style: textTheme.titleLarge),
+                child: Text(
+                  domain.title,
+                  style: AppText.body(
+                    size: 19,
+                    weight: FontWeight.w600,
+                    height: 1.3,
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 16),
           Text(
             domain.description,
-            style: textTheme.bodyMedium?.copyWith(
-              color: AppColors.textBody,
-            ),
+            style: AppText.body(size: 15, color: AppColors.textBody),
           ),
           const SizedBox(height: 18),
           Wrap(

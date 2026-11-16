@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 
+/// Pill button. Primary is marigold (the "act now" colour); secondary is a
+/// quiet outline. An optional [trailingIcon] nudges right on hover.
 class AnimatedButton extends StatefulWidget {
   final VoidCallback onPressed;
   final String text;
   final bool isPrimary;
   final IconData? trailingIcon;
+  final bool compact;
 
   const AnimatedButton({
     Key? key,
@@ -14,6 +16,7 @@ class AnimatedButton extends StatefulWidget {
     required this.text,
     this.isPrimary = true,
     this.trailingIcon,
+    this.compact = false,
   }) : super(key: key);
 
   @override
@@ -21,61 +24,60 @@ class AnimatedButton extends StatefulWidget {
 }
 
 class _AnimatedButtonState extends State<AnimatedButton> {
-  bool _isHovered = false;
-  bool _isPressed = false;
+  bool _hovered = false;
+  bool _focused = false;
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = GoogleFonts.inter(
-      fontSize: 15,
-      fontWeight: widget.isPrimary ? FontWeight.w700 : FontWeight.w600,
-      letterSpacing: 0.3,
-      color: widget.isPrimary
-          ? const Color(0xFF041018)
-          : (_isHovered ? AppColors.accentPrimary : AppColors.textPrimary),
-    );
+    final active = _hovered || _focused;
+    final primary = widget.isPrimary;
+    final reduceMotion = MediaQuery.of(context).disableAnimations;
+    final fg = primary ? AppColors.backgroundDark : AppColors.textPrimary;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onPressed,
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        child: AnimatedScale(
-          scale: _isPressed ? 0.97 : 1.0,
-          duration: const Duration(milliseconds: 90),
-          curve: Curves.easeOut,
+    final padding = widget.compact
+        ? const EdgeInsets.symmetric(horizontal: 18, vertical: 12)
+        : const EdgeInsets.symmetric(horizontal: 24, vertical: 16);
+
+    return Semantics(
+      button: true,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: widget.onPressed,
+          onHover: (v) => setState(() => _hovered = v),
+          onFocusChange: (v) => setState(() => _focused = v),
+          customBorder: const StadiumBorder(),
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          splashColor: (primary ? Colors.black : AppColors.marigold)
+              .withValues(alpha: 0.1),
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 160),
+            duration: const Duration(milliseconds: 200),
             curve: Curves.easeOutCubic,
-            transform: Matrix4.translationValues(0, _isHovered ? -3 : 0, 0),
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
+            padding: padding,
+            transform: Matrix4.translationValues(
+              0,
+              active && !reduceMotion ? -2 : 0,
+              0,
+            ),
             decoration: BoxDecoration(
-              gradient: widget.isPrimary
-                  ? const LinearGradient(colors: AppColors.primaryGradient)
-                  : null,
-              color: widget.isPrimary
-                  ? null
-                  : (_isHovered
-                      ? AppColors.accentPrimary.withValues(alpha: 0.08)
+              color: primary
+                  ? (active ? const Color(0xFFFFC266) : AppColors.marigold)
+                  : (active
+                      ? Colors.white.withValues(alpha: 0.06)
                       : Colors.transparent),
-              borderRadius: BorderRadius.circular(12),
-              border: widget.isPrimary
-                  ? null
-                  : Border.all(
-                      color: _isHovered
-                          ? AppColors.accentPrimary
-                          : Colors.white.withValues(alpha: 0.22),
-                      width: 1.2,
-                    ),
-              boxShadow: widget.isPrimary && _isHovered
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color: primary
+                    ? (_focused ? AppColors.textPrimary : AppColors.marigold)
+                    : (active ? AppColors.marigold : AppColors.borderStrong),
+                width: _focused ? 2 : 1,
+              ),
+              boxShadow: primary && active
                   ? [
                       BoxShadow(
-                        color: AppColors.accentPrimary.withValues(alpha: 0.35),
-                        blurRadius: 26,
+                        color: AppColors.marigold.withValues(alpha: 0.35),
+                        blurRadius: 24,
                         offset: const Offset(0, 8),
                       ),
                     ]
@@ -84,22 +86,23 @@ class _AnimatedButtonState extends State<AnimatedButton> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(widget.text, style: textStyle),
-                if (widget.trailingIcon != null)
-                  AnimatedPadding(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeOutCubic,
-                    padding: EdgeInsets.only(left: _isHovered ? 10 : 6),
-                    child: Icon(
-                      widget.trailingIcon,
-                      size: 16,
-                      color: widget.isPrimary
-                          ? const Color(0xFF041018)
-                          : (_isHovered
-                              ? AppColors.accentPrimary
-                              : AppColors.textPrimary),
-                    ),
+                Text(
+                  widget.text,
+                  style: AppText.body(
+                    size: widget.compact ? 14 : 15,
+                    weight: FontWeight.w600,
+                    color: fg,
+                    height: 1,
                   ),
+                ),
+                if (widget.trailingIcon != null) ...[
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: active && !reduceMotion ? 12 : 8,
+                    height: 0,
+                  ),
+                  Icon(widget.trailingIcon, size: 17, color: fg),
+                ],
               ],
             ),
           ),

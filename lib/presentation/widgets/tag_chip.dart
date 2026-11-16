@@ -1,69 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 
-/// Neutral at rest so dense chip groups read as texture, not noise.
-/// The accent only appears on hover — unless [emphasized], which is
-/// reserved for the few chips that carry the differentiator signal.
-class TagChip extends StatefulWidget {
+/// Neutral chip for skills and tech stacks. [color] only tints the border so
+/// a card's status colour stays the loudest thing on it. [emphasized] is for
+/// the few chips that carry the differentiator signal (domains): tinted fill,
+/// mono caps.
+class TagChip extends StatelessWidget {
   final String label;
   final Color? color;
+  final bool mono;
   final bool emphasized;
 
   const TagChip({
     super.key,
     required this.label,
     this.color,
+    this.mono = false,
     this.emphasized = false,
   });
 
   @override
-  State<TagChip> createState() => _TagChipState();
-}
-
-class _TagChipState extends State<TagChip> {
-  bool _hovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    final accent = widget.color ?? AppColors.accentPrimary;
-    final active = _hovered || widget.emphasized;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeOut,
+    if (emphasized) {
+      final accent = color ?? AppColors.marigold;
+      return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: active
-              ? accent.withValues(alpha: widget.emphasized ? 0.10 : 0.08)
-              : Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: active
-                ? accent.withValues(alpha: 0.4)
-                : AppColors.borderSubtle,
+          color: accent.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: accent.withValues(alpha: 0.32)),
+        ),
+        child: Text(
+          label.toUpperCase(),
+          style: AppText.mono(
+            size: 10.5,
+            weight: FontWeight.w600,
+            color: accent,
+            letterSpacing: 1,
           ),
         ),
-        child: widget.emphasized
-            ? Text(
-                widget.label.toUpperCase(),
-                style: AppFonts.mono(
-                  fontSize: 10.5,
-                  color: accent,
-                  letterSpacing: 1.2,
-                ),
+      );
+    }
+
+    final border = color?.withValues(alpha: 0.22) ?? AppColors.borderSubtle;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.035),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: border),
+      ),
+      child: Text(
+        label,
+        style: mono
+            ? AppText.mono(
+                size: 11.5,
+                color: AppColors.textSecondary,
+                letterSpacing: 0.2,
               )
-            : AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 150),
-                style: GoogleFonts.inter(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: _hovered ? accent : AppColors.textBody,
-                ),
-                child: Text(widget.label),
+            : AppText.body(
+                size: 13,
+                weight: FontWeight.w500,
+                color: AppColors.textSecondary,
+                height: 1.2,
               ),
       ),
     );

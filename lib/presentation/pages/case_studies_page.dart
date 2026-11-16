@@ -1,97 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
+import 'package:portfolio/presentation/widgets/case_study_card.dart';
 import 'package:portfolio/presentation/widgets/content_container.dart';
 import 'package:portfolio/presentation/widgets/fade_in_section.dart';
-import 'package:portfolio/presentation/widgets/glass_card.dart';
 import 'package:portfolio/presentation/widgets/page_scaffold.dart';
 import 'package:portfolio/presentation/widgets/section_header.dart';
-import 'package:portfolio/presentation/widgets/tag_chip.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CaseStudiesPage extends StatelessWidget {
   const CaseStudiesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final width = MediaQuery.sizeOf(context).width;
+    final gutter = AppLayout.gutter(context);
 
     return PageScaffold(
       children: [
-        const FadeInSection(
-          child: SectionHeader(
-            title: 'Case Studies',
-            subtitle: 'Product strategy — read the full analysis on each site',
-          ),
-        ),
-        const SizedBox(height: 48),
         ContentContainer(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.fromLTRB(gutter, 0, gutter, width < 700 ? 56 : 88),
           child: Column(
-            children: PortfolioContent.caseStudies.asMap().entries.map((entry) {
-              final index = entry.key;
-              final s = entry.value;
-              return FadeInSection(
-                delay: Duration(milliseconds: 100 * (index % 3)),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 24),
-                  child: GlassCard(
-                    accentColor: s.color,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    s.title,
-                                    style: textTheme.headlineSmall?.copyWith(
-                                      color: s.color,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(s.subtitle, style: textTheme.titleMedium),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Image.asset(
-                              s.logoPath,
-                              height: 48,
-                              width: 120,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(s.summary, style: textTheme.bodyLarge),
-                        const SizedBox(height: 20),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: s.tags
-                              .map((t) => TagChip(label: t, color: s.color))
-                              .toList(),
-                        ),
-                        const SizedBox(height: 24),
-                        FilledButton.icon(
-                          onPressed: () => launchUrl(
-                            Uri.parse(s.externalUrl),
-                            mode: LaunchMode.externalApplication,
-                          ),
-                          icon: const Icon(Icons.open_in_new, size: 18),
-                          label: const Text('Open case study'),
-                        ),
-                      ],
-                    ),
-                  ),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const FadeInSection(
+                child: SectionHeader(
+                  eyebrow: 'Case studies',
+                  title: 'Product strategy and analysis',
+                  description:
+                      'Teardowns of Rapido and HitWicket, plus the AI quoting workflow I owned from research to prototype. Read the full analysis in each deck.',
+                  accent: AppColors.research,
+                  large: true,
                 ),
-              );
-            }).toList(),
+              ),
+              const SizedBox(height: 56),
+              ...PortfolioContent.caseStudies.asMap().entries.map((entry) {
+                return FadeInSection(
+                  delay: Duration(milliseconds: 150 + entry.key * 120),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: CaseStudyCard(study: entry.value, detailed: true),
+                  ),
+                );
+              }),
+            ],
           ),
         ),
       ],

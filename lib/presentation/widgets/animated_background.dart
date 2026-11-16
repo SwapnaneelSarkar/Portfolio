@@ -1,51 +1,123 @@
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui' show PointMode;
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 
-/// Deep-space backdrop: slow-drifting aurora glows over a fine dot grid.
+/// Fixed "whiteboard after hours" canvas: a faint dot grid with a few slow,
+/// soft glows drifting behind it. Sits behind the scroll view, so it never
+/// moves with content.
 class AnimatedBackground extends StatelessWidget {
   final AnimationController controller;
-
-  /// Kept for call-site compatibility; the old particle network was removed.
-  final bool showParticles;
-
-  /// Kept for call-site compatibility; floating decorations were removed.
-  final bool showFloatingDecorations;
 
   const AnimatedBackground({
     super.key,
     required this.controller,
-    this.showParticles = false,
-    this.showFloatingDecorations = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Static dot grid — rasterized once, never repainted with the aurora.
-        const RepaintBoundary(
-          child: CustomPaint(
-            painter: _DotGridPainter(),
-            child: SizedBox.expand(),
+    final reduceMotion = MediaQuery.of(context).disableAnimations;
+
+    return SizedBox.expand(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          RepaintBoundary(
+            child: CustomPaint(
+              painter: BackgroundPainter(
+                animation: reduceMotion ? null : controller,
+              ),
+            ),
           ),
-        ),
-        RepaintBoundary(
-          child: AnimatedBuilder(
-            animation: controller,
-            builder: (context, child) {
-              // Quantize to ~30 updates/sec: imperceptible on a 24s drift,
-              // halves full-viewport raster work on CanvasKit.
-              final t = (controller.value * 720).floorToDouble() / 720;
-              return CustomPaint(
-                painter: _AuroraPainter(t: t),
-                child: const SizedBox.expand(),
-              );
-            },
+          const RepaintBoundary(
+            child: CustomPaint(painter: _DotGridPainter()),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+}
+
+class BackgroundPainter extends CustomPainter {
+  final Animation<double>? animation;
+
+  BackgroundPainter({this.animation}) : super(repaint: animation);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    canvas.drawRect(rect, Paint()..color = AppColors.backgroundDark);
+
+    final t = (animation?.value ?? 0.15) * 2 * pi;
+
+    _glow(
+      canvas,
+      Offset(
+        size.width * (0.82 + 0.05 * sin(t)),
+        size.height * (0.12 + 0.05 * cos(t)),
+      ),
+      size.shortestSide * 0.75,
+      const Color(0xFF5B3FD9),
+      0.32,
+    );
+    _glow(
+      canvas,
+      Offset(
+        size.width * (0.08 + 0.06 * cos(t)),
+        size.height * (0.78 + 0.04 * sin(t)),
+      ),
+      size.shortestSide * 0.7,
+      const Color(0xFF3A2A9E),
+      0.28,
+    );
+    _glow(
+      canvas,
+      Offset(
+        size.width * (0.55 + 0.08 * sin(t + 1.4)),
+        size.height * (0.5 + 0.06 * cos(t + 0.7)),
+      ),
+      size.shortestSide * 0.5,
+      AppColors.marigold,
+      0.05,
+    );
+
+    // Darken the edges so content in the middle reads first.
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..shader = RadialGradient(
+          center: Alignment.center,
+          radius: 1.1,
+          colors: [
+            Colors.transparent,
+            AppColors.backgroundDark.withValues(alpha: 0.55),
+          ],
+          stops: const [0.55, 1],
+        ).createShader(rect),
+    );
+  }
+
+  void _glow(
+    Canvas canvas,
+    Offset center,
+    double radius,
+    Color color,
+    double alpha,
+  ) {
+    final paint = Paint()
+      ..shader = RadialGradient(
+        colors: [
+          color.withValues(alpha: alpha),
+          color.withValues(alpha: 0),
+        ],
+      ).createShader(Rect.fromCircle(center: center, radius: radius));
+    canvas.drawCircle(center, radius, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant BackgroundPainter oldDelegate) {
+    return oldDelegate.animation != animation;
   }
 }
 
@@ -54,90 +126,23 @@ class _DotGridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Static base — the animated layer above only paints translucent glows.
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    canvas.drawRect(
-      rect,
-      Paint()
-        ..shader = const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.backgroundDark,
-            Color(0xFF070B14),
-            AppColors.backgroundDark,
-          ],
-        ).createShader(rect),
-    );
-    const spacing = 44.0;
-    final paint = Paint()..color = Colors.white.withValues(alpha: 0.035);
-    for (double x = spacing / 2; x < size.width; x += spacing) {
-      for (double y = spacing / 2; y < size.height; y += spacing) {
-        canvas.drawCircle(Offset(x, y), 1, paint);
+    const spacing = 28.0;
+    final coords = <double>[];
+    for (double y = spacing / 2; y < size.height; y += spacing) {
+      for (double x = spacing / 2; x < size.width; x += spacing) {
+        coords..add(x)..add(y);
       }
     }
+    canvas.drawRawPoints(
+      PointMode.points,
+      Float32List.fromList(coords),
+      Paint()
+        ..color = Colors.white.withValues(alpha: 0.055)
+        ..strokeWidth = 1.6
+        ..strokeCap = StrokeCap.round,
+    );
   }
 
   @override
   bool shouldRepaint(covariant _DotGridPainter oldDelegate) => false;
-}
-
-class _AuroraPainter extends CustomPainter {
-  final double t;
-
-  _AuroraPainter({required this.t});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final phase = t * 2 * pi;
-    final d = min(size.width, size.height);
-
-    _glow(
-      canvas,
-      center: Offset(
-        size.width * (0.82 + 0.05 * sin(phase)),
-        size.height * (0.12 + 0.05 * cos(phase)),
-      ),
-      radius: d * 0.55,
-      color: AppColors.accentPrimary.withValues(alpha: 0.07),
-    );
-    _glow(
-      canvas,
-      center: Offset(
-        size.width * (0.08 + 0.05 * cos(phase + 1.3)),
-        size.height * (0.55 + 0.06 * sin(phase + 1.3)),
-      ),
-      radius: d * 0.5,
-      color: AppColors.accentSecondary.withValues(alpha: 0.065),
-    );
-    _glow(
-      canvas,
-      center: Offset(
-        size.width * (0.55 + 0.06 * sin(phase + 2.6)),
-        size.height * (0.95 + 0.04 * cos(phase + 2.6)),
-      ),
-      radius: d * 0.45,
-      color: AppColors.accentTertiary.withValues(alpha: 0.045),
-    );
-  }
-
-  void _glow(
-    Canvas canvas, {
-    required Offset center,
-    required double radius,
-    required Color color,
-  }) {
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()
-        ..shader = RadialGradient(
-          colors: [color, color.withValues(alpha: 0)],
-        ).createShader(Rect.fromCircle(center: center, radius: radius)),
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _AuroraPainter oldDelegate) =>
-      oldDelegate.t != t;
 }

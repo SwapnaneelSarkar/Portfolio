@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
 
-/// Thin gradient reading-progress bar pinned under the frosted nav.
+/// Thin marigold reading-progress bar along the top edge of the viewport.
 class ScrollProgressBar extends StatelessWidget {
   final ScrollController controller;
 
@@ -21,19 +22,16 @@ class ScrollProgressBar extends StatelessWidget {
                 .clamp(0.0, 1.0);
           }
           return SizedBox(
-            height: 2.5,
+            height: 3,
             width: double.infinity,
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: fraction,
               child: Container(
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF22D3EE),
-                      Color(0xFFA78BFA),
-                      Color(0xFFF471B5),
-                    ],
+                  gradient: LinearGradient(colors: AppColors.primaryGradient),
+                  borderRadius: BorderRadius.horizontal(
+                    right: Radius.circular(3),
                   ),
                 ),
               ),

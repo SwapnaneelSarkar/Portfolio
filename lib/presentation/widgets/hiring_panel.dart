@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/glass_card.dart';
+import 'package:portfolio/presentation/widgets/status_pill.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// What I'm looking for + fastest ways to reach me — the site's strongest
@@ -12,7 +13,6 @@ class HiringPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final profile = PortfolioContent.profile;
 
     return GlassCard(
@@ -21,29 +21,36 @@ class HiringPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const StatusPill(
+            label: 'Currently open to',
+            color: AppColors.now,
+            pulse: true,
+          ),
+          const SizedBox(height: 18),
           Text(
-            'CURRENTLY OPEN TO',
-            style: AppFonts.mono(
-              fontSize: 11,
-              color: AppColors.accentPrimary,
+            'Product Manager · APM\n0→1 Product Roles',
+            style: AppText.display(
+              size: 22,
+              weight: FontWeight.w700,
+              height: 1.3,
+              letterSpacing: -0.4,
             ),
           ),
           const SizedBox(height: 16),
           Text(
-            'Product Manager · APM\n0→1 Product Roles',
-            style: textTheme.headlineSmall?.copyWith(height: 1.35),
-          ),
-          const SizedBox(height: 16),
-          Text(
             'Supply chain, ERP & AI products a specialty\nFull-time · Hybrid or Remote · Available now',
-            style: textTheme.bodySmall,
+            style: AppText.body(
+              size: 14,
+              color: AppColors.textSecondary,
+              height: 1.6,
+            ),
           ),
           const SizedBox(height: 24),
           Container(height: 1, color: Colors.white.withValues(alpha: 0.08)),
           const SizedBox(height: 20),
           Row(
             children: [
-              _social(FontAwesomeIcons.linkedin, profile.linkedInUrl),
+              _social(FontAwesomeIcons.linkedinIn, profile.linkedInUrl),
               const SizedBox(width: 12),
               _social(FontAwesomeIcons.github, profile.githubUrl),
               const SizedBox(width: 12),
@@ -56,24 +63,21 @@ class HiringPanel extends StatelessWidget {
   }
 
   Widget _social(IconData icon, String url) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => launchUrl(
-          Uri.parse(url),
-          mode: LaunchMode.externalApplication,
+    return InkWell(
+      onTap: () => launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      ),
+      customBorder: const CircleBorder(),
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.borderStrong),
         ),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.borderSubtle),
-          ),
-          child: Center(
-            child: FaIcon(icon, color: AppColors.textPrimary, size: 17),
-          ),
+        child: Center(
+          child: FaIcon(icon, color: AppColors.textSecondary, size: 16),
         ),
       ),
     );

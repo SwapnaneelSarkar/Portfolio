@@ -3,73 +3,64 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:portfolio/presentation/widgets/page_scaffold.dart';
+import 'package:portfolio/presentation/widgets/status_pill.dart';
 
 class NotFoundPage extends StatelessWidget {
   const NotFoundPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final isMobile = MediaQuery.sizeOf(context).width < 700;
 
     return PageScaffold(
       showFooter: false,
       children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height * 0.55,
-          ),
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.62,
           child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: AppColors.primaryGradient,
-                  ).createShader(bounds),
-                  child: Text(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const StatusPill(label: 'Signal lost', color: AppColors.coral),
+                  const SizedBox(height: 24),
+                  Text(
                     '404',
-                    style: textTheme.displayLarge?.copyWith(
-                      color: Colors.white,
-                      fontSize: 120,
+                    style: AppText.display(
+                      size: isMobile ? 96 : 160,
+                      weight: FontWeight.w800,
+                      letterSpacing: -6,
+                      height: 1,
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'SIGNAL LOST',
-                  style: AppFonts.mono(
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
-                    letterSpacing: 4,
+                  const SizedBox(height: 16),
+                  Text(
+                    'Page not found. It may have moved, or never shipped.',
+                    textAlign: TextAlign.center,
+                    style: AppText.body(size: 18, color: AppColors.textSecondary),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text('Page not found', style: textTheme.headlineSmall),
-                const SizedBox(height: 32),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    AnimatedButton(
-                      onPressed: () => context.go('/'),
-                      text: 'Back to Home',
-                      isPrimary: true,
-                    ),
-                    AnimatedButton(
-                      onPressed: () => context.go('/projects'),
-                      text: 'View Projects',
-                      isPrimary: false,
-                    ),
-                    TextButton(
-                      onPressed: () => context.go('/contact'),
-                      child: const Text('or contact me'),
-                    ),
-                  ],
-                ),
-              ],
+                  const SizedBox(height: 32),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      AnimatedButton(
+                        onPressed: () => context.go('/'),
+                        text: 'Back to home',
+                        isPrimary: true,
+                        trailingIcon: Icons.arrow_forward_rounded,
+                      ),
+                      AnimatedButton(
+                        onPressed: () => context.go('/projects'),
+                        text: 'View projects',
+                        isPrimary: false,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
