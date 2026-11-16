@@ -3,45 +3,52 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:portfolio/presentation/widgets/page_scaffold.dart';
-import 'package:portfolio/assets.dart';
-import 'package:lottie/lottie.dart';
+import 'package:portfolio/presentation/widgets/status_pill.dart';
 
 class NotFoundPage extends StatelessWidget {
   const NotFoundPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final isMobile = MediaQuery.sizeOf(context).width < 700;
 
     return PageScaffold(
       showFooter: false,
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.55,
+          height: MediaQuery.sizeOf(context).height * 0.62,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Lottie.network(
-                  Assets.notFoundAnimation,
-                  height: 220,
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  '404',
-                  style: textTheme.displayMedium?.copyWith(
-                    color: AppColors.accentPrimary,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const StatusPill(label: 'Not on the roadmap', color: AppColors.coral),
+                  const SizedBox(height: 24),
+                  Text(
+                    '404',
+                    style: AppText.display(
+                      size: isMobile ? 96 : 160,
+                      weight: FontWeight.w800,
+                      letterSpacing: -6,
+                      height: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text('Page not found', style: textTheme.headlineSmall),
-                const SizedBox(height: 32),
-                AnimatedButton(
-                  onPressed: () => context.go('/'),
-                  text: 'Back to Home',
-                  isPrimary: true,
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  Text(
+                    'This page doesn\'t exist. Head back to the homepage.',
+                    textAlign: TextAlign.center,
+                    style: AppText.body(size: 18, color: AppColors.textSecondary),
+                  ),
+                  const SizedBox(height: 32),
+                  AnimatedButton(
+                    onPressed: () => context.go('/'),
+                    text: 'Back to home',
+                    isPrimary: true,
+                    icon: Icons.arrow_forward_rounded,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

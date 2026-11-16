@@ -3,8 +3,11 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
 import 'package:portfolio/presentation/widgets/footer.dart';
 import 'package:portfolio/presentation/widgets/animated_background.dart';
-import 'package:lottie/lottie.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:portfolio/presentation/widgets/content_container.dart';
+import 'package:portfolio/presentation/widgets/glass_card.dart';
+import 'package:portfolio/presentation/widgets/responsive_grid.dart';
+import 'package:portfolio/presentation/widgets/section_header.dart';
+import 'package:portfolio/presentation/widgets/tag_chip.dart';
 import 'package:portfolio/assets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,7 +41,6 @@ class _EducationPageState extends State<EducationPage>
         'Mobile Application Development',
       ],
       'color': AppColors.accentPrimary,
-      'animation': Assets.educationAnimation,
     },
     {
       'institution': 'Kendriya Vidyalaya, Cooch Behar',
@@ -56,7 +58,6 @@ class _EducationPageState extends State<EducationPage>
         'Computer Science',
       ],
       'color': AppColors.accentSecondary,
-      'animation': Assets.schoolAnimation,
     },
   ];
 
@@ -143,62 +144,33 @@ class _EducationPageState extends State<EducationPage>
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                Container(
-                  height: 280,
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedOpacity(
-                          opacity: _isVisible ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
-                            'Education',
-                            style: textTheme.displayMedium?.copyWith(
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        AnimatedOpacity(
-                          opacity: _isVisible ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 700),
-                          child: SizedBox(
-                            height: 50,
-                            child: DefaultTextStyle(
-                              style: textTheme.headlineSmall!.copyWith(
-                                color: AppColors.accentSecondary,
-                              ),
-                              child: AnimatedTextKit(
-                                animatedTexts: [
-                                  TypewriterAnimatedText(
-                                    'Academic journey',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                  TypewriterAnimatedText(
-                                    'Learning and growth',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                  TypewriterAnimatedText(
-                                    'Knowledge foundation',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                ],
-                                repeatForever: true,
-                                pause: const Duration(milliseconds: 1000),
-                                displayFullTextOnTap: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                ContentContainer(
+                  padding: EdgeInsets.fromLTRB(
+                    AppLayout.gutter(size.width),
+                    size.width < 700 ? 116 : 150,
+                    AppLayout.gutter(size.width),
+                    size.width < 700 ? 40 : 64,
+                  ),
+                  child: AnimatedOpacity(
+                    opacity: _isVisible ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 500),
+                    child: const SectionHeader(
+                      eyebrow: 'Education',
+                      title: 'Academic journey',
+                      description:
+                          'Computer Science and Business Systems at VIT-AP, plus certifications in problem solving, software engineering, and Flutter.',
+                      accent: AppColors.lilac,
+                      large: true,
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+                ContentContainer(
+                  padding: EdgeInsets.fromLTRB(
+                    AppLayout.gutter(size.width),
+                    0,
+                    AppLayout.gutter(size.width),
+                    size.width < 700 ? 56 : 88,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -206,13 +178,14 @@ class _EducationPageState extends State<EducationPage>
                         opacity: _isVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 800),
                         child: Text(
-                          'Academic Background',
-                          style: textTheme.headlineMedium?.copyWith(
-                            color: AppColors.accentPrimary,
+                          'Academic background',
+                          style: AppText.display(
+                            size: 24,
+                            weight: FontWeight.w600,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 28),
                       ..._education.asMap().entries.map((entry) {
                         return _buildEducationCard(
                           entry.value,
@@ -221,18 +194,19 @@ class _EducationPageState extends State<EducationPage>
                           size,
                         );
                       }),
-                      const SizedBox(height: 80),
+                      const SizedBox(height: 40),
                       AnimatedOpacity(
                         opacity: _isVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 800),
                         child: Text(
                           'Certifications',
-                          style: textTheme.headlineMedium?.copyWith(
-                            color: AppColors.accentPrimary,
+                          style: AppText.display(
+                            size: 24,
+                            weight: FontWeight.w600,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 28),
                       _buildCertificationsGrid(textTheme, size),
                     ],
                   ),
@@ -252,7 +226,6 @@ class _EducationPageState extends State<EducationPage>
     TextTheme textTheme,
     Size size,
   ) {
-    final isMobile = size.width < 768;
     final isEven = index % 2 == 0;
 
     return AnimatedBuilder(
@@ -267,40 +240,9 @@ class _EducationPageState extends State<EducationPage>
           child: Opacity(opacity: opacity, child: child),
         );
       },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 60),
-        child: isMobile
-            ? Column(
-                children: [
-                  _buildEducationContent(education, textTheme),
-                  const SizedBox(height: 30),
-                  _buildEducationAnimation(education),
-                ],
-              )
-            : Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: isEven
-                    ? [
-                        Expanded(
-                          flex: 3,
-                          child: _buildEducationContent(education, textTheme),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: _buildEducationAnimation(education),
-                        ),
-                      ]
-                    : [
-                        Expanded(
-                          flex: 2,
-                          child: _buildEducationAnimation(education),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: _buildEducationContent(education, textTheme),
-                        ),
-                      ],
-              ),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: _buildEducationContent(education, textTheme),
       ),
     );
   }
@@ -310,13 +252,12 @@ class _EducationPageState extends State<EducationPage>
     TextTheme textTheme,
   ) {
     return Container(
-      padding: const EdgeInsets.all(30),
+      width: double.infinity,
+      padding: EdgeInsets.all(MediaQuery.sizeOf(context).width < 600 ? 22 : 32),
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: (education['color'] as Color).withValues(alpha: 0.2),
-        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,8 +268,11 @@ class _EducationPageState extends State<EducationPage>
               Expanded(
                 child: Text(
                   education['institution'],
-                  style: textTheme.headlineSmall?.copyWith(
-                    color: education['color'],
+                  style: AppText.display(
+                    size: 20,
+                    weight: FontWeight.w600,
+                    letterSpacing: -0.3,
+                    height: 1.25,
                   ),
                 ),
               ),
@@ -340,10 +284,10 @@ class _EducationPageState extends State<EducationPage>
                 ),
                 child: Text(
                   education['period'],
-                  style: TextStyle(
+                  style: AppText.mono(
+                    size: 11.5,
+                    weight: FontWeight.w600,
                     color: education['color'],
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -369,70 +313,40 @@ class _EducationPageState extends State<EducationPage>
           Text(education['description'], style: textTheme.bodyLarge),
           const SizedBox(height: 24),
           Text(
-            'Courses',
-            style: textTheme.titleMedium?.copyWith(
-              color: AppColors.accentSecondary,
+            'COURSES',
+            style: AppText.mono(
+              size: 11,
+              weight: FontWeight.w600,
+              color: AppColors.textFaint,
+              letterSpacing: 1.4,
             ),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: (education['courses'] as List<String>).map((course) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: (education['color'] as Color).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  course,
-                  style: TextStyle(
-                    color: education['color'],
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            }).toList(),
+            children: (education['courses'] as List<String>)
+                .map((course) => TagChip(label: course))
+                .toList(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildEducationAnimation(Map<String, dynamic> education) {
-    return Lottie.network(
-      education['animation'],
-      fit: BoxFit.contain,
-    );
-  }
-
   Widget _buildCertificationsGrid(TextTheme textTheme, Size size) {
-    final isMobile = size.width < 768;
-
     return AnimatedBuilder(
       animation: _contentController,
       builder: (context, child) {
         return Opacity(opacity: _contentController.value, child: child);
       },
-      child: isMobile
-          ? Column(
-              children: _certificates
-                  .map((cert) => _buildCertificateCard(cert, textTheme))
-                  .toList(),
-            )
-          : GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              childAspectRatio: 2.0,
-              children: _certificates
-                  .map((cert) => _buildCertificateCard(cert, textTheme))
-                  .toList(),
-            ),
+      child: ResponsiveGrid(
+        minCellWidth: 420,
+        maxColumns: 2,
+        children: _certificates
+            .map((cert) => _buildCertificateCard(cert, textTheme))
+            .toList(),
+      ),
     );
   }
 
@@ -440,88 +354,58 @@ class _EducationPageState extends State<EducationPage>
     Map<String, dynamic> certificate,
     TextTheme textTheme,
   ) {
-    return GestureDetector(
+    final color = certificate['color'] as Color;
+
+    return GlassCard(
+      accentColor: color,
       onTap: () => _showCertificateDialog(certificate),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: (certificate['color'] as Color).withValues(alpha: 0.2),
+      semanticLabel: '${certificate['title']} certificate',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.verified_rounded, color: color, size: 22),
+              const Spacer(),
+              Text(
+                certificate['date'],
+                style: AppText.mono(size: 11.5, color: AppColors.textFaint),
+              ),
+            ],
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.verified, color: certificate['color'], size: 24),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    certificate['title'],
-                    style: textTheme.titleLarge?.copyWith(
-                      color: certificate['color'],
-                    ),
-                  ),
+          const SizedBox(height: 16),
+          Text(
+            certificate['title'],
+            style: AppText.body(size: 18, weight: FontWeight.w600, height: 1.3),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            certificate['issuer'],
+            style: AppText.mono(size: 12, color: AppColors.textSecondary),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            certificate['description'],
+            style: textTheme.bodyMedium,
+          ),
+          const Spacer(),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Text(
+                'View certificate',
+                style: AppText.body(
+                  size: 14,
+                  weight: FontWeight.w600,
+                  color: color,
+                  height: 1,
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    certificate['issuer'],
-                    style: textTheme.titleMedium,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: (certificate['color'] as Color).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    certificate['date'],
-                    style: TextStyle(
-                      color: certificate['color'],
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              certificate['description'],
-              style: textTheme.bodyMedium,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Tap to view',
-                  style: TextStyle(
-                    color: certificate['color'],
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Icon(Icons.touch_app, color: certificate['color'], size: 16),
-              ],
-            ),
-          ],
-        ),
+              ),
+              const SizedBox(width: 6),
+              Icon(Icons.arrow_forward_rounded, color: color, size: 15),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -531,12 +415,10 @@ class _EducationPageState extends State<EducationPage>
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.cardBackground,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: Text(
           certificate['title'],
-          style: TextStyle(
-            color: certificate['color'],
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppText.display(size: 20, weight: FontWeight.w600),
         ),
         content: const Column(
           mainAxisSize: MainAxisSize.min,
@@ -544,7 +426,7 @@ class _EducationPageState extends State<EducationPage>
           children: [
             Text(
               'Download this certificate to verify credentials.',
-              style: TextStyle(color: AppColors.textPrimary, fontSize: 16),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
             ),
           ],
         ),
@@ -552,7 +434,7 @@ class _EducationPageState extends State<EducationPage>
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text(
-              'Maybe Later',
+              'Not now',
               style: TextStyle(color: AppColors.textSecondary),
             ),
           ),
@@ -561,9 +443,6 @@ class _EducationPageState extends State<EducationPage>
               Navigator.pop(context);
               _downloadCertificate(certificate['url']);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: certificate['color'],
-            ),
             child: const Text('Download'),
           ),
         ],

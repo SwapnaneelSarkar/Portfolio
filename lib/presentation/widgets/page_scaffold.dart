@@ -3,7 +3,7 @@ import 'package:portfolio/presentation/widgets/animated_background.dart';
 import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
 import 'package:portfolio/presentation/widgets/footer.dart';
 
-/// Shared layout: slow gradient background (no particles) + scroll body.
+/// Shared layout: board-canvas background + floating nav + scroll body.
 class PageScaffold extends StatefulWidget {
   final List<Widget> children;
   final bool showFooter;
@@ -52,7 +52,9 @@ class _PageScaffoldState extends State<PageScaffold>
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                const SizedBox(height: 100),
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).width < 700 ? 116 : 150,
+                ),
                 ...widget.children,
                 if (widget.showFooter) const Footer(),
               ],

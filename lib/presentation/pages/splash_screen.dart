@@ -3,8 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/animated_background.dart';
-import 'package:portfolio/assets.dart';
-import 'package:lottie/lottie.dart';
+import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,8 +14,11 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
+  static const _splashDuration = Duration(milliseconds: 2800);
+
   late final AnimationController _bgController;
   late final AnimationController _logoController;
+  late final AnimationController _loadController;
 
   @override
   void initState() {
@@ -28,10 +30,15 @@ class _SplashScreenState extends State<SplashScreen>
 
     _logoController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
+      duration: const Duration(milliseconds: 1100),
     )..forward();
 
-    Future.delayed(const Duration(milliseconds: 2800), () {
+    _loadController = AnimationController(
+      vsync: this,
+      duration: _splashDuration - const Duration(milliseconds: 300),
+    )..forward();
+
+    Future.delayed(_splashDuration, () {
       if (mounted) context.go('/');
     });
   }
@@ -40,81 +47,96 @@ class _SplashScreenState extends State<SplashScreen>
   void dispose() {
     _bgController.dispose();
     _logoController.dispose();
+    _loadController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final profile = PortfolioContent.profile;
-    final textTheme = Theme.of(context).textTheme;
+    final logo = CurvedAnimation(
+      parent: _logoController,
+      curve: Curves.easeOutBack,
+    );
 
     return Scaffold(
       body: Stack(
         children: [
           AnimatedBackground(controller: _bgController),
           Center(
-            child: AnimatedBuilder(
-              animation: _logoController,
-              builder: (context, child) {
-                return Opacity(
-                  opacity: _logoController.value,
-                  child: Transform.scale(
-                    scale: 0.9 + (0.1 * _logoController.value),
-                    child: child,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AnimatedBuilder(
+                  animation: logo,
+                  builder: (context, child) => Opacity(
+                    opacity: _logoController.value,
+                    child: Transform.scale(
+                      scale: 0.7 + 0.3 * logo.value,
+                      child: child,
+                    ),
                   ),
-                );
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 72,
-                    height: 72,
+                  child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.backgroundLight,
-                      borderRadius: BorderRadius.circular(36),
-                      border: Border.all(
-                        color: AppColors.accentPrimary.withOpacity(0.35),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.lilac.withValues(alpha: 0.35),
+                          blurRadius: 60,
+                        ),
+                      ],
+                    ),
+                    child: const AvatarBadge(size: 112),
+                  ),
+                ),
+                const SizedBox(height: 28),
+                FadeTransition(
+                  opacity: CurvedAnimation(
+                    parent: _logoController,
+                    curve: const Interval(0.3, 1),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        profile.name,
+                        style: AppText.display(
+                          size: 26,
+                          weight: FontWeight.w700,
+                          letterSpacing: -0.6,
+                        ),
                       ),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Image.asset(
-                      Assets.avatar,
-                      fit: BoxFit.cover,
-                      alignment: const Alignment(0, -0.2),
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Center(
-                          child: Icon(
-                            Icons.person,
-                            color: AppColors.textPrimary,
-                            size: 34,
+                      const SizedBox(height: 8),
+                      Text(
+                        profile.title.toUpperCase(),
+                        style: AppText.mono(
+                          size: 12,
+                          color: AppColors.textSecondary,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      SizedBox(
+                        width: 180,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: AnimatedBuilder(
+                            animation: _loadController,
+                            builder: (context, _) => LinearProgressIndicator(
+                              value: Curves.easeInOutCubic.transform(
+                                _loadController.value,
+                              ),
+                              minHeight: 3,
+                              color: AppColors.marigold,
+                              backgroundColor:
+                                  Colors.white.withValues(alpha: 0.08),
+                            ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 28),
-                  Lottie.network(
-                    Assets.developerAnimation,
-                    height: 120,
-                    width: 120,
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    profile.name,
-                    style: textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    profile.title,
-                    style: textTheme.bodyLarge?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

@@ -13,11 +13,20 @@ class ContentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final gutter = AppLayout.gutter(width);
+
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: AppLayout.maxContentWidth),
+        constraints: BoxConstraints(
+          maxWidth: AppLayout.maxContentWidth + gutter * 2,
+        ),
         child: Padding(
-          padding: padding ?? AppLayout.sectionPadding,
+          padding: padding ??
+              EdgeInsets.symmetric(
+                horizontal: gutter,
+                vertical: width < 700 ? 52 : 72,
+              ),
           child: child,
         ),
       ),

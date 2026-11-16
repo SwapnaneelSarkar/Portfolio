@@ -1,57 +1,118 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// "After-hours roadmap board" palette.
+///
+/// Accent colours are status colours, not decoration:
+/// marigold = now / primary action, mint = shipped, lilac = research.
 class AppColors {
   // Backgrounds
-  static const Color backgroundDark = Color(0xFF0B0F14);
-  static const Color backgroundLight = Color(0xFF141A22);
-  static const Color cardBackground = Color(0xFF1A222D);
-  static const Color cardHover = Color(0xFF232D3B);
-  static const Color cardActive = Color(0xFF2C3849);
+  static const Color backgroundDark = Color(0xFF0F0B24); // ink
+  static const Color backgroundLight = Color(0xFF171233);
+  static const Color cardBackground = Color(0xFF1A1538);
+  static const Color cardHover = Color(0xFF221C47);
+  static const Color cardActive = Color(0xFF2B2456);
 
-  // Accents
-  static const Color accentPrimary = Color(0xFF14B8A6); // Teal
-  static const Color accentSecondary = Color(0xFF38BDF8); // Sky blue
-  static const Color accentTertiary = Color(0xFFF59E0B); // Amber
-  static const Color accentWarm = Color(0xFFF59E0B);
+  // Status accents
+  static const Color marigold = Color(0xFFFFB23F);
+  static const Color mint = Color(0xFF45E0A8);
+  static const Color lilac = Color(0xFFB49CFF);
+  static const Color coral = Color(0xFFFF8A70);
+
+  static const Color now = marigold;
+  static const Color shipped = mint;
+  static const Color research = lilac;
+
+  // Accents (kept for existing call sites)
+  static const Color accentPrimary = marigold;
+  static const Color accentSecondary = lilac;
+  static const Color accentTertiary = mint;
+  static const Color accentWarm = coral;
 
   // Legacy aliases for gradual migration
   static const Color primaryDark = backgroundDark;
   static const Color primaryLight = backgroundLight;
 
   // Semantic
-  static const Color primaryAccentLight = Color(0xFF38BDF8);
-  static const Color primaryRedLight = Color(0xFFEB6A5E);
-  static const Color primaryYellowLight = Color(0xFFFDD663);
-  static const Color primaryGreenLight = Color(0xFF46B565);
+  static const Color primaryAccentLight = lilac;
+  static const Color primaryRedLight = Color(0xFFFF6B7A);
+  static const Color primaryYellowLight = marigold;
+  static const Color primaryGreenLight = mint;
 
   // Text
-  static const Color textPrimary = Color(0xFFF1F5F9);
-  static const Color textSecondary = Color(0xFF94A3B8);
-  static const Color borderSubtle = Color(0x14FFFFFF);
+  static const Color textPrimary = Color(0xFFF3F0FF);
+  static const Color textSecondary = Color(0xFFA9A2CB);
+  static const Color textFaint = Color(0xFF746D9B);
+  static const Color borderSubtle = Color(0x17FFFFFF);
+  static const Color borderStrong = Color(0x2BFFFFFF);
 
   // Gradients
-  static const List<Color> primaryGradient = [
-    Color(0xFF14B8A6),
-    Color(0xFF38BDF8),
-  ];
-
-  static const List<Color> secondaryGradient = [
-    Color(0xFF38BDF8),
-    Color(0xFF14B8A6),
-  ];
+  static const List<Color> primaryGradient = [marigold, coral];
+  static const List<Color> secondaryGradient = [lilac, Color(0xFF7C6CFF)];
 
   // Skill level colors
-  static const Color beginnerLevel = Color(0xFFEB6A5E);
-  static const Color intermediateLevel = Color(0xFFFDD663);
-  static const Color advancedLevel = Color(0xFF38BDF8);
-  static const Color expertLevel = Color(0xFF14B8A6);
+  static const Color beginnerLevel = coral;
+  static const Color intermediateLevel = marigold;
+  static const Color advancedLevel = lilac;
+  static const Color expertLevel = mint;
 }
 
 class AppLayout {
   static const double maxContentWidth = 1200;
   static const EdgeInsets sectionPadding =
-      EdgeInsets.symmetric(horizontal: 24, vertical: 80);
+      EdgeInsets.symmetric(horizontal: 24, vertical: 72);
+
+  static double gutter(double width) => width < 600 ? 20 : 32;
+}
+
+/// Type roles: Unbounded for display, Instrument Sans for body,
+/// JetBrains Mono for labels, dates and status.
+class AppText {
+  static TextStyle display({
+    double size = 40,
+    FontWeight weight = FontWeight.w700,
+    Color color = AppColors.textPrimary,
+    double height = 1.08,
+    double letterSpacing = -0.5,
+  }) {
+    return GoogleFonts.unbounded(
+      fontSize: size,
+      fontWeight: weight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+    );
+  }
+
+  static TextStyle mono({
+    double size = 12,
+    FontWeight weight = FontWeight.w500,
+    Color color = AppColors.textSecondary,
+    double letterSpacing = 0.6,
+    double? height,
+  }) {
+    return GoogleFonts.jetBrainsMono(
+      fontSize: size,
+      fontWeight: weight,
+      color: color,
+      letterSpacing: letterSpacing,
+      height: height,
+    );
+  }
+
+  static TextStyle body({
+    double size = 16,
+    FontWeight weight = FontWeight.w400,
+    Color color = AppColors.textPrimary,
+    double height = 1.6,
+  }) {
+    return GoogleFonts.instrumentSans(
+      fontSize: size,
+      fontWeight: weight,
+      color: color,
+      height: height,
+    );
+  }
 }
 
 class AppTheme {
@@ -61,144 +122,130 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.backgroundDark,
     colorScheme: const ColorScheme.dark(
       primary: AppColors.accentPrimary,
+      onPrimary: AppColors.backgroundDark,
       secondary: AppColors.accentSecondary,
+      onSecondary: AppColors.backgroundDark,
       tertiary: AppColors.accentTertiary,
       surface: AppColors.cardBackground,
+      onSurface: AppColors.textPrimary,
+    ),
+    focusColor: AppColors.marigold.withValues(alpha: 0.18),
+    hoverColor: Colors.white.withValues(alpha: 0.04),
+    splashColor: AppColors.marigold.withValues(alpha: 0.08),
+    highlightColor: Colors.transparent,
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: AppColors.marigold,
+      selectionColor: AppColors.marigold.withValues(alpha: 0.3),
     ),
     textTheme: TextTheme(
-      displayLarge: GoogleFonts.poppins(
-        fontSize: 72,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
-        letterSpacing: -1.5,
-        height: 1.1,
-      ),
-      displayMedium: GoogleFonts.poppins(
-        fontSize: 56,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
-        letterSpacing: -0.5,
-        height: 1.15,
-      ),
-      displaySmall: GoogleFonts.poppins(
-        fontSize: 40,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
+      displayLarge: AppText.display(size: 72, weight: FontWeight.w800),
+      displayMedium: AppText.display(size: 52, weight: FontWeight.w700),
+      displaySmall: AppText.display(size: 38, weight: FontWeight.w600),
+      headlineMedium: AppText.display(
+        size: 28,
+        weight: FontWeight.w600,
         height: 1.2,
+        letterSpacing: -0.3,
       ),
-      headlineMedium: GoogleFonts.poppins(
-        fontSize: 32,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-        letterSpacing: 0.25,
+      headlineSmall: AppText.display(
+        size: 22,
+        weight: FontWeight.w600,
         height: 1.25,
+        letterSpacing: -0.2,
       ),
-      headlineSmall: GoogleFonts.poppins(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-        height: 1.3,
-      ),
-      titleLarge: GoogleFonts.poppins(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-        letterSpacing: 0.15,
-      ),
-      titleMedium: GoogleFonts.poppins(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-        letterSpacing: 0.15,
-      ),
-      titleSmall: GoogleFonts.poppins(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-        letterSpacing: 0.1,
-      ),
-      bodyLarge: GoogleFonts.poppins(
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
-        color: AppColors.textPrimary,
-        letterSpacing: 0.25,
+      titleLarge: AppText.body(size: 20, weight: FontWeight.w600, height: 1.3),
+      titleMedium: AppText.body(size: 16, weight: FontWeight.w600, height: 1.4),
+      titleSmall: AppText.body(size: 14, weight: FontWeight.w600, height: 1.4),
+      bodyLarge: AppText.body(size: 16, height: 1.65),
+      bodyMedium: AppText.body(
+        size: 14,
+        color: AppColors.textSecondary,
         height: 1.6,
       ),
-      bodyMedium: GoogleFonts.poppins(
-        fontSize: 14,
-        fontWeight: FontWeight.normal,
+      bodySmall: AppText.body(
+        size: 12.5,
         color: AppColors.textSecondary,
-        letterSpacing: 0.25,
-        height: 1.55,
+        height: 1.5,
       ),
-      labelLarge: GoogleFonts.poppins(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-        letterSpacing: 1.25,
-      ),
+      labelLarge: AppText.body(size: 15, weight: FontWeight.w600, height: 1.2),
+      labelMedium: AppText.mono(size: 12),
+      labelSmall: AppText.mono(size: 11),
     ),
     cardTheme: CardThemeData(
       color: AppColors.cardBackground,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         side: const BorderSide(color: AppColors.borderSubtle),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.accentPrimary,
+        backgroundColor: AppColors.marigold,
         foregroundColor: AppColors.backgroundDark,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        textStyle: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-        ),
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+        shape: const StadiumBorder(),
+        textStyle: AppText.body(size: 15, weight: FontWeight.w600, height: 1),
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: AppColors.marigold,
+        foregroundColor: AppColors.backgroundDark,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+        shape: const StadiumBorder(),
+        textStyle: AppText.body(size: 15, weight: FontWeight.w600, height: 1),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.accentPrimary,
-        side: const BorderSide(color: AppColors.accentPrimary, width: 1.5),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        textStyle: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-        ),
+        foregroundColor: AppColors.textPrimary,
+        side: const BorderSide(color: AppColors.borderStrong),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+        shape: const StadiumBorder(),
+        textStyle: AppText.body(size: 15, weight: FontWeight.w600, height: 1),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: AppColors.accentPrimary,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        textStyle: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-        ),
+        foregroundColor: AppColors.marigold,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        shape: const StadiumBorder(),
+        textStyle: AppText.body(size: 15, weight: FontWeight.w600, height: 1),
       ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white.withValues(alpha: 0.03),
+      hintStyle: AppText.body(size: 15, color: AppColors.textFaint),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: AppColors.borderSubtle),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: AppColors.borderSubtle),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: AppColors.marigold, width: 1.5),
+      ),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: AppColors.cardActive,
+      contentTextStyle: AppText.body(size: 14),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      titleTextStyle: GoogleFonts.poppins(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-      ),
+      titleTextStyle: AppText.body(size: 18, weight: FontWeight.w600),
     ),
     iconTheme: const IconThemeData(
       color: AppColors.textPrimary,
-      size: 24,
+      size: 22,
     ),
     dividerTheme: const DividerThemeData(
       color: AppColors.borderSubtle,

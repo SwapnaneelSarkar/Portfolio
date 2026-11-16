@@ -12,7 +12,6 @@ import 'package:portfolio/presentation/widgets/experience_preview.dart';
 import 'package:portfolio/presentation/widgets/projects_preview.dart';
 import 'package:portfolio/presentation/widgets/case_studies_preview.dart';
 import 'package:portfolio/presentation/widgets/contact_preview.dart';
-import 'package:portfolio/presentation/widgets/scroll_indicator.dart';
 import 'package:portfolio/presentation/widgets/fade_in_section.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,7 +33,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _heroAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1900),
     )..forward();
 
     _backgroundAnimationController = AnimationController(
@@ -75,35 +74,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: Column(
               children: [
                 HeroSection(controller: _heroAnimationController),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 100),
-                  child: AboutSection(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 200),
-                  child: SkillsSection(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 300),
-                  child: ExperiencePreview(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 400),
-                  child: ProjectsPreview(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 500),
-                  child: CaseStudiesPreview(),
-                ),
-                const FadeInSection(
-                  delay: Duration(milliseconds: 600),
-                  child: ContactPreview(),
-                ),
+                const SizedBox(height: 24),
+                const FadeInSection(child: AboutSection()),
+                const FadeInSection(child: ExperiencePreview()),
+                const FadeInSection(child: ProjectsPreview()),
+                const FadeInSection(child: CaseStudiesPreview()),
+                const FadeInSection(child: SkillsSection()),
+                const FadeInSection(child: ContactPreview()),
                 const Footer(),
               ],
             ),
           ),
-          const ScrollIndicator(),
         ],
       ),
     );

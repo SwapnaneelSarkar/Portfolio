@@ -1,198 +1,253 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
-import 'package:go_router/go_router.dart';
-import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:portfolio/presentation/widgets/content_container.dart';
-import 'package:portfolio/presentation/widgets/section_header.dart';
-import 'package:lottie/lottie.dart';
-import 'package:portfolio/assets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ContactPreview extends StatefulWidget {
+/// The page's payoff: one bold marigold panel asking for the conversation.
+class ContactPreview extends StatelessWidget {
   const ContactPreview({Key? key}) : super(key: key);
 
-  @override
-  State<ContactPreview> createState() => _ContactPreviewState();
-}
+  static const Color _ink = AppColors.backgroundDark;
 
-class _ContactPreviewState extends State<ContactPreview> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  bool _isVisible = false;
-  
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
-    
-    // Add post-frame callback to start animation after build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _isVisible = true;
-      });
-      _controller.forward();
-    });
-  }
-  
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-  
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final textTheme = Theme.of(context).textTheme;
-    final isMobile = size.width < 768;
-    
-    return ContentContainer(
-      child: Column(
-        children: [
-          AnimatedOpacity(
-            opacity: _isVisible ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 500),
-            child: const SectionHeader(
-              title: 'Get In Touch',
-              subtitle: 'Let\'s build something that ships',
-            ),
-          ),
-          const SizedBox(height: 48),
-          
-          // Content
-          isMobile
-              ? Column(
-                  children: [
-                    _buildContactContent(textTheme),
-                    const SizedBox(height: 40),
-                    _buildContactAnimation(),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: _buildContactAnimation(),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: _buildContactContent(textTheme),
-                    ),
-                  ],
-                ),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildContactContent(TextTheme textTheme) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isMobile = width < 900;
     final profile = PortfolioContent.profile;
-    return AnimatedOpacity(
-      opacity: _isVisible ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 1000),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Interested in working together?',
-            style: textTheme.headlineMedium?.copyWith(
-              color: AppColors.accentPrimary,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            'Whether you have a project in mind, a question about my work, or just want to say hello, I\'d love to hear from you. Let\'s create something amazing together!',
-            style: textTheme.bodyLarge,
-          ),
-          const SizedBox(height: 32),
-          _buildContactItem(
-            Icons.email,
-            'Email',
-            profile.email,
-          ),
-          const SizedBox(height: 16),
-          _buildContactItem(
-            Icons.phone,
-            'Phone',
-            profile.phone,
-          ),
-          const SizedBox(height: 16),
-          _buildContactItem(
-            Icons.location_on,
-            'Location',
-            profile.location,
-          ),
-          const SizedBox(height: 40),
-          AnimatedButton(
-            onPressed: () => context.go('/contact'),
-            text: 'Contact Me',
-            isPrimary: true,
-          ),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildContactItem(IconData icon, String title, String value) {
-    return Row(
+
+    final pitch = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: AppColors.accentPrimary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            icon,
-            color: AppColors.accentPrimary,
-            size: 20,
+        Text(
+          'CONTACT',
+          style: AppText.mono(
+            size: 12,
+            weight: FontWeight.w700,
+            color: _ink.withValues(alpha: 0.7),
+            letterSpacing: 1.6,
           ),
         ),
-        const SizedBox(width: 16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+        const SizedBox(height: 18),
+        Semantics(
+          header: true,
+          child: Text(
+            'Let\'s build something that ships.',
+            style: AppText.display(
+              size: isMobile ? 32 : 50,
+              weight: FontWeight.w800,
+              color: _ink,
+              height: 1.05,
+              letterSpacing: isMobile ? -1 : -2,
             ),
-            Text(
-              value,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+          ),
+        ),
+        const SizedBox(height: 18),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 520),
+          child: Text(
+            'Whether you have a project in mind, a question about my work, '
+            'or just want to say hello, I\'d love to hear from you.',
+            style: AppText.body(
+              size: isMobile ? 16 : 18,
+              color: _ink.withValues(alpha: 0.78),
+              height: 1.55,
+            ),
+          ),
+        ),
+        const SizedBox(height: 30),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            _InkButton(
+              text: 'Send a message',
+              icon: Icons.arrow_forward_rounded,
+              filled: true,
+              onTap: () => context.go('/contact'),
+            ),
+            _InkButton(
+              text: 'Email me',
+              icon: Icons.north_east_rounded,
+              filled: false,
+              onTap: () => launchUrl(Uri.parse('mailto:${profile.email}')),
             ),
           ],
         ),
       ],
     );
+
+    final facts = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final (label, value) in [
+          ('Email', profile.email),
+          ('Phone', profile.phone),
+          ('Based in', profile.location),
+        ])
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: _ink.withValues(alpha: 0.16)),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label.toUpperCase(),
+                  style: AppText.mono(
+                    size: 10.5,
+                    weight: FontWeight.w600,
+                    color: _ink.withValues(alpha: 0.6),
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                SelectableText(
+                  value,
+                  style: AppText.body(
+                    size: 16,
+                    weight: FontWeight.w600,
+                    color: _ink,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+
+    return ContentContainer(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(isMobile ? 28 : 36),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFFFC566), AppColors.marigold, Color(0xFFFF9A5C)],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.marigold.withValues(alpha: 0.22),
+              blurRadius: 80,
+              offset: const Offset(0, 30),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          children: [
+            Positioned(
+              right: -120,
+              bottom: -160,
+              child: Container(
+                width: 420,
+                height: 420,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: _ink.withValues(alpha: 0.08),
+                    width: 60,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(isMobile ? 28 : 56),
+              child: isMobile
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [pitch, const SizedBox(height: 32), facts],
+                    )
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(flex: 7, child: pitch),
+                        const SizedBox(width: 56),
+                        Expanded(flex: 4, child: facts),
+                      ],
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
-  
-  Widget _buildContactAnimation() {
-    return AnimatedOpacity(
-      opacity: _isVisible ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 1000),
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: 0.8 + (0.2 * _controller.value),
-            child: child,
-          );
-        },
-        child: Lottie.network(
-          Assets.contactAnimation,
-          fit: BoxFit.contain,
+}
+
+class _InkButton extends StatefulWidget {
+  final String text;
+  final IconData icon;
+  final bool filled;
+  final VoidCallback onTap;
+
+  const _InkButton({
+    required this.text,
+    required this.icon,
+    required this.filled,
+    required this.onTap,
+  });
+
+  @override
+  State<_InkButton> createState() => _InkButtonState();
+}
+
+class _InkButtonState extends State<_InkButton> {
+  bool _active = false;
+
+  @override
+  Widget build(BuildContext context) {
+    const ink = ContactPreview._ink;
+    final fg = widget.filled ? AppColors.textPrimary : ink;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: widget.onTap,
+        onHover: (v) => setState(() => _active = v),
+        onFocusChange: (v) => setState(() => _active = v),
+        customBorder: const StadiumBorder(),
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          decoration: BoxDecoration(
+            color: widget.filled
+                ? (_active ? const Color(0xFF241D4D) : ink)
+                : (_active ? ink.withValues(alpha: 0.08) : Colors.transparent),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: ink.withValues(alpha: widget.filled ? 1 : 0.35),
+              width: _active && !widget.filled ? 2 : 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                widget.text,
+                style: AppText.body(
+                  size: 15,
+                  weight: FontWeight.w600,
+                  color: fg,
+                  height: 1,
+                ),
+              ),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: _active ? 12 : 8,
+                height: 0,
+              ),
+              Icon(widget.icon, size: 17, color: fg),
+            ],
+          ),
         ),
       ),
     );

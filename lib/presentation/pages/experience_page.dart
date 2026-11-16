@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/content_container.dart';
 import 'package:portfolio/presentation/widgets/experience_card.dart';
@@ -11,27 +12,37 @@ class ExperiencePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final gutter = AppLayout.gutter(width);
+    final entries = PortfolioContent.experiences;
+
     return PageScaffold(
       children: [
-        const FadeInSection(
-          child: SectionHeader(
-            title: 'Experience',
-            subtitle: 'Roles, scope, and outcomes',
-          ),
-        ),
-        const SizedBox(height: 32),
         ContentContainer(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.fromLTRB(gutter, 0, gutter, width < 700 ? 56 : 88),
           child: Column(
-            children: PortfolioContent.experiences.asMap().entries.map((entry) {
-              return FadeInSection(
-                delay: Duration(milliseconds: 80 + entry.key * 70),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 24),
-                  child: ExperienceCard(experience: entry.value),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const FadeInSection(
+                child: SectionHeader(
+                  eyebrow: 'Experience',
+                  title: 'Roles, scope, and outcomes',
+                  description:
+                      'From building Flutter apps to owning product discovery and delivery for client teams.',
+                  accent: AppColors.now,
+                  large: true,
                 ),
-              );
-            }).toList(),
+              ),
+              const SizedBox(height: 64),
+              for (var i = 0; i < entries.length; i++)
+                FadeInSection(
+                  delay: Duration(milliseconds: 120 + i * 80),
+                  child: ExperienceCard(
+                    experience: entries[i],
+                    isLast: i == entries.length - 1,
+                  ),
+                ),
+            ],
           ),
         ),
       ],

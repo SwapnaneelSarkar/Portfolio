@@ -3,6 +3,9 @@
 class Assets {
   // Brand assets
   static const String avatar = 'assets/images/swapnaneel-avatar.png';
+  // Same avatar with the baked-in checkerboard removed and cropped to the head.
+  static const String avatarCutout =
+      'assets/images/swapnaneel-avatar-cutout.png';
   static const String rapidoLogo = 'assets/images/rapido_logo.png';
   static const String hitwicketLogo = 'assets/images/hitwicket_logo.png';
 

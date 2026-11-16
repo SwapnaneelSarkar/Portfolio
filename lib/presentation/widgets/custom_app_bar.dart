@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portfolio/assets.dart';
@@ -8,6 +11,10 @@ import 'package:portfolio/presentation/blocs/navigation/navigation_bloc.dart';
 import 'package:portfolio/presentation/pages/snake_game_page.dart';
 import 'package:portfolio/presentation/pages/memory_game_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+const double _barHeight = 58;
+const double _barTop = 14;
 
 class CustomAppBar extends StatefulWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -27,7 +34,7 @@ class _CustomAppBarState extends State<CustomAppBar>
   final List<Map<String, String>> _menuItems = [
     {'title': 'Home', 'route': '/'},
     {'title': 'Projects', 'route': '/projects'},
-    {'title': 'Case Studies', 'route': '/case-studies'},
+    {'title': 'Case studies', 'route': '/case-studies'},
     {'title': 'Experience', 'route': '/experience'},
     {'title': 'Education', 'route': '/education'},
   ];
@@ -37,12 +44,13 @@ class _CustomAppBarState extends State<CustomAppBar>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 320),
     );
 
     _menuAnimation = CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeInOut,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
     );
   }
 
@@ -51,6 +59,14 @@ class _CustomAppBarState extends State<CustomAppBar>
     _menuOverlay?.remove();
     _animationController.dispose();
     super.dispose();
+  }
+
+  String _currentPath(BuildContext context) {
+    try {
+      return GoRouter.of(context).routerDelegate.currentConfiguration.uri.path;
+    } catch (_) {
+      return '';
+    }
   }
 
   void _toggleMenu() {
@@ -63,24 +79,24 @@ class _CustomAppBarState extends State<CustomAppBar>
 
   void _openMenu() {
     if (_menuOverlay != null) return;
+    final current = _currentPath(context);
 
     _menuOverlay = OverlayEntry(
-      builder:
-          (context) => _CompactMenuOverlay(
-            animation: _menuAnimation,
-            menuItems: _menuItems,
-            onClose: _closeMenu,
-            onNavigate: (route) {
-              this.context.go(route);
-              this.context.read<NavigationBloc>().add(NavigateToPage(route));
-              _closeMenu();
-            },
-            onShowGame: () async {
-              await _closeMenu();
-              if (mounted) _showEasterEgg(this.context, false);
-            },
-            buildSocialIcon: _buildSocialIcon,
-          ),
+      builder: (context) => _CompactMenuOverlay(
+        animation: _menuAnimation,
+        menuItems: _menuItems,
+        currentPath: current,
+        onClose: _closeMenu,
+        onNavigate: (route) {
+          this.context.go(route);
+          this.context.read<NavigationBloc>().add(NavigateToPage(route));
+          _closeMenu();
+        },
+        onShowGame: () async {
+          await _closeMenu();
+          if (mounted) _showEasterEgg(this.context, false);
+        },
+      ),
     );
     Overlay.of(context).insert(_menuOverlay!);
     setState(() {
@@ -100,189 +116,197 @@ class _CustomAppBarState extends State<CustomAppBar>
     _menuOverlay = null;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isCompact = size.width < 1360;
-    final isMobile = size.width < 768;
+  void _onLogoTap() {
+    context.go('/');
 
-    return Stack(
-      children: [
-        // Main App Bar
-        Container(
-          height: 80,
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          decoration: BoxDecoration(
-            color: AppColors.backgroundDark.withOpacity(0.8),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          child: Row(
-            children: [
-              // Logo
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {
-                    context.go('/');
-
-                    // Easter egg trigger - click logo 5 times
-                    setState(() {
-                      _logoClickCount++;
-                      if (_logoClickCount >= 5) {
-                        _logoClickCount = 0;
-                        _showEasterEgg(context, true);
-                      }
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      TweenAnimationBuilder<double>(
-                        tween: Tween<double>(begin: 0.0, end: 1.0),
-                        duration: const Duration(milliseconds: 500),
-                        builder: (context, value, child) {
-                          return Transform.scale(scale: value, child: child);
-                        },
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: AppColors.backgroundLight,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppColors.accentPrimary.withOpacity(0.35),
-                            ),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: Image.asset(
-                            Assets.avatar,
-                            fit: BoxFit.cover,
-                            alignment: const Alignment(0, -0.2),
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color: AppColors.textPrimary,
-                                  size: 22,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      if (!isMobile)
-                        const Text(
-                          'Swapnaneel Sarkar',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              if (!isCompact)
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children:
-                          _menuItems.map((item) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              child: _NavItem(
-                                title: item['title']!,
-                                route: item['route']!,
-                              ),
-                            );
-                          }).toList(),
-                    ),
-                  ),
-                ),
-              if (!isCompact) const SizedBox(width: 16),
-              if (!isCompact)
-                AnimatedButton(
-                  onPressed: () => context.go('/contact'),
-                  text: 'Contact',
-                  isPrimary: true,
-                )
-              else
-                GestureDetector(
-                  onTap: _toggleMenu,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color:
-                          _isMenuOpen
-                              ? AppColors.accentPrimary.withOpacity(0.2)
-                              : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        AnimatedOpacity(
-                          opacity: _isMenuOpen ? 0.0 : 1.0,
-                          duration: const Duration(milliseconds: 200),
-                          child: const Icon(
-                            Icons.menu,
-                            color: AppColors.textPrimary,
-                            size: 28,
-                          ),
-                        ),
-                        AnimatedOpacity(
-                          opacity: _isMenuOpen ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 200),
-                          child: const Icon(
-                            Icons.close,
-                            color: AppColors.accentPrimary,
-                            size: 28,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ],
-    );
+    // Easter egg trigger - click logo 5 times
+    setState(() {
+      _logoClickCount++;
+      if (_logoClickCount >= 5) {
+        _logoClickCount = 0;
+        _showEasterEgg(context, true);
+      }
+    });
   }
 
-  Widget _buildSocialIcon(IconData icon, Color color) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isCompact = width < 1040;
+    final showName = width >= 420;
+    final gutter = AppLayout.gutter(width);
+    final current = _currentPath(context);
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        width < 600 ? 12 : gutter - 8,
+        _barTop,
+        width < 600 ? 12 : gutter - 8,
+        0,
       ),
-      child: Center(child: FaIcon(icon, color: color, size: 20)),
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppLayout.maxContentWidth + 16,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+              child: Container(
+                height: _barHeight,
+                padding: const EdgeInsets.only(left: 8, right: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundDark.withValues(alpha: 0.62),
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(color: AppColors.borderSubtle),
+                ),
+                child: Row(
+                  children: [
+                    _Logo(showName: showName, onTap: _onLogoTap),
+                    const Spacer(),
+                    if (!isCompact) ...[
+                      for (final item in _menuItems)
+                        _NavItem(
+                          title: item['title']!,
+                          route: item['route']!,
+                          active: current == item['route'],
+                        ),
+                      const SizedBox(width: 10),
+                      AnimatedButton(
+                        onPressed: () => context.go('/contact'),
+                        text: 'Contact',
+                        isPrimary: true,
+                        compact: true,
+                        icon: Icons.arrow_forward_rounded,
+                      ),
+                    ] else
+                      _MenuButton(isOpen: _isMenuOpen, onTap: _toggleMenu),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
   void _showEasterEgg(BuildContext context, bool isSnakeGame) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder:
-            (context) =>
-                isSnakeGame ? const SnakeGamePage() : const MemoryGamePage(),
+        builder: (context) =>
+            isSnakeGame ? const SnakeGamePage() : const MemoryGamePage(),
+      ),
+    );
+  }
+}
+
+class _Logo extends StatelessWidget {
+  final bool showName;
+  final VoidCallback onTap;
+
+  const _Logo({required this.showName, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: 'Swapnaneel Sarkar, home',
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const StadiumBorder(),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(2, 4, 12, 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const AvatarBadge(size: 40),
+              if (showName) ...[
+                const SizedBox(width: 10),
+                Text(
+                  'Swapnaneel Sarkar',
+                  style: AppText.display(
+                    size: 14,
+                    weight: FontWeight.w600,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Round avatar on a lilac→indigo tile. Shared by nav, footer and splash.
+class AvatarBadge extends StatelessWidget {
+  final double size;
+
+  const AvatarBadge({super.key, this.size = 40});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.lilac, Color(0xFF5B3FD9)],
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(
+        Assets.avatarCutout,
+        fit: BoxFit.cover,
+        alignment: const Alignment(0, -0.1),
+        filterQuality: FilterQuality.medium,
+        errorBuilder: (context, error, stackTrace) => Icon(
+          Icons.person,
+          color: AppColors.textPrimary,
+          size: size * 0.55,
+        ),
+      ),
+    );
+  }
+}
+
+class _MenuButton extends StatelessWidget {
+  final bool isOpen;
+  final VoidCallback onTap;
+
+  const _MenuButton({required this.isOpen, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: isOpen ? 'Close menu' : 'Open menu',
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isOpen
+                ? AppColors.marigold
+                : Colors.white.withValues(alpha: 0.06),
+          ),
+          child: Icon(
+            isOpen ? Icons.close_rounded : Icons.menu_rounded,
+            color: isOpen ? AppColors.backgroundDark : AppColors.textPrimary,
+            size: 22,
+          ),
+        ),
       ),
     );
   }
@@ -291,146 +315,211 @@ class _CustomAppBarState extends State<CustomAppBar>
 class _CompactMenuOverlay extends StatelessWidget {
   final Animation<double> animation;
   final List<Map<String, String>> menuItems;
+  final String currentPath;
   final VoidCallback onClose;
   final ValueChanged<String> onNavigate;
   final VoidCallback onShowGame;
-  final Widget Function(IconData icon, Color color) buildSocialIcon;
 
   const _CompactMenuOverlay({
     required this.animation,
     required this.menuItems,
+    required this.currentPath,
     required this.onClose,
     required this.onNavigate,
     required this.onShowGame,
-    required this.buildSocialIcon,
   });
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final panelWidth = size.width < 520 ? size.width * 0.82 : 420.0;
+    final size = MediaQuery.sizeOf(context);
+    final panelWidth = size.width < 520 ? size.width - 24 : 400.0;
+    const top = _barTop + _barHeight + 10;
+    final profile = PortfolioContent.profile;
 
     return Material(
       color: Colors.transparent,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 80,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: onClose,
-              child: Container(color: Colors.black.withOpacity(0.5)),
-            ),
-          ),
-          AnimatedBuilder(
-            animation: animation,
-            builder: (context, child) {
-              return Positioned(
-                top: 80,
+      child: AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          final v = animation.value;
+          return Stack(
+            children: [
+              Positioned(
+                top: _barTop + _barHeight + 4,
+                left: 0,
                 right: 0,
                 bottom: 0,
-                width: panelWidth,
-                child: Transform.translate(
-                  offset: Offset(panelWidth * (1 - animation.value), 0),
-                  child: child,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: onClose,
+                  child: Container(
+                    color: AppColors.backgroundDark.withValues(
+                      alpha: 0.55 * v,
+                    ),
+                  ),
                 ),
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.backgroundLight,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(-10, 0),
+              ),
+              Positioned(
+                top: top,
+                right: 12,
+                width: panelWidth,
+                child: Opacity(
+                  opacity: v,
+                  child: Transform.translate(
+                    offset: Offset(0, -12 * (1 - v)),
+                    child: child,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 18),
+          decoration: BoxDecoration(
+            color: AppColors.backgroundLight,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: AppColors.borderSubtle),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.4),
+                blurRadius: 40,
+                offset: const Offset(0, 20),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...menuItems.map((item) {
+                final active = currentPath == item['route'];
+                return InkWell(
+                  onTap: () => onNavigate(item['route']!),
+                  borderRadius: BorderRadius.circular(18),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      color: active
+                          ? Colors.white.withValues(alpha: 0.05)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item['title']!,
+                            style: AppText.display(
+                              size: 20,
+                              weight: FontWeight.w600,
+                              letterSpacing: -0.3,
+                              color: active
+                                  ? AppColors.textPrimary
+                                  : AppColors.textSecondary,
+                            ),
+                          ),
+                        ),
+                        if (active)
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: AppColors.marigold,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () => onNavigate('/contact'),
+                    icon: const Icon(Icons.arrow_forward_rounded, size: 18),
+                    iconAlignment: IconAlignment.end,
+                    label: const Text('Contact'),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _SocialIcon(
+                    icon: FontAwesomeIcons.linkedinIn,
+                    label: 'LinkedIn',
+                    onTap: () => _open(profile.linkedInUrl),
+                  ),
+                  _SocialIcon(
+                    icon: FontAwesomeIcons.github,
+                    label: 'GitHub',
+                    onTap: () => _open(profile.githubUrl),
+                  ),
+                  _SocialIcon(
+                    icon: FontAwesomeIcons.envelope,
+                    label: 'Email',
+                    onTap: () => _open('mailto:${profile.email}'),
+                  ),
+                  _SocialIcon(
+                    icon: FontAwesomeIcons.gamepad,
+                    label: 'Play a game',
+                    onTap: onShowGame,
                   ),
                 ],
               ),
-              child: SafeArea(
-                top: false,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    ...menuItems.map((item) {
-                      return ListTile(
-                        title: Text(
-                          item['title']!,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        onTap: () => onNavigate(item['route']!),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 8,
-                        ),
-                      );
-                    }),
-                    const Divider(
-                      color: AppColors.textSecondary,
-                      thickness: 0.5,
-                      indent: 30,
-                      endIndent: 30,
-                    ),
-                    ListTile(
-                      title: const Text(
-                        'Hire Me',
-                        style: TextStyle(
-                          color: AppColors.accentPrimary,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      leading: const Icon(
-                        Icons.work_outline,
-                        color: AppColors.accentPrimary,
-                      ),
-                      onTap: () => onNavigate('/contact'),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 8,
-                      ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          buildSocialIcon(
-                            FontAwesomeIcons.linkedin,
-                            AppColors.accentPrimary,
-                          ),
-                          buildSocialIcon(
-                            FontAwesomeIcons.github,
-                            AppColors.accentSecondary,
-                          ),
-                          buildSocialIcon(
-                            FontAwesomeIcons.instagram,
-                            AppColors.accentTertiary,
-                          ),
-                          GestureDetector(
-                            onTap: onShowGame,
-                            child: buildSocialIcon(
-                              FontAwesomeIcons.gamepad,
-                              AppColors.primaryLight,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _open(String url) async {
+    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+  }
+}
+
+class _SocialIcon extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _SocialIcon({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: Tooltip(
+        message: label,
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
+          child: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.borderSubtle),
+            ),
+            child: Center(
+              child: FaIcon(icon, color: AppColors.textSecondary, size: 17),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -439,9 +528,13 @@ class _CompactMenuOverlay extends StatelessWidget {
 class _NavItem extends StatefulWidget {
   final String title;
   final String route;
+  final bool active;
 
-  const _NavItem({Key? key, required this.title, required this.route})
-    : super(key: key);
+  const _NavItem({
+    required this.title,
+    required this.route,
+    required this.active,
+  });
 
   @override
   State<_NavItem> createState() => _NavItemState();
@@ -452,39 +545,36 @@ class _NavItemState extends State<_NavItem> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
+    final lit = widget.active || _isHovered;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2),
+      child: InkWell(
         onTap: () {
           context.go(widget.route);
           context.read<NavigationBloc>().add(NavigateToPage(widget.route));
         },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: _isHovered ? FontWeight.bold : FontWeight.normal,
-                color:
-                    _isHovered
-                        ? AppColors.accentPrimary
-                        : AppColors.textPrimary,
-              ),
+        onHover: (v) => setState(() => _isHovered = v),
+        customBorder: const StadiumBorder(),
+        hoverColor: Colors.transparent,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: widget.active
+                ? Colors.white.withValues(alpha: 0.07)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Text(
+            widget.title,
+            style: AppText.body(
+              size: 14.5,
+              weight: FontWeight.w500,
+              height: 1,
+              color: lit ? AppColors.textPrimary : AppColors.textSecondary,
             ),
-            const SizedBox(height: 4),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              height: 2,
-              width: _isHovered ? 20 : 0,
-              decoration: BoxDecoration(
-                color: AppColors.accentPrimary,
-                borderRadius: BorderRadius.circular(1),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

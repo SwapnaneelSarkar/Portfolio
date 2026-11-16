@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio/assets.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/presentation/pages/snake_game_page.dart';
+import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Footer extends StatelessWidget {
@@ -11,152 +11,133 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundLight.withOpacity(0.5),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
-        ),
-      ),
-      child: Column(
-        children: [
-          // Logo and name
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundDark,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(
-                    color: AppColors.accentPrimary.withOpacity(0.35),
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Image.asset(
-                  Assets.avatar,
-                  fit: BoxFit.cover,
-                  alignment: const Alignment(0, -0.2),
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Center(
-                      child: Icon(
-                        Icons.person,
-                        color: AppColors.textPrimary,
-                        size: 26,
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              const Text(
-                'Swapnaneel Sarkar',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            PortfolioContent.profile.title,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14,
+    final width = MediaQuery.sizeOf(context).width;
+    final gutter = AppLayout.gutter(width);
+    final isMobile = width < 700;
+    final profile = PortfolioContent.profile;
+
+    final identity = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const AvatarBadge(size: 44),
+        const SizedBox(width: 14),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              profile.name,
+              style: AppText.display(size: 16, weight: FontWeight.w600),
             ),
-          ),
-          const SizedBox(height: 32),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildSocialButton(
-                FontAwesomeIcons.linkedin,
-                PortfolioContent.profile.linkedInUrl,
-                AppColors.accentPrimary,
-              ),
-              const SizedBox(width: 20),
-              _buildSocialButton(
-                FontAwesomeIcons.github,
-                PortfolioContent.profile.githubUrl,
-                AppColors.accentSecondary,
-              ),
-              const SizedBox(width: 20),
-              _buildSocialButton(
-                FontAwesomeIcons.envelope,
-                'mailto:${PortfolioContent.profile.email}',
-                AppColors.accentTertiary,
-              ),
-            ],
-          ),
-          const SizedBox(height: 32),
-          const Text(
-            '© 2026 Swapnaneel Sarkar. All rights reserved.',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
-          ),
-          const SizedBox(height: 16),
-
-          // Made with Flutter
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Made with ',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
-              ),
-              const Icon(
-                Icons.favorite,
-                color: AppColors.accentTertiary,
-                size: 16,
-              ),
-              const Text(
-                ' using ',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
-              ),
-              const FlutterLogo(size: 16),
-              const Text(
-                ' Flutter',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
-              ),
-            ],
-          ),
-
-          // Easter egg hint
-          const SizedBox(height: 8),
-          GestureDetector(
-            onTap: () => _showEasterEgg(context),
-            child: const Text(
-              'Psst... there\'s a hidden game somewhere',
-              style: TextStyle(
+            const SizedBox(height: 4),
+            Text(
+              profile.title,
+              style: AppText.body(
+                size: 13.5,
                 color: AppColors.textSecondary,
-                fontSize: 10,
-                fontStyle: FontStyle.italic,
+                height: 1.2,
               ),
             ),
+          ],
+        ),
+      ],
+    );
+
+    final socials = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _buildSocialButton(
+          FontAwesomeIcons.linkedinIn,
+          'LinkedIn',
+          profile.linkedInUrl,
+        ),
+        const SizedBox(width: 10),
+        _buildSocialButton(FontAwesomeIcons.github, 'GitHub', profile.githubUrl),
+        const SizedBox(width: 10),
+        _buildSocialButton(
+          FontAwesomeIcons.envelope,
+          'Email',
+          'mailto:${profile.email}',
+        ),
+      ],
+    );
+
+    final smallPrint = AppText.mono(size: 11.5, color: AppColors.textFaint);
+
+    return Container(
+      margin: const EdgeInsets.only(top: 24),
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.borderSubtle)),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppLayout.maxContentWidth + gutter * 2,
           ),
-        ],
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(gutter, 40, gutter, 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isMobile) ...[
+                  identity,
+                  const SizedBox(height: 24),
+                  socials,
+                ] else
+                  Row(
+                    children: [identity, const Spacer(), socials],
+                  ),
+                const SizedBox(height: 36),
+                Wrap(
+                  spacing: 24,
+                  runSpacing: 10,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text('© 2026 ${profile.name}', style: smallPrint),
+                    Text('Built with Flutter', style: smallPrint),
+                    // Easter egg hint
+                    InkWell(
+                      onTap: () => _showEasterEgg(context),
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          'Psst... there\'s a hidden game somewhere',
+                          style: smallPrint.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildSocialButton(IconData icon, String url, Color color) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => _launchUrl(url),
-        child: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(25),
+  Widget _buildSocialButton(IconData icon, String label, String url) {
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        link: true,
+        label: label,
+        child: InkWell(
+          onTap: () => _launchUrl(url),
+          customBorder: const CircleBorder(),
+          child: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.borderStrong),
+            ),
+            child: Center(
+              child: FaIcon(icon, color: AppColors.textSecondary, size: 16),
+            ),
           ),
-          child: Center(child: FaIcon(icon, color: color, size: 20)),
         ),
       ),
     );

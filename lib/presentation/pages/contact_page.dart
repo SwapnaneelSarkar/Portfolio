@@ -4,8 +4,8 @@ import 'package:portfolio/presentation/widgets/custom_app_bar.dart';
 import 'package:portfolio/presentation/widgets/footer.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/animated_background.dart';
-import 'package:lottie/lottie.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:portfolio/presentation/widgets/content_container.dart';
+import 'package:portfolio/presentation/widgets/section_header.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:portfolio/assets.dart';
@@ -154,64 +154,34 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
             child: Column(
               children: [
                 // Header
-                Container(
-                  height: 300,
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedOpacity(
-                          opacity: _isVisible ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(
-                            'Get In Touch',
-                            style: textTheme.displayMedium?.copyWith(
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        AnimatedOpacity(
-                          opacity: _isVisible ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 700),
-                          child: SizedBox(
-                            height: 50,
-                            child: DefaultTextStyle(
-                              style: textTheme.headlineSmall!.copyWith(
-                                color: AppColors.accentSecondary,
-                              ),
-                              child: AnimatedTextKit(
-                                animatedTexts: [
-                                  TypewriterAnimatedText(
-                                    'Let\'s work together',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                  TypewriterAnimatedText(
-                                    'Have a project in mind?',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                  TypewriterAnimatedText(
-                                    'I\'d love to hear from you',
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                ],
-                                repeatForever: true,
-                                pause: const Duration(milliseconds: 1000),
-                                displayFullTextOnTap: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                ContentContainer(
+                  padding: EdgeInsets.fromLTRB(
+                    AppLayout.gutter(size.width),
+                    isMobile ? 116 : 150,
+                    AppLayout.gutter(size.width),
+                    isMobile ? 40 : 56,
+                  ),
+                  child: AnimatedOpacity(
+                    opacity: _isVisible ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 500),
+                    child: const SectionHeader(
+                      eyebrow: 'Contact',
+                      title: 'Have a project in mind?',
+                      description:
+                          'Let\'s work together. Send a message and I\'ll get back to you as soon as possible.',
+                      large: true,
                     ),
                   ),
                 ),
-                
+
                 // Contact Content
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+                ContentContainer(
+                  padding: EdgeInsets.fromLTRB(
+                    AppLayout.gutter(size.width),
+                    0,
+                    AppLayout.gutter(size.width),
+                    isMobile ? 56 : 88,
+                  ),
                   child: isMobile
                       ? Column(
                           children: [
@@ -227,6 +197,7 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
                               flex: 2,
                               child: _buildContactInfo(textTheme),
                             ),
+                            const SizedBox(width: 56),
                             Expanded(
                               flex: 3,
                               child: _buildContactForm(textTheme),
@@ -263,19 +234,17 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Contact Information',
-            style: textTheme.headlineMedium?.copyWith(
-              color: AppColors.accentPrimary,
-            ),
+            'Contact information',
+            style: AppText.display(size: 22, weight: FontWeight.w600),
           ),
           const SizedBox(height: 24),
           Text(
             'Feel free to reach out to me for any inquiries, project collaborations, freelance opportunities, or just to say hello. I\'m always open to discussing new ideas and challenges.',
             style: textTheme.bodyLarge?.copyWith(
-              color: AppColors.textPrimary,
+              color: AppColors.textSecondary,
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 32),
           _buildContactItem(
             Icons.email,
             'Email',
@@ -298,9 +267,12 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
           ),
           const SizedBox(height: 40),
           Text(
-            'Social Media',
-            style: textTheme.titleLarge?.copyWith(
-              color: AppColors.accentSecondary,
+            'ELSEWHERE',
+            style: AppText.mono(
+              size: 11,
+              weight: FontWeight.w600,
+              color: AppColors.textFaint,
+              letterSpacing: 1.4,
             ),
           ),
           const SizedBox(height: 16),
@@ -325,14 +297,8 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
               ),
             ],
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 36),
           _buildResumeDownloadButton(),
-          const SizedBox(height: 40),
-          Lottie.network(
-            Assets.contactAnimation,
-            height: 200,
-            fit: BoxFit.contain,
-          ),
         ],
       ),
     );
@@ -344,16 +310,16 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
       child: Row(
         children: [
           Container(
-            width: 50,
-            height: 50,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: AppColors.accentPrimary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
+              color: AppColors.marigold.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(
               icon,
-              color: AppColors.accentPrimary,
-              size: 24,
+              color: AppColors.marigold,
+              size: 22,
             ),
           ),
           const SizedBox(width: 16),
@@ -362,19 +328,20 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                  title.toUpperCase(),
+                  style: AppText.mono(
+                    size: 10.5,
+                    color: AppColors.textFaint,
+                    letterSpacing: 1.2,
                   ),
                 ),
+                const SizedBox(height: 4),
                 Text(
                   value,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  style: AppText.body(
+                    size: 16,
+                    weight: FontWeight.w600,
+                    height: 1.3,
                   ),
                 ),
               ],
@@ -391,17 +358,17 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
       child: GestureDetector(
         onTap: () => _launchUrl(url),
         child: Container(
-          width: 50,
-          height: 50,
+          width: 46,
+          height: 46,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(25),
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.borderStrong),
           ),
           child: Center(
             child: FaIcon(
               icon,
-              color: color,
-              size: 20,
+              color: AppColors.textSecondary,
+              size: 17,
             ),
           ),
         ),
@@ -412,16 +379,8 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
   Widget _buildResumeDownloadButton() {
     return ElevatedButton.icon(
       onPressed: () => _launchUrl(Assets.resumeUrl),
-      icon: const Icon(Icons.download),
-      label: const Text('Download Resume'),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.accentPrimary,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
+      icon: const Icon(Icons.download_rounded, size: 18),
+      label: const Text('Download resume'),
     );
   }
   
@@ -440,30 +399,27 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(30),
+        padding: EdgeInsets.all(
+          MediaQuery.sizeOf(context).width < 600 ? 22 : 34,
+        ),
         decoration: BoxDecoration(
           color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: AppColors.accentPrimary.withOpacity(0.1),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
+              color: Colors.black.withValues(alpha: 0.3),
+              blurRadius: 40,
+              offset: const Offset(0, 20),
             ),
           ],
-          border: Border.all(
-            color: AppColors.accentPrimary.withOpacity(0.2),
-            width: 1,
-          ),
+          border: Border.all(color: AppColors.borderSubtle),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Send Me a Message',
-              style: textTheme.headlineSmall?.copyWith(
-                color: AppColors.accentPrimary,
-              ),
+              'Send a message',
+              style: AppText.display(size: 22, weight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
             Text(
@@ -477,21 +433,21 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.accentSecondary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.mint.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Row(
                   children: [
                     const Icon(
                       Icons.check_circle,
-                      color: AppColors.accentSecondary,
+                      color: AppColors.mint,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'Your message has been sent successfully! I\'ll get back to you soon.',
                         style: textTheme.bodyMedium?.copyWith(
-                          color: AppColors.accentSecondary,
+                          color: AppColors.mint,
                         ),
                       ),
                     ),
@@ -611,32 +567,19 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
                     const SizedBox(height: 30),
                     SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      height: 54,
                       child: ElevatedButton(
                         onPressed: _isSubmitting ? null : _submitForm,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.accentPrimary,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
                         child: _isSubmitting
                             ? const SizedBox(
                                 width: 24,
                                 height: 24,
                                 child: CircularProgressIndicator(
-                                  color: Colors.white,
+                                  color: AppColors.backgroundDark,
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Text(
-                                'Send Message',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            : const Text('Send message'),
                       ),
                     ),
                   ],
@@ -661,11 +604,7 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          style: AppText.body(size: 14, weight: FontWeight.w600, height: 1.2),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -673,44 +612,36 @@ class _ContactPageState extends State<ContactPage> with TickerProviderStateMixin
           maxLines: maxLines,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-              color: AppColors.textSecondary.withOpacity(0.5),
-            ),
             prefixIcon: Icon(
               prefixIcon,
-              color: AppColors.accentPrimary,
+              color: AppColors.textFaint,
+              size: 20,
             ),
             filled: true,
-            fillColor: AppColors.backgroundDark,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none,
-            ),
+            fillColor: AppColors.backgroundDark.withValues(alpha: 0.7),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.accentPrimary,
                 width: 2,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.beginnerLevel,
                 width: 2,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.beginnerLevel,
                 width: 2,
               ),
             ),
           ),
-          style: const TextStyle(
-            color: AppColors.textPrimary,
-          ),
+          style: AppText.body(size: 15, height: 1.4),
           validator: validator,
         ),
       ],

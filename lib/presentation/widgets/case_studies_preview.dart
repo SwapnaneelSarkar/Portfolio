@@ -3,151 +3,45 @@ import 'package:go_router/go_router.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
 import 'package:portfolio/presentation/widgets/animated_button.dart';
+import 'package:portfolio/presentation/widgets/case_study_card.dart';
 import 'package:portfolio/presentation/widgets/content_container.dart';
-import 'package:portfolio/presentation/widgets/glass_card.dart';
+import 'package:portfolio/presentation/widgets/responsive_grid.dart';
 import 'package:portfolio/presentation/widgets/section_header.dart';
-import 'package:portfolio/presentation/widgets/tag_chip.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class CaseStudiesPreview extends StatefulWidget {
+class CaseStudiesPreview extends StatelessWidget {
   const CaseStudiesPreview({super.key});
 
   @override
-  State<CaseStudiesPreview> createState() => _CaseStudiesPreviewState();
-}
-
-class _CaseStudiesPreviewState extends State<CaseStudiesPreview>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    )..forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final studies = PortfolioContent.caseStudies;
+    final isMobile = MediaQuery.sizeOf(context).width < 700;
 
-    return FadeTransition(
-      opacity: _controller,
-      child: ContentContainer(
-      child: Column(
-        children: [
-          const SectionHeader(
-            title: 'Case Studies',
-            subtitle: 'Product strategy and analysis (hosted separately)',
-          ),
-          const SizedBox(height: 40),
-          ...studies.map(
-            (s) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: _CaseStudyCard(study: s, textTheme: textTheme),
-            ),
-          ),
-          const SizedBox(height: 24),
-          AnimatedButton(
-            onPressed: () => context.go('/case-studies'),
-            text: 'All Case Studies',
-            isPrimary: false,
-          ),
-        ],
-      ),
-    ),
-    );
-  }
-}
-
-class _CaseStudyCard extends StatelessWidget {
-  final CaseStudyEntry study;
-  final TextTheme textTheme;
-
-  const _CaseStudyCard({
-    required this.study,
-    required this.textTheme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      accentColor: study.color,
-      onTap: () => _openStudy(study.externalUrl),
+    return ContentContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      study.title,
-                      style: textTheme.titleLarge?.copyWith(color: study.color),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(study.subtitle, style: textTheme.bodyMedium),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              Image.asset(
-                study.logoPath,
-                height: 40,
-                width: 100,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            study.summary,
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
-            style: textTheme.bodyLarge?.copyWith(
-              fontSize: 14,
-              color: AppColors.textSecondary,
+          SectionHeader(
+            eyebrow: 'Case studies',
+            title: 'Product strategy and analysis',
+            description:
+                'Teardowns of real products. Each one opens as a full deck.',
+            accent: AppColors.research,
+            action: AnimatedButton(
+              onPressed: () => context.go('/case-studies'),
+              text: 'All case studies',
+              isPrimary: false,
+              icon: Icons.arrow_forward_rounded,
             ),
           ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: study.tags
-                .map((t) => TagChip(label: t, color: study.color))
+          SizedBox(height: isMobile ? 32 : 48),
+          ResponsiveGrid(
+            minCellWidth: 440,
+            maxColumns: 2,
+            children: PortfolioContent.caseStudies
+                .map((s) => CaseStudyCard(study: s))
                 .toList(),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Text(
-                'Read full case study',
-                style: textTheme.labelLarge?.copyWith(color: study.color),
-              ),
-              const SizedBox(width: 6),
-              Icon(Icons.arrow_outward, size: 16, color: study.color),
-            ],
           ),
         ],
       ),
     );
-  }
-
-  Future<void> _openStudy(String url) async {
-    final uri = Uri.parse(url);
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 }
