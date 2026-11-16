@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/data/portfolio_content.dart';
-import 'package:portfolio/presentation/widgets/content_container.dart';
-import 'package:portfolio/presentation/widgets/fade_in_section.dart';
-import 'package:portfolio/presentation/widgets/glass_card.dart';
-import 'package:portfolio/presentation/widgets/hiring_panel.dart';
-import 'package:portfolio/presentation/widgets/page_scaffold.dart';
-import 'package:portfolio/presentation/widgets/section_header.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:portfolio/assets.dart';
+import 'package:portfolio/presentation/shell/nav.dart';
+import 'package:portfolio/presentation/ui/actions.dart';
+import 'package:portfolio/presentation/ui/page_body.dart';
+import 'package:portfolio/presentation/ui/primitives.dart';
 
 import '../../services/email_service.dart';
 
 class ContactPage extends StatefulWidget {
-  const ContactPage({Key? key}) : super(key: key);
+  const ContactPage({super.key});
 
   @override
   State<ContactPage> createState() => _ContactPageState();
@@ -39,43 +37,39 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   Future<void> _submitForm() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (_isSubmitting || !_formKey.currentState!.validate()) return;
     setState(() => _isSubmitting = true);
 
+    var success = false;
     try {
-      final success = await EmailService.sendEmail(
+      success = await EmailService.sendEmail(
         name: _nameController.text,
         email: _emailController.text,
         subject: _subjectController.text,
         message: _messageController.text,
       );
+    } catch (_) {
+      success = false;
+    }
 
-      if (!mounted) return;
-      setState(() {
-        _isSubmitting = false;
-        _isSubmitted = success;
-      });
+    if (!mounted) return;
+    setState(() {
+      _isSubmitting = false;
+      _isSubmitted = success;
+    });
 
-      if (success) {
-        _nameController.clear();
-        _emailController.clear();
-        _subjectController.clear();
-        _messageController.clear();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to send message. Please try again.'),
-            backgroundColor: AppColors.accentTertiary,
-          ),
-        );
-      }
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => _isSubmitting = false);
+    if (success) {
+      _nameController.clear();
+      _emailController.clear();
+      _subjectController.clear();
+      _messageController.clear();
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('An error occurred. Please try again.'),
-          backgroundColor: AppColors.accentTertiary,
+          content: Text(
+            'Your message didn\'t send. Check your connection and try again, '
+            'or email me directly.',
+          ),
         ),
       );
     }
@@ -83,449 +77,451 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final isMobile = MediaQuery.of(context).size.width < 900;
-
-    return PageScaffold(
+    return PageBody(
       children: [
-        ContentContainer(
-          padding: EdgeInsets.symmetric(horizontal: AppLayout.gutter(context)),
-          child: const FadeInSection(
-            child: SectionHeader(
-              eyebrow: 'Contact',
-              title: 'Get in touch',
-              description: 'Open to Product Manager roles.',
-              large: true,
-            ),
-          ),
+        const PageHeader(
+          title: 'Contact',
+          description: 'Open to Product Manager roles. Messages land in my '
+              'inbox, and I reply within 24 hours.',
         ),
-        const SizedBox(height: 56),
-        ContentContainer(
-          padding: EdgeInsets.symmetric(horizontal: AppLayout.gutter(context)),
-          child: FadeInSection(
-            child: isMobile
-                ? Column(
-                    children: [
-                      _buildIntro(textTheme),
-                      const SizedBox(height: 32),
-                      const HiringPanel(),
-                      const SizedBox(height: 32),
-                      _buildContactForm(textTheme),
-                    ],
-                  )
-                : Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildIntro(textTheme),
-                            const SizedBox(height: 32),
-                            const HiringPanel(),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 56),
-                      Expanded(flex: 3, child: _buildContactForm(textTheme)),
-                    ],
-                  ),
-          ),
-        ),
-        const SizedBox(height: 88),
-      ],
-    );
-  }
-
-  Widget _buildIntro(TextTheme textTheme) {
-    final profile = PortfolioContent.profile;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Hiring for a product role?', style: textTheme.headlineMedium),
-        const SizedBox(height: 16),
-        Text(
-          'I\'m happy to walk you through my case studies — supply-chain and ERP platforms at Heizen, 0→1 AI launches — or how I\'d approach your problem space. I respond within 24 hours.',
-          style: textTheme.bodyLarge?.copyWith(color: AppColors.textBody),
-        ),
-        const SizedBox(height: 28),
-        _contactItem(
-          Icons.email_outlined,
-          'EMAIL',
-          profile.email,
-          'mailto:${profile.email}',
-        ),
-        const SizedBox(height: 16),
-        _contactItem(
-          Icons.phone_outlined,
-          'PHONE',
-          profile.phone,
-          'tel:+918967853033',
-        ),
-        const SizedBox(height: 16),
-        _contactItem(
-          Icons.location_on_outlined,
-          'LOCATION',
-          profile.location,
-          null,
-        ),
-        const SizedBox(height: 28),
-        TextButton.icon(
-          onPressed: () => launchUrl(
-            Uri.parse(Assets.resumeUrl),
-            mode: LaunchMode.externalApplication,
-          ),
-          icon: const Icon(Icons.download_outlined, size: 18),
-          label: const Text('Download Resume'),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final composer = _buildComposer(context, constraints.maxWidth);
+            if (constraints.maxWidth < 860) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [composer, const SizedBox(height: 24), const _Side()],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: composer),
+                const SizedBox(width: 32),
+                const SizedBox(width: 300, child: _Side()),
+              ],
+            );
+          },
         ),
       ],
     );
   }
 
-  Widget _contactItem(
-    IconData icon,
-    String title,
-    String value,
-    String? url,
-  ) {
-    final row = Row(
-      children: [
-        Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: AppColors.accentPrimary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: AppColors.accentPrimary.withValues(alpha: 0.25),
-            ),
+  Widget _buildComposer(BuildContext context, double width) {
+    final p = context.palette;
+    const profile = PortfolioContent.profile;
+    final narrow = width < 560;
+
+    final header = Container(
+      height: 44,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      color: p.sunken,
+      child: Row(
+        children: [
+          Icon(Icons.edit_outlined, size: 15, color: p.textMuted),
+          const SizedBox(width: 10),
+          Text(
+            _isSubmitted ? 'Message sent' : 'New message',
+            style: AppText.ui(size: 13.5, weight: FontWeight.w600, color: p.text),
           ),
-          child: Icon(icon, color: AppColors.accentPrimary, size: 19),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
+        ],
+      ),
+    );
+
+    if (_isSubmitted) {
+      return Panel(
+        padding: EdgeInsets.zero,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                title,
-                style: AppFonts.mono(
-                  fontSize: 10,
-                  color: AppColors.textSecondary,
-                  letterSpacing: 1.5,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+              header,
+              Divider(height: 1, color: p.border),
+              Padding(
+                padding: const EdgeInsets.all(28),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const StatusIcon(StatusKind.shipped, size: 22),
+                    const SizedBox(height: 14),
+                    Text(
+                      'Thanks, your message is in my inbox.',
+                      style: AppText.ui(
+                        size: 17,
+                        weight: FontWeight.w600,
+                        color: p.text,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'I\'ll reply within 24 hours.',
+                      style: AppText.ui(size: 15, color: p.textMuted),
+                    ),
+                    const SizedBox(height: 18),
+                    OutlinedButton(
+                      onPressed: () => setState(() => _isSubmitted = false),
+                      child: const Text('Write another message'),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
-      ],
-    );
+      );
+    }
 
-    if (url == null) return row;
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => launchUrl(
-          Uri.parse(url),
-          mode: LaunchMode.externalApplication,
-        ),
-        child: row,
-      ),
-    );
-  }
-
-  Widget _buildContactForm(TextTheme textTheme) {
-    return GlassCard(
-      accentColor: AppColors.accentPrimary,
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Send me a message', style: textTheme.headlineSmall),
-          const SizedBox(height: 8),
-          Text(
-            'I\'ll get back to you as soon as possible.',
-            style: textTheme.bodyMedium,
+    Widget row(String label, Widget field) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 68,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 13),
+                  child: Text(
+                    label,
+                    style: AppText.ui(size: 13.5, color: p.textFaint),
+                  ),
+                ),
+              ),
+              Expanded(child: field),
+            ],
           ),
-          const SizedBox(height: 28),
-          if (_isSubmitted)
-            _buildSuccessCard(textTheme)
-          else
-            Form(
-              key: _formKey,
+        );
+
+    final name = _field(
+      controller: _nameController,
+      hint: 'Your name',
+      autofill: AutofillHints.name,
+      validator: (v) =>
+          (v == null || v.trim().isEmpty) ? 'Add your name' : null,
+    );
+    final email = _field(
+      controller: _emailController,
+      hint: 'you@company.com',
+      autofill: AutofillHints.email,
+      keyboard: TextInputType.emailAddress,
+      validator: (v) {
+        if (v == null || v.trim().isEmpty) return 'Add your email address';
+        if (!RegExp(r'^[\w\-\.+]+@([\w-]+\.)+[\w-]{2,}$').hasMatch(v.trim())) {
+          return 'That email address doesn\'t look right';
+        }
+        return null;
+      },
+    );
+
+    final divider = Divider(height: 1, color: p.border);
+
+    return Panel(
+      padding: EdgeInsets.zero,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: CallbackShortcuts(
+          bindings: {
+            const SingleActivator(LogicalKeyboardKey.enter, meta: true):
+                _submitForm,
+            const SingleActivator(LogicalKeyboardKey.enter, control: true):
+                _submitForm,
+          },
+          child: Form(
+            key: _formKey,
+            child: AutofillGroup(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  LayoutBuilder(builder: (context, constraints) {
-                    final narrow = constraints.maxWidth < 600;
-                    final name = _buildTextField(
-                      controller: _nameController,
-                      label: 'Name',
-                      hint: 'Your name',
-                      prefixIcon: Icons.person_outline,
-                      validator: (value) => (value == null || value.isEmpty)
-                          ? 'Please enter your name'
-                          : null,
-                    );
-                    final email = _buildTextField(
-                      controller: _emailController,
-                      label: 'Email',
-                      hint: 'you@company.com',
-                      prefixIcon: Icons.email_outlined,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        if (!RegExp(r'^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$')
-                            .hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    );
-                    if (narrow) {
-                      return Column(
-                        children: [name, const SizedBox(height: 20), email],
-                      );
-                    }
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: name),
-                        const SizedBox(width: 16),
-                        Expanded(child: email),
-                      ],
-                    );
-                  }),
-                  const SizedBox(height: 20),
-                  _buildTextField(
-                    controller: _subjectController,
-                    label: 'Subject',
-                    hint: 'What\'s this about?',
-                    prefixIcon: Icons.subject,
-                    validator: (value) => (value == null || value.isEmpty)
-                        ? 'Please enter a subject'
-                        : null,
-                  ),
-                  const SizedBox(height: 20),
-                  _buildTextField(
-                    controller: _messageController,
-                    label: 'Message',
-                    hint: 'Tell me about the role or the problem space',
-                    prefixIcon: Icons.message_outlined,
-                    maxLines: 5,
-                    validator: (value) => (value == null || value.isEmpty)
-                        ? 'Please enter your message'
-                        : null,
-                  ),
-                  const SizedBox(height: 28),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52,
-                    child: _GradientSubmitButton(
-                      isSubmitting: _isSubmitting,
-                      onPressed: _isSubmitting ? null : _submitForm,
+                  header,
+                  divider,
+                  row(
+                    'To',
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(4, 3, 10, 3),
+                          decoration: BoxDecoration(
+                            color: p.sunken,
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(color: p.border),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Avatar(size: 20, radius: 10),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  narrow
+                                      ? profile.name
+                                      : '${profile.name}  <${profile.email}>',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppText.ui(size: 13, color: p.text),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Center(
-                    child: Text(
-                      'TYPICAL RESPONSE < 24H',
-                      style: AppFonts.mono(
-                        fontSize: 10,
-                        color: AppColors.accentSecondary,
+                  divider,
+                  if (narrow) ...[
+                    row('Name', name),
+                    divider,
+                    row('Email', email),
+                  ] else
+                    row(
+                      'From',
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(child: name),
+                          Container(
+                            width: 1,
+                            height: 24,
+                            margin: const EdgeInsets.fromLTRB(8, 10, 12, 0),
+                            color: p.border,
+                          ),
+                          Expanded(child: email),
+                        ],
                       ),
+                    ),
+                  divider,
+                  row(
+                    'Subject',
+                    _field(
+                      controller: _subjectController,
+                      hint: 'What\'s this about?',
+                      validator: (v) => (v == null || v.trim().isEmpty)
+                          ? 'Add a subject'
+                          : null,
+                    ),
+                  ),
+                  divider,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _field(
+                      controller: _messageController,
+                      hint: 'Tell me about the role or the problem space…',
+                      minLines: 8,
+                      maxLines: 16,
+                      keyboard: TextInputType.multiline,
+                      validator: (v) => (v == null || v.trim().isEmpty)
+                          ? 'Write a message'
+                          : null,
+                    ),
+                  ),
+                  divider,
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        FilledButton.icon(
+                          onPressed: _isSubmitting ? null : _submitForm,
+                          icon: _isSubmitting
+                              ? SizedBox(
+                                  width: 14,
+                                  height: 14,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: p.onPrimary,
+                                  ),
+                                )
+                              : const Icon(Icons.send_outlined, size: 15),
+                          label: Text(_isSubmitting ? 'Sending…' : 'Send message'),
+                        ),
+                        if (!AppLayout.isMobile(context)) ...[
+                          const SizedBox(width: 12),
+                          Kbd(Nav.isApple ? '⌘ ↵' : 'Ctrl ↵'),
+                          const SizedBox(width: 6),
+                          Text(
+                            'to send',
+                            style: AppText.ui(size: 12, color: p.textFaint),
+                          ),
+                        ],
+                        const Spacer(),
+                        Text(
+                          'Replies within 24 hours',
+                          style: AppText.ui(size: 12.5, color: p.textFaint),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSuccessCard(TextTheme textTheme) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.accentPrimary.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.accentPrimary.withValues(alpha: 0.3),
+          ),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Icon(Icons.check_circle_outline,
-                  color: AppColors.accentPrimary),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Message sent — I\'ll get back to you within 24 hours.',
-                  style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          TextButton(
-            onPressed: () => setState(() => _isSubmitted = false),
-            child: const Text('Send another message'),
-          ),
-        ],
-      ),
     );
   }
 
-  Widget _buildTextField({
+  Widget _field({
     required TextEditingController controller,
-    required String label,
     required String hint,
-    required IconData prefixIcon,
+    String? autofill,
+    TextInputType? keyboard,
+    int minLines = 1,
     int maxLines = 1,
     String? Function(String?)? validator,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label.toUpperCase(),
-          style: AppFonts.mono(
-            fontSize: 10,
-            color: AppColors.textSecondary,
-            letterSpacing: 1.5,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: TextStyle(
-              color: AppColors.textSecondary.withValues(alpha: 0.5),
-              fontSize: 14,
-            ),
-            prefixIcon: maxLines == 1
-                ? Icon(prefixIcon, color: AppColors.textSecondary, size: 19)
-                : null,
-            filled: true,
-            fillColor: AppColors.backgroundDark.withValues(alpha: 0.6),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.borderSubtle),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.borderSubtle),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: AppColors.accentPrimary,
-                width: 1.5,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: AppColors.primaryRedLight,
-                width: 1.5,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: AppColors.primaryRedLight,
-                width: 1.5,
-              ),
-            ),
-          ),
-          style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
-          validator: validator,
-        ),
-      ],
+    final p = context.palette;
+    return TextFormField(
+      controller: controller,
+      minLines: minLines,
+      maxLines: maxLines,
+      keyboardType: keyboard,
+      autofillHints: autofill == null ? null : [autofill],
+      validator: validator,
+      style: AppText.ui(size: 14.5, color: p.text, height: 1.5),
+      decoration: InputDecoration(
+        filled: false,
+        hintText: hint,
+        border: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        errorBorder: InputBorder.none,
+        focusedErrorBorder: InputBorder.none,
+        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+      ),
     );
   }
 }
 
-class _GradientSubmitButton extends StatefulWidget {
-  final bool isSubmitting;
-  final VoidCallback? onPressed;
-
-  const _GradientSubmitButton({
-    required this.isSubmitting,
-    required this.onPressed,
-  });
-
-  @override
-  State<_GradientSubmitButton> createState() => _GradientSubmitButtonState();
-}
-
-class _GradientSubmitButtonState extends State<_GradientSubmitButton> {
-  bool _hovered = false;
+class _Side extends StatelessWidget {
+  const _Side();
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onPressed,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          curve: Curves.easeOutCubic,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(colors: AppColors.primaryGradient),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: _hovered && !widget.isSubmitting
-                ? [
-                    BoxShadow(
-                      color: AppColors.accentPrimary.withValues(alpha: 0.35),
-                      blurRadius: 24,
-                      offset: const Offset(0, 8),
-                    ),
-                  ]
-                : const [],
+    final p = context.palette;
+    const profile = PortfolioContent.profile;
+
+    Widget heading(String text) => Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text(
+            text,
+            style: AppText.ui(size: 13, weight: FontWeight.w600, color: p.text),
           ),
-          child: Center(
-            child: widget.isSubmitting
-                ? const SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(
-                      color: Color(0xFF041018),
-                      strokeWidth: 2,
-                    ),
-                  )
-                : const Text(
-                    'Send Message',
-                    style: TextStyle(
-                      color: Color(0xFF041018),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+        );
+
+    Widget line(IconData icon, String label, VoidCallback? onTap,
+        {Widget? trailing}) {
+      return SizedBox(
+        height: 34,
+        child: Row(
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: onTap == null
+                    ? Row(
+                        children: [
+                          Icon(icon, size: 14.5, color: p.textMuted),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              label,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppText.ui(
+                                size: 13.5,
+                                weight: FontWeight.w500,
+                                color: p.textMuted,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : InlineLink(label, icon: icon, onTap: onTap),
+              ),
+            ),
+            if (trailing != null) trailing,
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Panel(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              heading('Other ways to reach me'),
+              line(
+                Icons.mail_outline,
+                profile.email,
+                () => openExternal('mailto:${profile.email}'),
+                trailing: IconButton(
+                  onPressed: () => copyEmail(context),
+                  tooltip: 'Copy email address',
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(Icons.content_copy, size: 14),
+                ),
+              ),
+              line(
+                Icons.phone_outlined,
+                profile.phone,
+                () => openExternal('tel:${profile.phone.replaceAll(' ', '')}'),
+              ),
+              line(
+                FontAwesomeIcons.linkedinIn,
+                'LinkedIn',
+                () => openExternal(profile.linkedInUrl),
+              ),
+              line(Icons.place_outlined, profile.location, null),
+            ],
           ),
         ),
-      ),
+        const SizedBox(height: 16),
+        Panel(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Dot(p.shipped, size: 7),
+                  const SizedBox(width: 9),
+                  Text(
+                    'Currently open to',
+                    style: AppText.ui(
+                      size: 13,
+                      weight: FontWeight.w600,
+                      color: p.text,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Product Manager, APM and 0→1 product roles',
+                style: AppText.ui(
+                  size: 15,
+                  weight: FontWeight.w600,
+                  color: p.text,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Supply chain, ERP and AI products a specialty. Full-time, '
+                'hybrid or remote. Available now.',
+                style: AppText.ui(size: 13.5, color: p.textMuted, height: 1.55),
+              ),
+              const SizedBox(height: 14),
+              OutlinedButton.icon(
+                onPressed: openResume,
+                icon: const Icon(Icons.file_download_outlined, size: 16),
+                label: const Text('Download resume'),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
